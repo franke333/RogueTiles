@@ -18,6 +18,8 @@ public class DebugGenerateLevel : MonoBehaviour
 
     public MeshRenderer mr;
 
+    
+
     void Update()
     {
         CellMap map = null;
@@ -73,7 +75,7 @@ public class DebugGenerateLevel : MonoBehaviour
 
                 var (dungeonX, dungeonY) = (MyRandom.Int(0, mapWidth - dungeon.Width -2), MyRandom.Int(0, mapHeight - dungeon.Height -2));
 
-                map.InsertMap(dungeonX,dungeonY, dungeonWithWalls);
+                map.InsertMap(dungeonX,dungeonY, dungeonWithWalls,1);
             }
         }
 
@@ -81,6 +83,8 @@ public class DebugGenerateLevel : MonoBehaviour
         if (map == null)
             return;
 
+
+        map.CalculateDistancesFrom(map.Width / 2, map.Height / 2);
         mr.material.mainTexture = map.mapIntoTexture();
         mr.material.mainTexture.filterMode = FilterMode.Point;
 

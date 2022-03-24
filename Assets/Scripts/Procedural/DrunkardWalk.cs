@@ -32,6 +32,7 @@ public class DrunkardWalk
             {
                 var (dx,dy) = MyRandom.Choice(possibleMoves);
                 (x, y) = (x + dx, y + dy);
+                //check if agent left the map, if yes -> summon new agent instead
                 if (x < 0 || y < 0 || x == width || y == height)
                     break;
                 cm.SetCell(x, y, tileType);

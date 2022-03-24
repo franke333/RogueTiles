@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,7 @@ public struct Cell
 {
     public byte type;
     public int roomIndex;
+    public int distance;
 }
 
 public class CellMap
@@ -17,12 +19,18 @@ public class CellMap
     Cell[,] _map;
 
     int _maxRoomIndex;
+    
+    
+    
 
     List<RoomType> _roomTypes;
 
     public int Height { get; private set; }
     public int Width { get; private set; }
 
+    public (int, int) DistanceStartPoint { get; private set; }
+
+    public int WalkableReachableTilesCount { get; private set; }
 
     public Cell this[int x,int y]
     {
@@ -74,24 +82,100 @@ public class CellMap
         _roomTypes = new List<RoomType>();
     }
 
+
+    // BFS
+    public void CalculateDistancesFrom(int x,int y)
+    {
+        if(!((TileType)_map[x,y].type).IsWalkable())
+        {
+            Log.Error("Starting point is unwalkable!!!");
+            return;
+        }
+
+        for (int i = 0; i < Width; i++)
+            for (int j = 0; j < Height; j++)
+                _map[i, j].distance = -1;
+
+        _map[x, y].distance = 0;
+        WalkableReachableTilesCount = 0;
+
+        List<(int, int)> listCurrentPositions, listNextPositions = new List<(int, int)>();
+        listNextPositions.Add((x, y));
+        while(listNextPositions.Count > 0)
+        {
+            listCurrentPositions = listNextPositions;
+            listNextPositions = new List<(int, int)>();
+            foreach(var (cx,cy) in listCurrentPositions)
+            {
+                (int, int)[] neighbours = new (int, int)[] { (cx+1,cy), (cx-1, cy), (cx, cy+1), (cx, cy-1) };
+                foreach(var (nx,ny) in neighbours)
+                {
+                    if (nx < 0 || ny < 0 || nx == Width || ny == Height)
+                        continue;
+                    if (_map[nx,ny].distance == -1 && ((TileType)_map[nx, ny].type).IsWalkable())
+                    {
+                        WalkableReachableTilesCount++;
+                        _map[nx, ny].distance = _map[cx, cy].distance + 1;
+                        listNextPositions.Add((nx, ny));
+                    }
+                }
+            }
+        }
+
+        Log.Info($"Recalculated distances from {x} {y}, coverage is {(float)WalkableReachableTilesCount / (Width * Height)}", null);
+    }
+
     /// <summary>
     /// 
     /// </summary>
+    /// <param name="rotate"> rotate clockwise 90° n times (4=0)</param>
     /// <returns> return the index that would correspond to the 0 index of insertedMap </returns>
-    public int InsertMap(int x,int y,CellMap insertedMap)
+    public int InsertMap(int x,int y,CellMap insertedMap,int rotate = 0)
     {
-        if(x+insertedMap.Width>Width || y+insertedMap.Height > Height)
+        Func<int, int, (int, int)> rotCoords;
+
+        // anit-clockwise rotation as we will be asking cell where it wes before rotation
+        switch (rotate%4)
         {
-            Log.Error($"Inserting map out of bounds\n{Width}:{Height} and inserted map was from" +
-                $"{x}:{y} to {x+insertedMap.Width}:{y+insertedMap.Height} upper bounds excluded", null);
-            return -1;
+            case 1:
+                rotCoords = (int x,int y) => (y, insertedMap.Height - x - 1);
+                break;
+            case 2:
+                rotCoords = (int x, int y) => (insertedMap.Width - y - 1, insertedMap.Height - x - 1);
+                break;
+            case 3:
+                rotCoords = (int x, int y) => (insertedMap.Width - y - 1, x);
+                break;
+            case 0:
+            default:
+                rotCoords = (int x, int y) => (x, y);
+                break;
         }
 
-        for (int i = 0; i < insertedMap.Width; i++)
-            for (int j = 0; j < insertedMap.Height; j++)
-                if (insertedMap._map[i, j].type != 0)
+        if (rotate % 2 == 0)
+        {
+            if (x + insertedMap.Width > Width || y + insertedMap.Height > Height)
+            {
+                Log.Error($"Inserting map out of bounds\n{Width}:{Height} and inserted map was from" +
+                    $"{x}:{y} to {x + insertedMap.Width}:{y + insertedMap.Height} upper bounds excluded", null);
+                return -1;
+            }
+        }
+        else
+        {
+            if (x + insertedMap.Height > Width || y + insertedMap.Width > Height)
+            {
+                Log.Error($"Inserting map out of bounds\n{Width}:{Height} and inserted map was from" +
+                    $"{x}:{y} to {x + insertedMap.Width}:{y + insertedMap.Height} upper bounds excluded", null);
+                return -1;
+            }
+        }
+
+        for (int i = 0; i < (rotate % 2 == 0 ? insertedMap.Width : insertedMap.Height); i++)
+            for (int j = 0; j < (rotate % 2 == 0 ? insertedMap.Height : insertedMap.Width ); j++)
+                if (insertedMap[rotCoords(i, j)].type != 0)
                 {
-                    _map[i + x, j + y] = insertedMap._map[i, j];
+                    _map[i + x, j + y] = insertedMap[rotCoords(i,j)];
                     _map[i + x, j + y].roomIndex += _maxRoomIndex;
                 }
         int returnValue = _maxRoomIndex;
@@ -147,6 +231,8 @@ public class CellMap
         rooms.RemoveAll(r => r.GetRoomTiles.Count == 0);
         return rooms;
     }
+
+
 
 
     //Debug purposes
