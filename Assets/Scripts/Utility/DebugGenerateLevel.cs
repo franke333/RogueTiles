@@ -17,8 +17,8 @@ public class DebugGenerateLevel : MonoBehaviour
     public int drunkardsMaxPath;
 
     public MeshRenderer mr;
-
-    
+    [Space]
+    public int spawnSafeArea = 10;
 
     void Update()
     {
@@ -48,8 +48,8 @@ public class DebugGenerateLevel : MonoBehaviour
 
             for (int i = 0; i < numberOfDungeons; i++)
             {
-                CellMap dungeon = Graph.WalkToTarget(endPosition, randomMoveChance, numberOfAgents)
-                .GenerateCellMap(roomWidth, roomHeight, corridorWidth, corridorLength, roomMergeChance);
+                Graph g = Graph.WalkToTarget(endPosition, randomMoveChance, numberOfAgents);
+                CellMap dungeon = g.GenerateCellMap(roomWidth, roomHeight, corridorWidth, corridorLength, roomMergeChance);
 
                 //pack dungeon in walls
                 CellMap dungeonWithWalls = new CellMap(dungeon.Width+2, dungeon.Height+2);
@@ -73,9 +73,32 @@ public class DebugGenerateLevel : MonoBehaviour
 
                         }
 
+                // start room position in nodes
+                int startY = 0;
+                int startX = g.StartNodeDistanceXInGraph;
+                // transform to cell position
+                startX = startX * roomWidth + startX * corridorLength + MyRandom.Int(0,roomWidth) + 1 ;
+
+                // make entrance
+                dungeonWithWalls.SetCellOfRoom(startX, startY, TileType.Cobblestone, 1);
+
+                //Enumerate all possible positions for dungeon so the entrance is accessable
+                for (int x = 0; x < map.Width; x++)
+                {
+                    for (int y = 0; y < map.Height; y++)
+                    {
+                        if (Math.Abs(x - map.Width / 2) < spawnSafeArea || Math.Abs(y - map.Height / 2) < spawnSafeArea)
+                            continue;
+
+                        //TODO Find correct placement 
+                    }
+                }
+
+                
+
                 var (dungeonX, dungeonY) = (MyRandom.Int(0, mapWidth - dungeon.Width -2), MyRandom.Int(0, mapHeight - dungeon.Height -2));
 
-                map.InsertMap(dungeonX,dungeonY, dungeonWithWalls,1);
+                map.InsertMap(dungeonX,dungeonY, dungeonWithWalls,0);
             }
         }
 

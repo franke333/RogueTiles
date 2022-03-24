@@ -75,6 +75,7 @@ public class Graph
     List<Node> nodes;
     List<Edge> edges;
 
+    public int StartNodeDistanceXInGraph { get; private set; }
 
     public static Graph Simple()
     {
@@ -108,8 +109,14 @@ public class Graph
         return g;
     }
 
-    public static Graph WalkToTarget(Vector2 target,float randomMoveChance,int numOfAgents)
+    public static Graph WalkToTarget(Vector2 target,float randomMoveChance,int numOfAgents,bool banNegativeY = true)
     {
+        if(banNegativeY && target.y<0)
+        {
+            Log.Error("Cant walk to negative y when banNegativeY is true", null);
+            return null;
+        }
+
         var g = new Graph();
 
         Dictionary<Vector2, Node> map = new Dictionary<Vector2, Node>();
@@ -122,15 +129,17 @@ public class Graph
             Vector2 agentPosition = new Vector2(0, 0);
             while (true) 
             {
-                int dVertical = (int)(target.y - agentPosition.y);
-                int dHorizontal = (int)(target.x - agentPosition.x);
                 Vector2 move;
                 if (randomMoveChance > MyRandom.Float(0,1))
                 {
                     move = edgeVectors[MyRandom.Int(0, 4)];
+                    if (banNegativeY && move == Vector2.down && move.y + agentPosition.y < 0)
+                        continue;
                 }
                 else
                 {
+                    int dVertical = (int)(target.y - agentPosition.y);
+                    int dHorizontal = (int)(target.x - agentPosition.x);
                     bool moveHorizontal = Mathf.Abs(dHorizontal) > MyRandom.Int(0, Mathf.Abs(dHorizontal) + Mathf.Abs(dVertical));
                     move = moveHorizontal ? edgeVectors[(dHorizontal > 0) ? 1 : 3] : edgeVectors[(dVertical > 0) ? 0 : 2];
                 }
@@ -307,7 +316,10 @@ public class Graph
         {
             
         }
-       
+
+        // help to find start room in cellmap
+        StartNodeDistanceXInGraph = -minWidth;
+
         return wholeMap;
     }
 
