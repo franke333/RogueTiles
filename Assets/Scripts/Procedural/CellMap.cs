@@ -8,6 +8,8 @@ public struct Cell
     public byte type;
     public int roomIndex;
     public int distance;
+
+    public bool IsWalkable { get => ((TileType)type).IsWalkable(); }
 }
 
 public class CellMap
@@ -141,7 +143,7 @@ public class CellMap
                 rotCoords = (int x,int y) => (y, insertedMap.Height - x - 1);
                 break;
             case 2:
-                rotCoords = (int x, int y) => (insertedMap.Width - y - 1, insertedMap.Height - x - 1);
+                rotCoords = (int x, int y) => (insertedMap.Width - x - 1, insertedMap.Height -y - 1);
                 break;
             case 3:
                 rotCoords = (int x, int y) => (insertedMap.Width - y - 1, x);
