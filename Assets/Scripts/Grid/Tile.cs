@@ -7,6 +7,10 @@ public class Tile : MonoBehaviour
     [SerializeField]
     Color _oddColor;
     [SerializeField]
+    bool _wall;
+    [SerializeField]
+    bool _walkable;
+    [SerializeField]
     SpriteRenderer _sr;
     [SerializeField]
     GameObject _selectionTile;
@@ -16,6 +20,8 @@ public class Tile : MonoBehaviour
     GameObject _rangeTile;
     [SerializeField]
     GridObject _occupiedObject;
+
+    
 
     public Room Room { get => _room; set => _room = value; }
     Room _room;
@@ -30,7 +36,7 @@ public class Tile : MonoBehaviour
     public void Init(bool isOdd,int x,int y, Room room)
     {
         if(isOdd)
-            _sr.color = _oddColor;
+            _sr.color *= _oddColor;
         this.x = x;
         this.y = y;
         Visible = false;
@@ -84,8 +90,10 @@ public class Tile : MonoBehaviour
 
     public bool IsWalkable
     {
-        get => _occupiedObject != null ? _occupiedObject.IsWalkable : true;
+        get => !_wall && _walkable && (_occupiedObject != null ? _occupiedObject.IsWalkable : true);
     }
+
+    public bool IsWall { get => _wall; }
 
     private bool CheckSelectability()
     {

@@ -47,15 +47,20 @@ public class GridManager : MonoBehaviour
         switch (card.shape) 
         {
             case Card.AreaShape.Line:
-                foreach(var dir in new int[] { 1,-1})
+                foreach (var dir in new int[] { 1, -1 })
+                {
+                    Tile t;
                     for (int i = 1; i <= card.range; i++)
-                    {
-                        Tile t;
-                        if(_map.TryGetValue(new Vector2(x + dir * i, y),out t))
+                        if (_map.TryGetValue(new Vector2(x + dir * i, y), out t) && !t.IsWall)
                             t.DisplayInRange();
-                        if(_map.TryGetValue(new Vector2(x, y + dir * i), out t))
+                        else
+                            break;
+                    for (int i = 1; i <= card.range; i++)
+                        if (_map.TryGetValue(new Vector2(x, y + dir * i), out t) && !t.IsWall)
                             t.DisplayInRange();
-                    }
+                        else
+                            break;
+                }
                 break;
             case Card.AreaShape.Circle:
                 Log.Error("NOT IMPLEMENTED");
@@ -161,8 +166,9 @@ public class GridManager : MonoBehaviour
                 return;
             t.Visible = true;
             lightLevel[new Vector2(t.x, t.y)] = intensity;
-            foreach (var at in GetAdjecentTiles(t))
-                LightUp(at, intensity - 1);
+            if(!t.IsWall)
+                foreach (var at in GetAdjecentTiles(t))
+                    LightUp(at, intensity - 1);
         }
 
         foreach (var unit in lightGivingUnits)

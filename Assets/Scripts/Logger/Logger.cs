@@ -26,7 +26,7 @@ public static class Log
 
     static Log()
     {
-        var info = GameObject.Find("LoggerManager").GetComponent<LoggerManager>();
+        LoggerManager info = GameObject.Find("LoggerManager").GetComponent<LoggerManager>();
         LoggerManager.LogTypeInfo[] datas = new LoggerManager.LogTypeInfo[(int)MessageType.Count]
             { info.Debug, info.Info, info.Warning, info.Error };
         for (int i = 0; i < datas.Length; i++)

@@ -127,6 +127,15 @@ public class CellMap
         Log.Info($"Recalculated distances from {x} {y}, coverage is {(float)WalkableReachableTilesCount / (Width * Height)}", null);
     }
 
+    public void ClearUnreachableTilesFrom(int x,int y)
+    {
+        CalculateDistancesFrom(x, y);
+        for (int i = 0; i < Width; i++)
+            for (int j = 0; j < Height; j++)
+                if (_map[i, j].IsWalkable && _map[i, j].distance == -1)
+                    _map[i, j] = new Cell() { roomIndex = 0, type = 0 };
+    }
+
     /// <summary>
     /// 
     /// </summary>
@@ -140,21 +149,21 @@ public class CellMap
         switch (rotate%4)
         {
             case 1:
-                rotCoords = (int x,int y) => (y, insertedMap.Height - x - 1);
+                rotCoords = (int c,int d) => (insertedMap.Width - d - 1, c);
                 break;
             case 2:
-                rotCoords = (int x, int y) => (insertedMap.Width - x - 1, insertedMap.Height -y - 1);
+                rotCoords = (int c, int d) => (insertedMap.Width - c - 1, insertedMap.Height - d - 1);
                 break;
             case 3:
-                rotCoords = (int x, int y) => (insertedMap.Width - y - 1, x);
+                rotCoords = (int c, int d) => (d, insertedMap.Height - c - 1);
                 break;
             case 0:
             default:
-                rotCoords = (int x, int y) => (x, y);
+                rotCoords = (int c, int d) => (c, d);
                 break;
         }
 
-        if (rotate % 2 == 0)
+        if ((rotate % 2 ) == 0)
         {
             if (x + insertedMap.Width > Width || y + insertedMap.Height > Height)
             {
@@ -168,13 +177,13 @@ public class CellMap
             if (x + insertedMap.Height > Width || y + insertedMap.Width > Height)
             {
                 Log.Error($"Inserting map out of bounds\n{Width}:{Height} and inserted map was from" +
-                    $"{x}:{y} to {x + insertedMap.Width}:{y + insertedMap.Height} upper bounds excluded", null);
+                    $"{x}:{y} to {x + insertedMap.Height}:{y + insertedMap.Width} upper bounds excluded", null);
                 return -1;
             }
         }
-
-        for (int i = 0; i < (rotate % 2 == 0 ? insertedMap.Width : insertedMap.Height); i++)
-            for (int j = 0; j < (rotate % 2 == 0 ? insertedMap.Height : insertedMap.Width ); j++)
+        Log.Debug($"{x} {y} {insertedMap.Width} {insertedMap.Height} {Width} {Height}");
+        for (int i = 0; i < (((rotate % 2 ) == 0) ? insertedMap.Width : insertedMap.Height); i++)
+            for (int j = 0; j < (((rotate % 2 ) == 0) ? insertedMap.Height : insertedMap.Width ); j++)
                 if (insertedMap[rotCoords(i, j)].type != 0)
                 {
                     _map[i + x, j + y] = insertedMap[rotCoords(i,j)];

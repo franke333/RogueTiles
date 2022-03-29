@@ -23,7 +23,10 @@ public class DebugGenerateLevel : MonoBehaviour
 
     void Update()
     {
+        
+
         CellMap map = null;
+
         if (Input.GetKeyDown(KeyCode.M))
         {
              map = DrunkardWalk.Generate(mapWidth, mapHeight, RoomType.Outside, TileType.Dirt, drunkards, drunkardsMaxPath);
@@ -39,13 +42,17 @@ public class DebugGenerateLevel : MonoBehaviour
         {
             map = DrunkardWalk.Generate(mapWidth, mapHeight, RoomType.Outside, TileType.Dirt, drunkards, drunkardsMaxPath);
 
-            int numberOfDungeons = 1;//MyRandom.Int(1, 3) + MyRandom.Int(1, 2);
+            int numberOfDungeons = MyRandom.Int(1, 3);
 
             var adjecentCoords = new (int,int)[] { 
                 (-1,-1),(-1,0),(-1,1),
                 (0,-1),        (0,1),
                 (1,-1), (1,0), (1,1),
             };
+            int maxUnsucessfulTries = 15;
+            List<(Vector2,Vector2)> listOfDungeonPlacements = new List<(Vector2, Vector2)>();
+
+            map.CalculateDistancesFrom(map.Width / 2, map.Height / 2);
 
             for (int i = 0; i < numberOfDungeons; i++)
             {
@@ -85,9 +92,11 @@ public class DebugGenerateLevel : MonoBehaviour
                 dungeonWithWalls.SetCellOfRoom(startX, startY, TileType.Cobblestone, 1);
 
 
+
                 //Enumerate all possible positions for dungeon so the entrance is accessable
-                map.CalculateDistancesFrom(map.Width / 2, map.Height / 2);
                 List<((int, int), int)> possibleDungEntrance = new List<((int, int), int)>();
+
+                //check for possible way in
                 for (int x = 0; x < map.Width; x++)
                 {
                     for (int y = 0; y < map.Height; y++)
@@ -95,79 +104,114 @@ public class DebugGenerateLevel : MonoBehaviour
                         if (Math.Abs(x - map.Width / 2) < spawnSafeArea || Math.Abs(y - map.Height / 2) < spawnSafeArea)
                             continue;
 
-                        if (!map[x, y].IsWalkable)
+                        if (map[x, y].type != (byte)TileType.Dirt)
                             continue;
 
-                        if (y >= startX && y + dungeonWithWalls.Width - startX < map.Height) {
-                            if (x < map.Width / 2)
-                            {
+                        if (x < map.Width / 2)
+                        {
+                            if (y >= dungeonWithWalls.Width - startX && y + startX  < map.Height)
                                 if (x >= dungeonWithWalls.Height)
                                     if (map[x + 1, y].IsWalkable && map[x, y].distance >= map[x + 1, y].distance)
                                         possibleDungEntrance.Add(((x, y), 3));
-                            }
-                            else
-                            {
+                        }
+                        else
+                        {
+                            if (y >= dungeonWithWalls.Width - startX && y + startX  < map.Height)
                                 if (x + dungeonWithWalls.Height <= map.Width)
                                     if (map[x - 1, y].IsWalkable && map[x, y].distance >= map[x - 1, y].distance)
                                         possibleDungEntrance.Add(((x, y), 1));
-                            }
                         }
-                        if (x >= startX && x + dungeonWithWalls.Width - startX < map.Width) {
-                            if (y < map.Height / 2)
-                            {
-                                if(y >= dungeonWithWalls.Height)
+        
+                        if (y < map.Height / 2)
+                        {
+                            if (x >= dungeonWithWalls.Width - startX && x + startX  < map.Width)
+                                if (y >= dungeonWithWalls.Height)
                                     if (map[x, y + 1].IsWalkable && map[x, y].distance >= map[x, y + 1].distance)
                                         possibleDungEntrance.Add(((x, y), 2));
-                            }
-                            else
-                            {
+                        }
+                        else
+                        {
+                            if (x >= startX && x + dungeonWithWalls.Width - startX < map.Width)
                                 if (y + dungeonWithWalls.Height <= map.Height)
                                     if (map[x, y - 1].IsWalkable && map[x, y].distance >= map[x, y - 1].distance)
                                         possibleDungEntrance.Add(((x, y), 0));
-                            }
                         }
                     }
                 }
 
 
-
-
-                
-                var ((dungeonXEntrance, dungeonYEntrance), orientaion) = 
-                    MyRandom.Choice(possibleDungEntrance);
-                Log.Debug($"orient = {orientaion}", null);
-                Log.Debug($"orient 2 = {possibleDungEntrance.Where(x => x.Item2 == 2).Count()}");
-                Log.Debug($"trying spawn entrance at {dungeonXEntrance} {dungeonYEntrance} with dungeon of size " +
-                    $"{dungeonWithWalls.Width} {dungeonWithWalls.Height} at map {map.Width} {map.Height}",null);
-                int dungeonX = 0, dungeonY = 0;
-                switch (orientaion)
+                if (possibleDungEntrance.Count == 0)
                 {
-                    case 0:
-                        dungeonX = dungeonXEntrance - startX;
-                        dungeonY = dungeonYEntrance;
-                        break;
-                    case 1:
-                        dungeonX = dungeonXEntrance;
-                        dungeonY = dungeonYEntrance + startX - dungeonWithWalls.Width;
-                        break;
-                    case 2:
-                        dungeonX = dungeonXEntrance + startX -dungeonWithWalls.Width;
-                        dungeonY = dungeonYEntrance - dungeonWithWalls.Height;
-                        break;
-                    case 3:
-                        dungeonX = dungeonXEntrance - dungeonWithWalls.Height;
-                        dungeonY = dungeonYEntrance - startX;
-                        break;
+                    Log.Error("No possible dungeon entrance", null);
+                    if (maxUnsucessfulTries > 0)
+                    {
+                        maxUnsucessfulTries--;
+                        i--;
+                    }
+                    continue;
                 }
 
-                map.InsertMap(dungeonX,dungeonY, dungeonWithWalls,orientaion);
+                for (int entrancyTry = 0; entrancyTry < 100; entrancyTry++)
+                {
+                    var ((dungeonXEntrance, dungeonYEntrance), orientaion) = MyRandom.Choice(possibleDungEntrance);
+                    int dungeonX = 0, dungeonY = 0;
+                    switch (orientaion)
+                    {
+                        case 0:
+                            dungeonX = dungeonXEntrance - startX;
+                            dungeonY = dungeonYEntrance;
+                            break;
+                        case 1:
+                            dungeonX = dungeonXEntrance;
+                            dungeonY = dungeonYEntrance + startX - dungeonWithWalls.Width + 1;
+                            break;
+                        case 2:
+                            dungeonX = dungeonXEntrance + startX - dungeonWithWalls.Width + 1;
+                            dungeonY = dungeonYEntrance - dungeonWithWalls.Height;
+                            break;
+                        case 3:
+                            dungeonX = dungeonXEntrance - dungeonWithWalls.Height;
+                            dungeonY = dungeonYEntrance - startX;
+                            break;
+                    }
+
+                    Vector2 leftTopCorner = new Vector2(
+                        dungeonX,
+                        dungeonY + ((orientaion%2)==0 ? dungeon.Height + 2 : dungeon.Width +2));
+                    Vector2 rightDownCorner = new Vector2(
+                         dungeonX + ((orientaion % 2) == 0 ? dungeon.Width + 2 : dungeon.Height + 2),
+                         dungeonY);
+
+                    if (listOfDungeonPlacements.Any(
+                        d => MyMath.RectanglesOverlap(d.Item1,d.Item2,leftTopCorner,rightDownCorner)))
+                    {
+                        // there is an overlap, check if this is last option
+                        if (entrancyTry == listOfDungeonPlacements.Count - 1)
+                        {
+                            Log.Error("No possible dungeon entrance due to overlaps", null);
+                            if (maxUnsucessfulTries > 0)
+                            {
+                                maxUnsucessfulTries--;
+                                i--;
+                            }
+                        }
+                        continue;
+                    }
+                    Log.Debug($"{orientaion}");
+                    map.InsertMap(dungeonX, dungeonY, dungeonWithWalls, orientaion);
+                    listOfDungeonPlacements.Add((leftTopCorner, rightDownCorner));
+                    break;
+                }
             }
+
+            map.ClearUnreachableTilesFrom(mapWidth / 2, mapHeight / 2);
         }
 
+       
 
         if (map == null)
             return;
-
+       
         mr.material.mainTexture = map.mapIntoTexture();
         mr.material.mainTexture.filterMode = FilterMode.Point;
 

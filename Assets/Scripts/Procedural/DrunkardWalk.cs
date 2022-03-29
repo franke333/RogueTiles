@@ -11,9 +11,9 @@ public class DrunkardWalk
         CellMap cm = new CellMap(width, height);
         var center = (width / 2, height / 2);
 
-        cm.SetCell(center.Item1, center.Item2, tileType);
-
         cm.AddNewRoom(roomType);
+
+        cm.SetCell(center.Item1, center.Item2, tileType);
 
         List<(int,int)> possibleMoves = new List<(int, int)>(){ (0,1),(0,-1),(1,0),(-1,0) };
 

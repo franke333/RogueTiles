@@ -362,8 +362,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   endPosition: {x: 3, y: 3}
-  randomMoveChance: 0.1
-  numberOfAgents: 2
+  randomMoveChance: 0.2
+  numberOfAgents: 3
   roomWidth: 5
   roomHeight: 5
   corridorWidth: 2
@@ -371,9 +371,10 @@ MonoBehaviour:
   roomMergeChance: 0.3
   mapWidth: 100
   mapHeight: 100
-  drunkards: 3
-  drunkardsMaxPath: 500
+  drunkards: 15
+  drunkardsMaxPath: 3000
   mr: {fileID: 146616606}
+  spawnSafeArea: 8
 --- !u!64 &146616605
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -569,7 +570,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterPrefab: {fileID: 7703456604106432544, guid: 46c74610755ed69429c883712a1e2d89, type: 3}
-  pos: {x: 2, y: 0}
+  pos: {x: 45, y: 45}
 --- !u!4 &154544069
 Transform:
   m_ObjectHideFlags: 0
@@ -614,7 +615,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterPrefab: {fileID: 3544650183521419590, guid: 32c1021718bc4604b88ccd8ad79d5b6e, type: 3}
-  pos: {x: 2, y: 2}
+  pos: {x: 50, y: 50}
 --- !u!4 &197802284
 Transform:
   m_ObjectHideFlags: 0
@@ -850,7 +851,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5fc90ed6826b3b4b8dfcfbfb3773687, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tilePrefab: {fileID: 5491905858436910780, guid: 20a066c783c815f448b9a0539b7f61f9, type: 3}
+  DirtTilePrefab: {fileID: 1452153010618427602, guid: d39d43220b72c6b40a11833666303c5d, type: 3}
+  WallTilePrefab: {fileID: 7726355805634153189, guid: dcc42b524cbb2674083ed581ce189a29, type: 3}
+  CobblestoneTilePrefab: {fileID: 5491905858436910780, guid: 20a066c783c815f448b9a0539b7f61f9, type: 3}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1018,6 +1021,7 @@ Transform:
   - {fileID: 888101089}
   - {fileID: 255565583}
   - {fileID: 343778350}
+  - {fileID: 899904912}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1459,6 +1463,49 @@ Transform:
   m_Father: {fileID: 672103274}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &899904911
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 899904912}
+  - component: {fileID: 899904913}
+  m_Layer: 0
+  m_Name: CameraManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &899904912
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 899904911}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 672103274}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &899904913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 899904911}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09369e2e7c010a54885b05d70ef740fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &990737069
 GameObject:
   m_ObjectHideFlags: 0

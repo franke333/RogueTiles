@@ -52,6 +52,9 @@ public class GameManager : SingletonClass<GameManager>
         if (State == GameState.StartGame)
             ChangeState(GameState.StartGame);
 
+        if (State == GameState.PlayerTurn)
+            CameraManager.Instance.SetFocusAt(_units[_currentUnitIndex].gameObject);
+
         // we are waiting on turn (animation or player)
         if (!_units[_currentUnitIndex].TakeTurn())
             return;
@@ -163,11 +166,13 @@ public class GameManager : SingletonClass<GameManager>
         foreach (var unit in _units)
             Destroy(unit.gameObject);
         _units.Clear();
-        _currentUnitIndex = 0;
+        
 
 
         foreach (DebugSummonUnit o in GameObject.FindObjectsOfType(typeof(DebugSummonUnit)))
             o.Summon();
+
+        _currentUnitIndex = 0;
         if (_units[_currentUnitIndex].IsEnemy)
             ChangeState(GameState.EnemyTurn);
         else

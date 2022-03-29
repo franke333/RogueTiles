@@ -2,16 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public struct EnemyEntry
+{
+    public int difficulty;
+    public GridUnit enemy;
+    bool appearOutside, appearInside;
+}
 
 public enum TileType
 {
-    Empty = 0,
-    Dirt = 1,
-
-
-
-    Wall = 10,
-    Cobblestone = 11
+    Empty,
+    Dirt,
+    Wall,
+    Cobblestone
 }
 
 public static class TileTypeExtensions
@@ -23,12 +26,25 @@ public static class TileTypeExtensions
 
 public class LevelDesignManager : SingletonClass<LevelDesignManager>
 {
-    public Tile tilePrefab;
 
+    public Tile DirtTilePrefab;
+    public Tile WallTilePrefab;
+    public Tile CobblestoneTilePrefab;
 
-    public Tile GetTilePrefab(byte index)
+    public Tile GetTilePrefab(TileType type)
     {
-        //TODO
-        return tilePrefab;
+        switch (type)
+        {
+            case TileType.Dirt:
+                return DirtTilePrefab;
+            case TileType.Wall:
+                return WallTilePrefab;
+            case TileType.Cobblestone:
+                return CobblestoneTilePrefab;
+            default:
+                return null;
+        }
     }
+
+    public Tile GetTilePrefab(byte index) => GetTilePrefab((TileType)index);
 }
