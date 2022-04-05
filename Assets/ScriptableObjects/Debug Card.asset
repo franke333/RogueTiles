@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c62fd6550a927184f85575293f96fcfc, type: 3}
   m_Name: Debug Card
   m_EditorClassIdentifier: 
-  name: I don fukin know
+  name: do nothing
   cost: 0
   sprite: {fileID: 0}
-  description: bruh
+  description: '-'
+  shape: 0
+  range: 0
   effectValue: 10
   needsTarget: 0
   cardEffect:

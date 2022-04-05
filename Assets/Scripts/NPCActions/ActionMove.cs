@@ -16,7 +16,7 @@ public class ActionMove : NPCActionBase
 
     public override bool CheckPlayability(GridUnit caster)
     {
-        return GridManager.Instance.GetAdjecentTiles(caster.CurrentTile).Count > 0;
+        return GridManager.Instance.GetAdjecentTiles(caster.CurrentTile).Where(t => t.IsWalkable).Count() > 0;
     }
 
     public override void PerformAction(GridUnit caster)

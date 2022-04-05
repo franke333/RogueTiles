@@ -20,3 +20,9 @@ public static class MyMath
         return true;
     }
 }
+
+public static class Vector2Extension
+{
+    public static float ManhattanDistance(this Vector2 a, Vector2 b)
+        => Mathf.Abs(a.x - b.x) + Mathf.Abs(a.y - b.y);
+}

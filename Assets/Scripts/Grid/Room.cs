@@ -36,8 +36,11 @@ public class Room : MonoBehaviour
 
 public enum RoomType
 {
-    Outside,
+    Water,
 
+    Outside,
+    OutsideEnemyCamp,
+    OutsideShopkeeper,
 
     // Graph Rooms
     Start,

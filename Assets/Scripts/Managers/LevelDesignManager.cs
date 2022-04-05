@@ -30,6 +30,7 @@ public class LevelDesignManager : SingletonClass<LevelDesignManager>
     public Tile DirtTilePrefab;
     public Tile WallTilePrefab;
     public Tile CobblestoneTilePrefab;
+    public Tile WaterTilePrefab;
 
     public Tile GetTilePrefab(TileType type)
     {
@@ -42,9 +43,11 @@ public class LevelDesignManager : SingletonClass<LevelDesignManager>
             case TileType.Cobblestone:
                 return CobblestoneTilePrefab;
             default:
-                return null;
+                return WaterTilePrefab;
         }
     }
 
     public Tile GetTilePrefab(byte index) => GetTilePrefab((TileType)index);
+
+
 }

@@ -89,14 +89,12 @@ public class GridManager : MonoBehaviour
         _map = new Dictionary<Vector2, Tile>();
         _rooms = new List<Room>();
 
-        Log.Debug("1", gameObject);
 
         // generate and porcess rooms
         _rooms = layoutGenerator.Invoke();
         if(roomFuncs != null)
             roomFuncs.Invoke(_rooms);
 
-        Log.Debug("2", gameObject);
 
         // register all tiles
         foreach (var room in _rooms)

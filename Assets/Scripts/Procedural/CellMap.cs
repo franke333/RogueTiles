@@ -218,26 +218,27 @@ public class CellMap
     {
 
         var rooms = new List<Room>();
+        //water room
+        var go = new GameObject($"Room Water");
+        var room = go.AddComponent<Room>();
+        room.Type = RoomType.Water;
+        rooms.Add(room);
         for (int i = 0; i < _maxRoomIndex; i++) 
         {
-            var go = new GameObject($"Room {_roomTypes[i]}");
-            var room = go.AddComponent<Room>();
+            go = new GameObject($"Room {_roomTypes[i]}");
+            room = go.AddComponent<Room>();
             room.Type = _roomTypes[i];
-
             rooms.Add(room);
         }
 
         for (int x = 0; x < Width; x++)
             for (int y = 0; y < Height; y++)
-                if ( _map[x, y].type != 0)
                 {
                     Cell c = _map[x, y];
-
-                    int roomIndex = c.roomIndex - 1;
                     Tile tilePrefab = LevelDesignManager.Instance.GetTilePrefab(c.type);
-                    var tile = GameObject.Instantiate(tilePrefab, new Vector3(x, y), Quaternion.identity, rooms[roomIndex].transform);
-                    tile.Init((x + y)% 2 == 0, x, y, rooms[roomIndex]);
-                    rooms[roomIndex].GetRoomTiles.Add(tile);
+                    var tile = GameObject.Instantiate(tilePrefab, new Vector3(x, y), Quaternion.identity, rooms[c.roomIndex].transform);
+                    tile.Init((x + y)% 2 == 0, x, y, rooms[c.roomIndex]);
+                    rooms[c.roomIndex].GetRoomTiles.Add(tile);
                 }
         rooms.RemoveAll(r => r.GetRoomTiles.Count == 0);
         return rooms;
