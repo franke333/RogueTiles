@@ -2,12 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public struct EnemyEntry
-{
-    public int difficulty;
-    public GridUnit enemy;
-    bool appearOutside, appearInside;
-}
 
 public enum TileType
 {

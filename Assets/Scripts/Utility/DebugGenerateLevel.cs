@@ -97,10 +97,10 @@ public class DebugGenerateLevel : MonoBehaviour
 
 
 
-                //Enumerate all possible positions for dungeon so the entrance is accessable
+                //Enumerate all possible positions for dungeon placing so the entrance is accessable
                 List<((int, int), int)> possibleDungEntrance = new List<((int, int), int)>();
 
-                //check for possible way in
+                //check for possible entrances
                 for (int x = 0; x < map.Width; x++)
                 {
                     for (int y = 0; y < map.Height; y++)

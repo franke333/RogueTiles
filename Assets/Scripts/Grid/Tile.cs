@@ -13,11 +13,8 @@ public class Tile : MonoBehaviour
     [SerializeField]
     SpriteRenderer _sr;
     [SerializeField]
-    GameObject _selectionTile;
-    [SerializeField]
-    GameObject _fogOfWarTile;
-    [SerializeField]
-    GameObject _rangeTile;
+    Color _rangeColor, _selectionColor, _fogOfWarColor;
+    Color _baseColor;
     [SerializeField]
     GridObject _occupiedObject;
 
@@ -28,27 +25,44 @@ public class Tile : MonoBehaviour
 
 
     static HashSet<Tile> tilesDisplayedInRange = new HashSet<Tile>();
-    bool _visible = false;
+    bool _visible,_inRange,_selected;
 
     public int x, y;
 
     public GridObject GetObject { get => _occupiedObject; }
     public void Init(bool isOdd,int x,int y, Room room)
     {
-        if(isOdd)
-            _sr.color *= _oddColor;
+        _baseColor = _sr.color;
+        if(isOdd && IsWalkable)
+            _baseColor *= _oddColor;
         this.x = x;
         this.y = y;
         Visible = false;
         _room = room;
+        RecalculateColor();
+    }
+
+    private void RecalculateColor()
+    {
+        Color c = _baseColor;
+        if (!Visible)
+            c = Color.Lerp(c, _fogOfWarColor, _fogOfWarColor.a);
+        if (_inRange)
+            c = Color.Lerp(c, _rangeColor, _rangeColor.a);
+        if (_selected)
+            c = Color.Lerp(c, _selectionColor, _selectionColor.a);
+        c.a = _baseColor.a;
+        _sr.color = c;
     }
 
     public bool Visible { 
         get => _visible;
         set
         {
+            if(_visible==value)
+                return;
             _visible = value;
-            _fogOfWarTile.SetActive(!value);
+            RecalculateColor();
             if (_occupiedObject != null)
                 _occupiedObject.GetComponent<SpriteRenderer>().enabled = value;
         }
@@ -57,13 +71,17 @@ public class Tile : MonoBehaviour
     public static void CleanDisplayInRange()
     {
         foreach (var t in tilesDisplayedInRange)
-            t._rangeTile.SetActive(false);
+        {
+            t._inRange = false;
+            t.RecalculateColor();
+        }
         tilesDisplayedInRange.Clear();
     }
 
     public void DisplayInRange()
     {
-        _rangeTile.SetActive(true);
+        _inRange = true;
+        RecalculateColor();
         tilesDisplayedInRange.Add(this);
     }
 
@@ -109,19 +127,21 @@ public class Tile : MonoBehaviour
     {
         if (!CheckSelectability())
             return;
-        _selectionTile.SetActive(true);
+        _selected = true;
+        RecalculateColor();
     }
 
     private void OnMouseExit()
     {
-        _selectionTile.SetActive(false);
+        _selected = false;
+        RecalculateColor();
     }
 
     private void OnMouseDown()
     {
         if (!CheckSelectability())
             return;
-        if (_rangeTile.activeSelf)
+        if (_inRange)
             GridManager.Instance.SelectedTileInRange = this;
         GridManager.Instance.SetSelectedTile(this);
     }
