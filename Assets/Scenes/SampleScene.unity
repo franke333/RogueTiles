@@ -361,14 +361,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77b8f7cf329aa4c4fb117fb2b5c285b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  endPosition: {x: 3, y: 3}
-  randomMoveChance: 0.2
-  numberOfAgents: 3
-  roomWidth: 5
-  roomHeight: 5
-  corridorWidth: 2
-  corridorLength: 2
-  roomMergeChance: 0.3
+  dungeonSettings:
+    endPosition: {x: 3, y: 3}
+    randomMoveChance: 0.2
+    numberOfAgents: 2
+    roomWidth: 6
+    roomHeight: 6
+    corridorWidth: 2
+    corridorLength: 2
+    roomMergeChance: 0.1
+  numberOfDungeons: 6
   mapWidth: 100
   mapHeight: 100
   drunkards: 15
@@ -378,7 +380,6 @@ MonoBehaviour:
   voronoiMr2: {fileID: 781321799}
   voronoiPointsCount: 50
   enemyCampProb: 0.3
-  spawnSafeArea: 8
 --- !u!64 &146616605
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -856,9 +857,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DirtTilePrefab: {fileID: 1452153010618427602, guid: d39d43220b72c6b40a11833666303c5d, type: 3}
-  WallTilePrefab: {fileID: 7726355805634153189, guid: dcc42b524cbb2674083ed581ce189a29, type: 3}
-  CobblestoneTilePrefab: {fileID: 5491905858436910780, guid: 20a066c783c815f448b9a0539b7f61f9, type: 3}
-  WaterTilePrefab: {fileID: 3610897045665275265, guid: 2039e9cb34b410e45a55c7f5ca4baec6, type: 3}
+  WallTilePrefab: {fileID: 255348424307460436, guid: dcc42b524cbb2674083ed581ce189a29, type: 3}
+  CobblestoneTilePrefab: {fileID: 2665019034490785667, guid: db089b19649384546b8b0d5f101db00c, type: 3}
+  WaterTilePrefab: {fileID: 8717461199902170475, guid: 2039e9cb34b410e45a55c7f5ca4baec6, type: 3}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
