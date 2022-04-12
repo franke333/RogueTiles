@@ -6,7 +6,7 @@ using System.Linq;
 public class NPCUnit : GridUnit
 {
     [System.Serializable]
-    struct ActionEntry
+    public struct ActionEntry
     {
         public int weight;
         public NPCActionBase actionObj;
@@ -14,6 +14,9 @@ public class NPCUnit : GridUnit
 
     [SerializeField]
     List<ActionEntry> _actions = new List<ActionEntry>();
+
+
+    public List<ActionEntry> ActionList { get => _actions; }
     protected override bool PlayTurn()
     {
 

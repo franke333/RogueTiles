@@ -21,10 +21,9 @@ public class CardEffects : MonoBehaviour
             => new CardData(Card.playedCard, Card.currentUnit, Card.currentTarget);
     }
 
-    public void DealDamage()
+    public void DealDamage(int damage)
     {
         var data = CardData.ReadData();
-        int dmg = data.playedCard.effectValue;
-        data.currentTarget.TakeDamage(dmg);
+        data.currentTarget.TakeDamage(damage);
     }
 }

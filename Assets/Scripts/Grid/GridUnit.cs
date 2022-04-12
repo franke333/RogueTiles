@@ -17,6 +17,9 @@ public abstract class GridUnit : GridObject
 
     List<Effect> _activeEffects;
 
+    [SerializeField]
+    GameObject childrenRenderer;
+
     public virtual int visibleRange { get => 0; }
     public bool IsEnemy
     {
@@ -57,6 +60,14 @@ public abstract class GridUnit : GridObject
         return res;
     }
 
+    public void Init(int maxHp,bool enemy)
+    {
+        _maxHp = maxHp;
+        _isEnemy = enemy;
+        _hp = maxHp;
+        childrenRenderer = transform.GetChild(0).gameObject;
+        _targetable = true;
+    }
 
     protected bool IsSameFaction(GridUnit otherUnit)
         => otherUnit.IsEnemy == IsEnemy;
@@ -100,7 +111,10 @@ public abstract class GridUnit : GridObject
         gameObject.SetActive(false);
     }
 
+    public override void SetVisible(bool value)
+    {
+        childrenRenderer.SetActive(value);
+    }
 
 
-   
 }

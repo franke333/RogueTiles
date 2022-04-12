@@ -184,7 +184,6 @@ public class CellMap
                 return -1;
             }
         }
-        Log.Debug($"{x} {y} {insertedMap.Width} {insertedMap.Height} {Width} {Height}");
         for (int i = 0; i < (((rotate % 2 ) == 0) ? insertedMap.Width : insertedMap.Height); i++)
             for (int j = 0; j < (((rotate % 2 ) == 0) ? insertedMap.Height : insertedMap.Width ); j++)
                 if (insertedMap[rotCoords(i, j)].type != 0)

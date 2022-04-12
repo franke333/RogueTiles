@@ -8,6 +8,7 @@ public class Room : MonoBehaviour
 {
     public RoomType Type { get; set; }
     public string roomName;
+    public int TribeOccupation { get; set; }
 
     public List<Tile> GetRoomTiles { get => _roomTiles; }
     List<Tile> _roomTiles;

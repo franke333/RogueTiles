@@ -197,4 +197,61 @@ public class LevelDesignManager : SingletonClass<LevelDesignManager>
         }
         return false;
     }
+
+    public static void SplitRoomVoronoi(CellMap map,Predicate<Cell> predicate,int numberOfVoronoiCells)
+    {
+        // divide outside into rooms using voronoi graph, then fill them up
+        List<Vector2> voronoiPList = new List<Vector2>();
+        List<Color> voronoiColors = new List<Color>();
+        List<List<(int, int)>> tilesOfVoronoiCellList = new List<List<(int, int)>>();
+        for (int i = 0; i < numberOfVoronoiCells; i++)
+        {
+            voronoiPList.Add(new Vector2(MyRandom.Int(0, map.Width), MyRandom.Int(0, map.Height)));
+            voronoiColors.Add(Color.HSVToRGB(MyRandom.Float(), MyRandom.Float(0.5f, 1f), MyRandom.Float(0.5f, 1f)));
+            tilesOfVoronoiCellList.Add(new List<(int, int)>());
+        }
+        for (int x = 0; x < map.Width; x++)
+        {
+            for (int y = 0; y < map.Height; y++)
+            {
+                //find closest voronoi point
+                if (!predicate(map[x,y]))
+                    continue;
+                Vector2 v = new Vector2(x, y);
+                int minPointIndex = 0;
+                float minDist = voronoiPList[0].ManhattanDistance(v);
+                for (int i = 1; i < numberOfVoronoiCells; i++)
+                {
+                    var dist = voronoiPList[i].ManhattanDistance(v);
+                    if (minDist > dist)
+                    {
+                        minPointIndex = i;
+                        minDist = dist;
+                    }
+                }
+                tilesOfVoronoiCellList[minPointIndex].Add((x, y));
+
+            }
+        }
+        //check for too small Cells (lets say 30 for now)
+        for (int i = 0; i < tilesOfVoronoiCellList.Count; i++)
+        {
+            var voronoiCell = tilesOfVoronoiCellList[i];
+            if (voronoiCell.Count < 30)
+            {
+                continue;
+            }
+            // new outside room types here 
+            // TODO: add room specifier
+            if (MyRandom.Float() <= 0.5f)
+                map.AddNewRoom(RoomType.OutsideEnemyCamp);
+            else
+                map.AddNewRoom(RoomType.Outside);
+
+            foreach (var (x, y) in voronoiCell)
+            {
+                map.SetCell(x, y, (TileType)map[x,y].type);
+            }
+        }
+    }
 }

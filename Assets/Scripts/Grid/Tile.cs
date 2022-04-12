@@ -42,6 +42,11 @@ public class Tile : MonoBehaviour
         RecalculateColor();
     }
 
+    public void TintBaseColor(Color color,float by)
+    {
+        _baseColor = Color.Lerp(_baseColor,color,by);
+    }
+
     private void RecalculateColor()
     {
         Color c = _baseColor;
@@ -64,7 +69,7 @@ public class Tile : MonoBehaviour
             _visible = value;
             RecalculateColor();
             if (_occupiedObject != null)
-                _occupiedObject.GetComponent<SpriteRenderer>().enabled = value;
+                _occupiedObject.SetVisible(value);
         }
     }
 
@@ -103,7 +108,7 @@ public class Tile : MonoBehaviour
         }
         obj.CurrentTile = this;
         obj.gameObject.transform.position = transform.position;
-        obj.GetComponent<SpriteRenderer>().enabled = Visible;
+        obj.SetVisible(Visible);
     }
 
     public bool IsWalkable

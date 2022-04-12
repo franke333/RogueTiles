@@ -55,8 +55,6 @@ public class Card : ScriptableObject
         playedCard = null; currentTarget = null; currentUnit = null;
     }
     // ---------------------------
-
-
     public new string name;
     public int cost;
     public Sprite sprite;
@@ -65,7 +63,6 @@ public class Card : ScriptableObject
     public AreaShape shape;
     public int range;
 
-    public int effectValue;
     public bool needsTarget;
     public UnityEvent cardEffect;
 }

@@ -13,7 +13,7 @@ public static class Log
         Count = 4
     }
 
-    private static string[] _messageStrings = new string[]
+    private static readonly string[] _messageStrings = new string[]
     {
         "Debug",
         "Info",

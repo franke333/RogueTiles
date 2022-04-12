@@ -9,7 +9,7 @@ public class GameManager : SingletonClass<GameManager>
     int _currentUnitIndex;
 
     [SerializeField]
-    float _waitTime = 0.5f;
+    float _waitTime = 0.2f;
     float _waitUntil;
 
     [SerializeField]
@@ -160,15 +160,16 @@ public class GameManager : SingletonClass<GameManager>
         HandDisplayer.Instance.DisplayUnitCards((PlayerUnit)_units[_currentUnitIndex]);
     }
 
-    private void HandleStart()
+    public void ClearUnits()
     {
         //clean
         foreach (var unit in _units)
             Destroy(unit.gameObject);
         _units.Clear();
-        
+    }
 
-
+    private void HandleStart()
+    {
         foreach (DebugSummonUnit o in GameObject.FindObjectsOfType(typeof(DebugSummonUnit)))
             o.Summon();
 
