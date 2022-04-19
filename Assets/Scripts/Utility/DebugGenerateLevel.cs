@@ -71,7 +71,7 @@ public class DebugGenerateLevel : MonoBehaviour
 
         Func<List<Room>> func = () => map.GenerateTileMap();
 
-        TribesManager.Instance.GenerateTribes(new List<int>() {2,2}, 2);
+        TribesManager.Instance.GenerateTribes(new List<int>() {2,2,2,2}, 4);
 
         GridManager.Instance.GenerateLevel(func, TribesManager.Instance.ProcessRooms);
 

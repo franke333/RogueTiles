@@ -90,8 +90,15 @@ public class GameManager : SingletonClass<GameManager>
                 break;
             case GameState.StartGame:
                 break;
-            case GameState.PlayerTurn:
             case GameState.EnemyTurn:
+                while (State == GameState.EnemyTurn)
+                {
+                    if (Time.time < _waitUntil)
+                        break;
+                    ProcessUnitTurn();
+                }
+                break;
+            case GameState.PlayerTurn:
             case GameState.PlayerChooseTarget:
                 ProcessUnitTurn();
                 break;
