@@ -13,6 +13,8 @@ public class TribesManager : SingletonClass<TribesManager>
 
     List<Tribe> tribes;
 
+    private GameObject enemyParentObject;
+
     private class Tribe
     {
         public string name { get; private set; }
@@ -39,8 +41,9 @@ public class TribesManager : SingletonClass<TribesManager>
             TribesManager tribeManager = TribesManager.Instance;
             for (int i = 0; i < size; i++)
             {
+                //character creation
                 string unitName = MyRandom.String(4, 9);
-                GameObject unitObject = new GameObject(unitName);
+                GameObject unitObject = new GameObject(name + " " + unitName);
                 GameObject spritesHolder = new GameObject("Sprites Holder");
                 spritesHolder.transform.parent = unitObject.transform;
                 var unit = unitObject.AddComponent<NPCUnit>();
@@ -72,7 +75,7 @@ public class TribesManager : SingletonClass<TribesManager>
                 sr.sprite = MyRandom.Choice(tribeManager.rightHandItems);
                 sr.sortingOrder = tribeManager.baseLayerOrder + 5;
 
-                //TODO add movements
+                //TODO add movements and actions
                 unit.ActionList.Add(new NPCUnit.ActionEntry() { weight = 1, actionObj = TribesManager.Instance.actions[0] });
 
                 unit.Init(5, true);
@@ -98,11 +101,13 @@ public class TribesManager : SingletonClass<TribesManager>
         foreach(var size in outdoorTribeSizes)
             tribes.Add(new Tribe(size, RoomType.OutsideEnemyCamp));
         _ready = true;
+        enemyParentObject = new GameObject("Enemies");
+        enemyParentObject.transform.SetParent(GameObject.Find("Enviroment").transform);
     }
 
     private void SpawnEnemy(GridUnit enemy,Tile tile)
     {
-        var unit = Instantiate(enemy);
+        var unit = Instantiate(enemy,enemyParentObject.transform);
         tile.Occupy(unit);
         unit.gameObject.SetActive(true);
     }
