@@ -34,8 +34,8 @@ public class DebugGenerateLevel : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.N))
         {
             var dg = dungeonSettings;
-             map = Graph.WalkToTarget(dg.endPosition, dg.randomMoveChance, dg.numberOfAgents)
-                .GenerateCellMap(dg.roomWidth, dg.roomHeight, dg.corridorWidth, dg.corridorLength, dg.roomMergeChance);
+            var g = Graph.WalkToTarget(dg.endPosition, dg.randomMoveChance, dg.numberOfAgents);
+            map = g.GenerateCellMap(dg.roomWidth, dg.roomHeight, dg.corridorWidth, dg.corridorLength, dg.roomMergeChance);
         }
 
         if (Input.GetKeyDown(KeyCode.B))
@@ -58,9 +58,12 @@ public class DebugGenerateLevel : MonoBehaviour
             LevelDesignManager.SplitRoomVoronoi(map,(Cell c) => c.roomIndex==outsideRoomIndex, map.Width * map.Height / 200);
         }
 
-       
+        if (Input.GetKeyDown(KeyCode.V))
+            map = BSP.Generate(120, 120, 6, 2, 5);
 
-        if (map == null)
+
+
+            if (map == null)
             return;
 
         GameManager.Instance.ClearUnits();
