@@ -56,13 +56,18 @@ public class Card : ScriptableObject
     }
     // ---------------------------
     public new string name;
-    public int cost;
     public Sprite sprite;
     public string description;
 
     public AreaShape shape;
     public int range;
 
+    // item generation
+    public int cost;
+    public ItemType itemType;
+
     public bool needsTarget;
     public UnityEvent cardEffect;
+
+
 }

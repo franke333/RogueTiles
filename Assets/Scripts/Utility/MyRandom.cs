@@ -35,6 +35,8 @@ public static class MyRandom
 
     public static T Choice<T>(IList<T> list)
     {
+        if (list.Count == 0)
+            throw new System.Exception("Cannot choose from an empty list.");
         return list[Int(0, list.Count)];
     }
 

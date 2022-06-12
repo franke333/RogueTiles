@@ -11,6 +11,7 @@ public abstract class GridUnit : GridObject
     [SerializeField]
     protected int _maxHp;
 
+    private bool takingTurn = false;
 
     [SerializeField]
     protected bool _isEnemy;
@@ -54,9 +55,19 @@ public abstract class GridUnit : GridObject
 
     public bool TakeTurn()
     {
-        RaiseEvent(new EventInfo(EventType.StartTurn));
+        if (!takingTurn)
+        {
+            //turn started
+            RaiseEvent(new EventInfo(EventType.StartTurn));
+            takingTurn = true;
+        }
         bool res = PlayTurn();
-        RaiseEvent(new EventInfo(EventType.EndTurn));
+        if (res)
+        {
+            //turn ending
+            RaiseEvent(new EventInfo(EventType.EndTurn));
+            takingTurn = false;
+        }
         return res;
     }
 
@@ -92,7 +103,7 @@ public abstract class GridUnit : GridObject
         
     }
 
-    protected void RaiseEvent(EventInfo ei)
+    protected virtual void RaiseEvent(EventInfo ei)
     {
 
         for(int i = 0; i < _activeEffects.Count; i++)

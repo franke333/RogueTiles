@@ -72,12 +72,12 @@ public class DebugGenerateLevel : MonoBehaviour
         mr.material.mainTexture = map.mapIntoTexture();
         mr.material.mainTexture.filterMode = FilterMode.Point;
 
-        Func<List<Room>> func = () => map.GenerateTileMap();
+        Func<List<Room>> func = map.GenerateTileMap;
 
         TribesManager.Instance.GenerateTribes(new List<int>() {2,2,2,2}, 4);
-
+        
         GridManager.Instance.GenerateLevel(func, TribesManager.Instance.ProcessRooms);
-
+        
         GameManager.Instance.ChangeState(GameManager.GameState.StartGame);
     }
 }

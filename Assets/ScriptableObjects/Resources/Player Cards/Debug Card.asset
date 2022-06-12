@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: Debug Card
   m_EditorClassIdentifier: 
   name: do nothing
-  cost: 0
   sprite: {fileID: 0}
   description: '-'
   shape: 0
   range: 0
-  effectValue: 10
+  cost: -2
+  itemType: 6
   needsTarget: 0
   cardEffect:
     m_PersistentCalls:

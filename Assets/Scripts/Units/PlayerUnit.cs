@@ -10,11 +10,24 @@ public class PlayerUnit : GridUnit
     private int _visibleRange;
 
     public List<Card> cards;
+    public Inventory inventory;
 
     // if card is selected, then we are looking at possible placements,
     // otherwise player is looking to where to walk
     private Card _selectedCard;
     public override int visibleRange { get => _visibleRange; }
+
+    public List<Card> GetCards()
+    {
+        List<Card> cards = new List<Card>();
+        foreach (var card in this.cards) 
+            cards.Add(card);
+        foreach (var slot in inventory.slots)
+            if (slot != null)
+                foreach (var card in slot.item.cards)
+                    cards.Add(card);
+        return cards;
+    }
 
     private Tile GetKeyDownTile()
     {
@@ -32,12 +45,12 @@ public class PlayerUnit : GridUnit
         return tile.Any() ? tile.First() : null;
     }
 
-    public void SelectCard(int index)
+    public void SelectCard(Card card)
     {
         Tile.CleanDisplayInRange();
-        Log.Debug($"{index} selctedCard Index", gameObject);
+        Log.Debug($"selcted Card: {card}", gameObject);
         HandDisplayer.Instance.ToggleVisibility();
-        _selectedCard = cards[index];
+        _selectedCard = card;
         if (_selectedCard.needsTarget)
             GridManager.Instance.DisplayRange(_selectedCard, CurrentTile);
     }
@@ -48,6 +61,14 @@ public class PlayerUnit : GridUnit
         Tile.CleanDisplayInRange();
     }
 
+    protected override void RaiseEvent(EventInfo ei)
+    {
+        // TODO: raise event through items in inventory
+        base.RaiseEvent(ei);
+        foreach (var item in inventory.slots.Select(s => s.item).Where(i => i != null))
+            foreach (var effect in item.effects)
+                effect.DoEffect(ei);
+    }
 
 
     protected override bool PlayTurn()
@@ -77,7 +98,6 @@ public class PlayerUnit : GridUnit
                     return false;
                 if(selectedTile.GetObject == null)
                 {
-                    selectedTile = null;
                     return false;
                 }
                 if (!selectedTile.GetObject.IsTargetable)

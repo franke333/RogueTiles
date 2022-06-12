@@ -12,27 +12,17 @@ public class HandDisplayer : SingletonClass<HandDisplayer>, IPointerEnterHandler
     [SerializeField]
     private List<CardDisplayer> cardDisplayers;
 
-    private void Start()
-    {
-        for (int i = 0; i < cardDisplayers.Count; i++)
-        {
-            int iCopy = i;
-            cardDisplayers[i].displayerClicked = () =>
-            {
-                _activeUnit.SelectCard(iCopy);
-                MouseOver = false;
-            };
-        }
-    }
 
     public void DisplayUnitCards(PlayerUnit unit)
     {
         _activeUnit = unit;
         // display cards here
-        var hand = unit.cards.PickN(cardDisplayers.Count);
+        var hand = unit.GetCards().PickN(cardDisplayers.Count);
         for (int i = 0; i < hand.Count; i++)
         {
-            cardDisplayers[i].DisplayCard(hand[i]);
+            Card card = hand[i];
+            cardDisplayers[i].DisplayCard(card);
+            cardDisplayers[i].displayerClicked = () => unit.SelectCard(card);
         }
         for (int i = hand.Count; i < cardDisplayers.Count; i++)
         {
