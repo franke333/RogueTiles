@@ -9,6 +9,7 @@ public class PlayerUnit : GridUnit
     [SerializeField]
     private int _visibleRange;
 
+    // base cards
     public List<Card> cards;
     public Inventory inventory;
 
@@ -23,7 +24,7 @@ public class PlayerUnit : GridUnit
         foreach (var card in this.cards) 
             cards.Add(card);
         foreach (var slot in inventory.slots)
-            if (slot != null)
+            if (slot != null && !slot.IsEmpty)
                 foreach (var card in slot.item.cards)
                     cards.Add(card);
         return cards;

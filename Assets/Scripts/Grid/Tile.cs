@@ -125,6 +125,8 @@ public class Tile : MonoBehaviour
             return false;
         if (HandDisplayer.Instance.MouseOver)
             return false;
+        if (InventoryDisplayer.Instance.InventoryWindowActive)
+            return false;
         return true;
     }
 

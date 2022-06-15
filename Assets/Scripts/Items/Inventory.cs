@@ -9,5 +9,10 @@ public class Inventory : MonoBehaviour
     private void Start()
     {
         // TODO copy slot types and base items
+        // init slots
+        for (int i = 0; i < slots.Count; i++)
+        {
+            InventoryDisplayer.Instance.slotDisplayers[i].Link(slots[i]);
+        }
     }
 }

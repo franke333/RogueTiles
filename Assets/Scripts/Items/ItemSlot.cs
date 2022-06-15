@@ -1,14 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-public class ItemSlot : MonoBehaviour
+[Serializable]
+public class ItemSlot
 {
     public ItemType slotType;
-    public Item item { get; private set; }
+
+    [SerializeField]
+    private Item _item;
+    public Item item { get => _item;}
 
     public void SetItem(Item item)
     {
-        this.item = item;
+        this._item = item;
     }
+
+    public bool IsEmpty => item == null;
 }

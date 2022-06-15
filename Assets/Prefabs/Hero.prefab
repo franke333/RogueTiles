@@ -184,5 +184,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6529b7cac6912b1449350834ff5e502d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slots: []
+  slots:
+  - slotType: 2
+  - slotType: 3
+  - slotType: 4
+  - slotType: 1
+  - slotType: 5
   scraps: 0
