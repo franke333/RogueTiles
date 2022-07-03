@@ -16,6 +16,7 @@ public enum ItemType
     Any
 }
 
+[CreateAssetMenu(fileName = "New Item", menuName = "Scriptables/Item")]
 [Serializable]
 public class Item : ScriptableObject
 {

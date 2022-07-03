@@ -7,7 +7,6 @@ using UnityEngine;
 /// </summary>
 public abstract class Effect 
 {
-    protected GridUnit _unit;
     protected string _tag;
     protected bool _discard;
 
@@ -19,8 +18,4 @@ public abstract class Effect
     public string tag { get => _tag; }
     public abstract void DoEffect(EventInfo info);
 
-    public void SetUnit(GridUnit unit)
-    {
-        _unit = unit;
-    }
 }

@@ -21,9 +21,37 @@ public class CardEffects : MonoBehaviour
             => new CardData(Card.playedCard, Card.currentUnit, Card.currentTarget);
     }
 
+    class TemporaryHPEffect : Effect
+    {
+        int tempHP;
+        public TemporaryHPEffect(int tempHP)
+        {
+            this.tempHP = tempHP;
+            _tag = "tempHP";
+        }
+
+        public override void DoEffect(EventInfo info)
+        {
+            if(info.eventType == EventType.TakeDamage)
+            {
+                int tempHPDamage = Mathf.Max(tempHP, info.finalDamage);
+                tempHP -= tempHPDamage;
+                info.finalDamage -= tempHPDamage;
+                if (tempHP == 0)
+                    this._discard = true;
+            }
+        }
+    }
+
     public void DealDamage(int damage)
     {
         var data = CardData.ReadData();
         data.currentTarget.TakeDamage(damage);
+    }
+
+    public void GainTemporaryHealth(int tmphp)
+    {
+        var data = CardData.ReadData();
+        data.currentUnit.ApplyEffect(new TemporaryHPEffect(tmphp));
     }
 }

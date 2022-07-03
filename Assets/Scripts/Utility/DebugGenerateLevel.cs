@@ -15,7 +15,6 @@ public class DebugGenerateLevel : MonoBehaviour
     public int drunkardsMaxPath;
 
     public MeshRenderer mr;
-    public MeshRenderer voronoiMr, voronoiMr2;
     public int voronoiPointsCount;
     public float enemyCampProb;
     
@@ -77,7 +76,10 @@ public class DebugGenerateLevel : MonoBehaviour
         TribesManager.Instance.GenerateTribes(new List<int>() {2,2,2,2}, 4);
         
         GridManager.Instance.GenerateLevel(func, TribesManager.Instance.ProcessRooms);
+
         
+
+
         GameManager.Instance.ChangeState(GameManager.GameState.StartGame);
     }
 }

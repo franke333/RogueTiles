@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LoggerManager : MonoBehaviour
+public class LoggerManager : PersistentSingletonClass<LoggerManager>
 {
     [System.Serializable]
     public struct LogTypeInfo{

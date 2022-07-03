@@ -64,7 +64,6 @@ public class PlayerUnit : GridUnit
 
     protected override void RaiseEvent(EventInfo ei)
     {
-        // TODO: raise event through items in inventory
         base.RaiseEvent(ei);
         foreach (var item in inventory.slots.Select(s => s.item).Where(i => i != null))
             foreach (var effect in item.effects)

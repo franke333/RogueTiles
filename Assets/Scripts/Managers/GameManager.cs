@@ -139,30 +139,17 @@ public class GameManager : SingletonClass<GameManager>
 
     private void GenerateLayout()
     {
-        //TODO
-
-        //Graph g = Graph.Simple();
-        //Graph g = Graph.Walk(new Vector2(4,4),0.43f,2);
-
-        /*Func<List<Room>> func = 
-            () => Graph.Walk(new Vector2(4, 4), 0.43f, 2).GenerateLayout(8,8,2,4,0.25f);
-
-        GridManager.Instance.GenerateLevel(func, null);
-        
-        ChangeState(GameState.StartGame);
-        */
+        LevelDesignManager.Instance.GenerateWorld();
     }
 
     private void StartEnemyTurn()
     {
-        //TODO show message: "enemy is taking his turn" and start timer
         UIManager.Instance.ToggleEnemyTurnMessage(true);
         HandDisplayer.Instance.Hide();
     }
 
     private void StartPlayerTurn()
     {
-        //TODO check if timer reached x seconds and start player turn
         UIManager.Instance.ToggleEnemyTurnMessage(false);
         HandDisplayer.Instance.DisplayUnitCards((PlayerUnit)_units[_currentUnitIndex]);
     }
@@ -177,8 +164,7 @@ public class GameManager : SingletonClass<GameManager>
 
     private void HandleStart()
     {
-        foreach (DebugSummonUnit o in GameObject.FindObjectsOfType(typeof(DebugSummonUnit)))
-            o.Summon();
+        //foreach (DebugSummonUnit o in GameObject.FindObjectsOfType(typeof(DebugSummonUnit))) o.Summon();
 
         _currentUnitIndex = 0;
         if (_units[_currentUnitIndex].IsEnemy)

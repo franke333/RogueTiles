@@ -20,5 +20,8 @@ abstract public class GridObject : MonoBehaviour
     public bool IsWalkable { get => _walkable; }
     public bool IsTargetable { get => _targetable; }
 
-    public abstract void SetVisible(bool value);
+    public virtual void SetVisible(bool value)
+    {
+        gameObject.SetActive(value);
+    }
 }

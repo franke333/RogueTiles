@@ -52,6 +52,11 @@ public class CellMap
             Log.Error("No room set up for CellMap", null);
             return;
         }
+        if(x < 0 || x>= Width || y <0 ||y >= Height)
+        {
+            Log.Error($"{x}:{y} coord out of bound for {Width}:{Height} cellmap", null);
+            return;
+        }
         _map[x, y] = new Cell() { type = (byte)tileType, roomIndex = _maxRoomIndex };
     }
 

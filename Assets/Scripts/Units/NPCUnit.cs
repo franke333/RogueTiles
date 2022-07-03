@@ -47,4 +47,12 @@ public class NPCUnit : GridUnit
 
         return true;
     }
+
+    protected override void Die()
+    {
+        Tile tile = _currentTile;
+        base.Die();
+        //drop item
+        tile.Occupy(ItemGenerator.Instance.WrapItem(ItemGenerator.Instance.GenerateItem()));
+    }
 }

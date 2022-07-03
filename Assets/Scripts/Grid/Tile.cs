@@ -95,7 +95,17 @@ public class Tile : MonoBehaviour
     {
         if(obj!= null && _occupiedObject != null)
         {
-            Log.Error($"{obj} is trying to occupy an occupied tile by {_occupiedObject}", gameObject);
+            if (_occupiedObject is GridItem)
+            {
+                if (obj is PlayerUnit)
+                    InventoryDisplayer.Instance.DisplayPickUpDialog(((GridItem)_occupiedObject).item);
+                _occupiedObject.gameObject.SetActive(false);
+            }
+            else
+            {
+                Log.Error($"{obj} is trying to occupy an occupied tile by {_occupiedObject}", gameObject);
+                return;
+            }
         }
 
         _occupiedObject = obj;

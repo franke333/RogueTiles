@@ -114,9 +114,8 @@ public abstract class GridUnit : GridObject
         }
     }
 
-    private void Die()
+    protected virtual void Die()
     {
-        Log.Debug("Dying not yet implemented", gameObject);
         GameManager.Instance.UnregisterUnit(this);
         _currentTile.Deoccupy();
         gameObject.SetActive(false);

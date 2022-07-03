@@ -44,9 +44,11 @@ public class InventoryDisplayer : SingletonClass<InventoryDisplayer>
         pickedUpItemSlot.SetItem(pickedUpItem);
         pickedUpItemSlotDisplayer.Display();
         for (int i = 0; i < slotDisplayers.Count; i++)
-           slotSwitchButtons[i].SetActive(slotDisplayers[i].Slot.slotType == pickedUpItemSlot.slotType ||
-                                          slotDisplayers[i].Slot.slotType == ItemType.Any);
+            slotSwitchButtons[i].gameObject.SetActive((slotDisplayers[i].Slot.slotType == pickedUpItemSlot.item.itemType) ||
+                                           (slotDisplayers[i].Slot.slotType == ItemType.Any));
+
         pickUpDialogGO.SetActive(true);
+        inventory.gameObject.SetActive(true);
     }
 
     public void SwitchItemWith(int slotIndex)

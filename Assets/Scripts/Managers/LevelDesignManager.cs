@@ -4,6 +4,12 @@ using UnityEngine;
 using System;
 using System.Linq;
 
+public enum WorldType
+{
+    Island=0,
+    Dungeon=1
+}
+
 [Serializable]
 public struct DungeonSettings
 {
@@ -29,27 +35,62 @@ public static class TileTypeExtensions
     public static bool IsWalkable(this TileType tileType) => _isWalkable.Contains(tileType);
 }
 
-public class LevelDesignManager : SingletonClass<LevelDesignManager>
+public class LevelDesignManager : PersistentSingletonClass<LevelDesignManager>
 {
-
+    // world settings
+    [SerializeField]
+    private PlayerUnit hero;
+    [SerializeField]
+    private DungeonSettings dungeonSettings;
+    [SerializeField]
+    private int numberOfDungeons;
+    [SerializeField]
+    private int mapWidth;
+    [SerializeField]
+    private int mapHeight;
+    [SerializeField]
+    private int drunkards;
+    [SerializeField]
+    private int drunkardsMaxPath;
+    [SerializeField]
+    private List<int> outsideTribesSizes;
+    [SerializeField]
+    private int insideTribeSize;
+    [SerializeField]
+    private WorldType worldType;
+    [Space]
     public Tile DirtTilePrefab;
     public Tile WallTilePrefab;
     public Tile CobblestoneTilePrefab;
     public Tile WaterTilePrefab;
 
+
+    public PlayerUnit Hero { get => hero; set => hero = value; }
+    public DungeonSettings DungeonSettings { get => dungeonSettings; set => dungeonSettings = value; }
+    public int NumberOfDungeons { get => numberOfDungeons; set => numberOfDungeons = value; }
+    public int MapWidth { get => mapWidth; set => mapWidth = value; }
+
+    public float MapWidthF { get => mapWidth; set => mapWidth = (int)value; }
+    public int MapHeight { get => mapHeight; set => mapHeight = value; }
+
+    public float MapHeightF { get => mapHeight; set => mapHeight = (int)value; }
+    public int Drunkards { get => drunkards; set => drunkards = value; }
+    public int DrunkardsMaxPath { get => drunkardsMaxPath; set => drunkardsMaxPath = value; }
+    public List<int> OutsideTribesSizes { get => outsideTribesSizes; set => outsideTribesSizes = value; }
+    public int InsideTribeSize { get => insideTribeSize; set => insideTribeSize = value; }
+    public WorldType WorldType { get => worldType; set => worldType = value; }
+
+    public int WorldTypeInt { get => (int)worldType; set => worldType = (WorldType)value; }
+
     public Tile GetTilePrefab(TileType type)
     {
-        switch (type)
+        return type switch
         {
-            case TileType.Dirt:
-                return DirtTilePrefab;
-            case TileType.Wall:
-                return WallTilePrefab;
-            case TileType.Cobblestone:
-                return CobblestoneTilePrefab;
-            default:
-                return WaterTilePrefab;
-        }
+            TileType.Dirt => DirtTilePrefab,
+            TileType.Wall => WallTilePrefab,
+            TileType.Cobblestone => CobblestoneTilePrefab,
+            _ => WaterTilePrefab,
+        };
     }
 
     public Tile GetTilePrefab(byte index) => GetTilePrefab((TileType)index);
@@ -241,8 +282,6 @@ public class LevelDesignManager : SingletonClass<LevelDesignManager>
             {
                 continue;
             }
-            // new outside room types here 
-            // TODO: add room specifier
             if (MyRandom.Float() <= 0.5f)
                 map.AddNewRoom(RoomType.OutsideEnemyCamp);
             else
@@ -253,5 +292,64 @@ public class LevelDesignManager : SingletonClass<LevelDesignManager>
                 map.SetCell(x, y, (TileType)map[x,y].type);
             }
         }
+    }
+
+
+    public void GenerateWorld()
+    {
+        CellMap map = null;
+        Vector2 heroStart = new Vector2(0,0);
+        switch (WorldType)
+        {
+            case WorldType.Island:
+                map = DrunkardWalk.Generate(mapWidth, mapHeight, RoomType.Outside, TileType.Dirt, drunkards, drunkardsMaxPath);
+                heroStart = new Vector2(map.Width / 2, map.Height / 2);
+                // place dungeons
+                for (int i = 0; i < numberOfDungeons; i++)
+                    PlaceWalledDungeon(map, dungeonSettings, heroStart);
+
+                int outsideRoomIndex = 1;
+                if (map.GetTypeOfRoom(outsideRoomIndex) != RoomType.Outside)
+                {
+                    Log.Error("Failed assert on outside room of generate");
+                }
+
+                map.ClearUnreachableTilesFrom((int)heroStart.x, (int)heroStart.y);
+
+                // split outside into regions
+                SplitRoomVoronoi(map, (Cell c) => c.roomIndex == outsideRoomIndex, map.Width * map.Height / 200);
+                break;
+            case WorldType.Dungeon:
+                var dg = dungeonSettings;
+                var g = Graph.WalkToTarget(dg.endPosition, dg.randomMoveChance, dg.numberOfAgents, false);
+                map = g.GenerateCellMap(dg.roomWidth, dg.roomHeight, dg.corridorWidth, dg.corridorLength, dg.roomMergeChance);
+                //todo
+                heroStart = new Vector2(g.StartNodeDistanceXInGraph*(dg.roomWidth+dg.corridorWidth) + dg.roomWidth/2, dg.roomHeight/2);
+                break;
+            default:
+                break;
+        }
+
+        
+        Func<List<Room>> func = map.GenerateTileMap;
+
+        TribesManager.Instance.GenerateTribes(outsideTribesSizes, insideTribeSize);
+
+        GridManager.Instance.GenerateLevel(func, TribesManager.Instance.ProcessRooms);
+
+        //summon hero
+        Log.Debug($"Debug summon of {hero} at {heroStart}", gameObject);
+        var unit = Instantiate(hero);
+        GridManager.Instance.GetTile(heroStart)?.Occupy(unit);
+        if (unit.CurrentTile == null)
+        {
+            GameManager.Instance.UnregisterUnit(unit);
+            Destroy(unit.gameObject);
+            Log.Error("! FAILED TO SUMMON HERO", gameObject);
+            return;
+        }
+
+
+        GameManager.Instance.ChangeState(GameManager.GameState.StartGame);
     }
 }
