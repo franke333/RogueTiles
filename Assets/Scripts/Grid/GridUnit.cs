@@ -16,7 +16,7 @@ public abstract class GridUnit : GridObject
     [SerializeField]
     protected bool _isEnemy;
 
-    List<Effect> _activeEffects;
+    List<LingeringEffect> _activeEffects;
 
     [SerializeField]
     GameObject childrenRenderer;
@@ -39,7 +39,7 @@ public abstract class GridUnit : GridObject
         return dmg != 0;
     }
 
-    public void ApplyEffect(Effect effect)
+    public void ApplyEffect(LingeringEffect effect)
     {
         if (effect.tag != "")
             for (int i = 0; i < _activeEffects.Count; i++)
@@ -98,7 +98,7 @@ public abstract class GridUnit : GridObject
     private void OnEnable()
     {
         _walkable = false;
-        _activeEffects = new List<Effect>();
+        _activeEffects = new List<LingeringEffect>();
         GameManager.Instance.RegisterUnit(this);
         
     }

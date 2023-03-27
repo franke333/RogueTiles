@@ -21,7 +21,7 @@ public class CardEffects : MonoBehaviour
             => new CardData(Card.playedCard, Card.currentUnit, Card.currentTarget);
     }
 
-    class TemporaryHPEffect : Effect
+    class TemporaryHPEffect : LingeringEffect
     {
         int tempHP;
         public TemporaryHPEffect(int tempHP)

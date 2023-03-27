@@ -17,6 +17,7 @@ public class HandDisplayer : SingletonClass<HandDisplayer>, IPointerEnterHandler
     {
         _activeUnit = unit;
         // display cards here
+        // TODO: make pick logic inside player.. not here :/
         var hand = unit.GetCards().PickN(cardDisplayers.Count);
         for (int i = 0; i < hand.Count; i++)
         {

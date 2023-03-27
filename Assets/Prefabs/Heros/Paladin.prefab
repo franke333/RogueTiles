@@ -158,7 +158,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bf1e3daec1e4584ba1b9b706bd93d8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  alias: Alex, the Fighter
+  alias: Bob, the Paladin
   _walkable: 0
   _targetable: 1
   _hp: 10

@@ -24,12 +24,12 @@ public class Item : ScriptableObject
     public Sprite sprite;
     public ItemType itemType;
     public List<Card> cards;
-    public List<Effect> effects;
+    public List<LingeringEffect> effects;
 
     private Item()
     {
         cards = new List<Card>();
-        effects = new List<Effect>();
+        effects = new List<LingeringEffect>();
     }
 
     public static Item GenerateEquip(int value)

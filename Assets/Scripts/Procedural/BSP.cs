@@ -24,8 +24,8 @@ public class BSP
     {
 
         SubDungeon dungeon = new SubDungeon(0, 0, width, height);
-        List<BTree<SubDungeon>.Node> treeLists;
-        void SplitSubDungeon(BTree<SubDungeon>.Node dungeonNode)
+        List<BinaryTree<SubDungeon>.Node> treeLists;
+        void SplitSubDungeon(BinaryTree<SubDungeon>.Node dungeonNode)
         {
             var dung = dungeonNode.item;
             float maxRatio = 1.25f;
@@ -67,13 +67,13 @@ public class BSP
                 treeLists.Add(dungeonNode.SetChildRight(subDung2));
             }
         }
-        var tree = new BTree<SubDungeon>();
+        var tree = new BinaryTree<SubDungeon>();
         tree.SetRoot(dungeon);
-        treeLists = new List<BTree<SubDungeon>.Node>() { tree.root };
+        treeLists = new List<BinaryTree<SubDungeon>.Node>() { tree.root };
         for (int i = 0; i < maxDepth; i++)
         {
             var oldTreeLists = treeLists;
-            treeLists = new List<BTree<SubDungeon>.Node>();
+            treeLists = new List<BinaryTree<SubDungeon>.Node>();
             foreach (var listNode in oldTreeLists)
                 SplitSubDungeon(listNode);
             if (treeLists.Count == 0)

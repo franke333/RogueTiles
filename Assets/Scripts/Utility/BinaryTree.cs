@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-public class BTree<T>
+public class BinaryTree<T>
 {
     public class Node
     {

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum EventType
 {
-    TakeDamage, DealDamage, StartTurn, EndTurn, Move
+    TakeDamage, DealDamage, StartTurn, EndTurn, Move //TODO:(eventcalls) , Heal, PlayCard
 }
 
 
