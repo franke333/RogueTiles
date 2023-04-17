@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tile : MonoBehaviour
+public class TileStandalone : MonoBehaviour, ITile
 {
     [SerializeField]
     Color _oddColor;
@@ -23,14 +23,13 @@ public class Tile : MonoBehaviour
     public Room Room { get => _room; set => _room = value; }
     Room _room;
 
-
-    static HashSet<Tile> tilesDisplayedInRange = new HashSet<Tile>();
     bool _visible,_inRange,_selected;
 
-    public int x, y;
+    public int x { get; set; }
+    public int y { get; set; }
 
     public GridObject GetObject { get => _occupiedObject; }
-    public void Init(bool isOdd,int x,int y, Room room)
+    public ITile Init(bool isOdd,int x,int y, Room room)
     {
         _baseColor = _sr.color;
         if(isOdd && IsWalkable)
@@ -40,6 +39,7 @@ public class Tile : MonoBehaviour
         Visible = false;
         _room = room;
         RecalculateColor();
+        return this;
     }
 
     public void TintBaseColor(Color color,float by)
@@ -73,24 +73,6 @@ public class Tile : MonoBehaviour
         }
     }
 
-    public static void CleanDisplayInRange()
-    {
-        foreach (var t in tilesDisplayedInRange)
-        {
-            t._inRange = false;
-            t.RecalculateColor();
-        }
-        tilesDisplayedInRange.Clear();
-    }
-
-    public void DisplayInRange()
-    {
-        _inRange = true;
-        RecalculateColor();
-        tilesDisplayedInRange.Add(this);
-    }
-
-    public void Deoccupy() => Occupy(null);
     public void Occupy(GridObject obj)
     {
         if(obj!= null && _occupiedObject != null)
@@ -114,7 +96,7 @@ public class Tile : MonoBehaviour
 
         if (obj.CurrentTile != null)
         {
-            obj.CurrentTile._occupiedObject = null;
+            obj.CurrentTile.Occupy(null);
         }
         obj.CurrentTile = this;
         obj.gameObject.transform.position = transform.position;
@@ -127,6 +109,8 @@ public class Tile : MonoBehaviour
     }
 
     public bool IsWall { get => _wall; }
+    public bool InRange { get => _inRange; set { _inRange = value; RecalculateColor(); } }
+    public bool Selected { get => _selected; set{ _selected = value; RecalculateColor(); } }
 
     private bool CheckSelectability()
     {
@@ -161,5 +145,10 @@ public class Tile : MonoBehaviour
         if (_inRange)
             GridManager.Instance.SelectedTileInRange = this;
         GridManager.Instance.SetSelectedTile(this);
+    }
+
+    public void Refresh()
+    {
+        RecalculateColor();
     }
 }

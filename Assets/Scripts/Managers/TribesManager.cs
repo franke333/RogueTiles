@@ -57,15 +57,15 @@ public class TribesManager : SingletonClass<TribesManager>
                 //chest
                 sr = AddSpriteRendererAsChildObject(spritesHolder, "chest piece");
                 sr.sprite = MyRandom.Choice(tribeManager.chests);
-                sr.sortingOrder = tribeManager.baseLayerOrder + 1;
+                sr.sortingOrder = tribeManager.baseLayerOrder + 2;
                 //heads
                 sr = AddSpriteRendererAsChildObject(spritesHolder, "head piece");
                 sr.sprite = MyRandom.Choice(tribeManager.heads);
-                sr.sortingOrder = tribeManager.baseLayerOrder + 2;
+                sr.sortingOrder = tribeManager.baseLayerOrder + 3;
                 //legs
                 sr = AddSpriteRendererAsChildObject(spritesHolder, "leg piece");
                 sr.sprite = MyRandom.Choice(tribeManager.legs);
-                sr.sortingOrder = tribeManager.baseLayerOrder + 2;
+                sr.sortingOrder = tribeManager.baseLayerOrder + 1;
                 //lefthand
                 sr = AddSpriteRendererAsChildObject(spritesHolder, "left hand");
                 sr.sprite = MyRandom.Choice(tribeManager.leftHandItems);
@@ -105,7 +105,7 @@ public class TribesManager : SingletonClass<TribesManager>
         enemyParentObject.transform.SetParent(GameObject.Find("Enviroment").transform);
     }
 
-    private void SpawnEnemy(GridUnit enemy,Tile tile)
+    private void SpawnEnemy(GridUnit enemy,ITile tile)
     {
         var unit = Instantiate(enemy,enemyParentObject.transform);
         tile.Occupy(unit);

@@ -6,7 +6,7 @@ public class DebugSummonUnit : MonoBehaviour
 {
 
     public GridUnit characterPrefab;
-    public Vector2 pos;
+    public Vector2Int pos;
 
     public bool Summon()
     {

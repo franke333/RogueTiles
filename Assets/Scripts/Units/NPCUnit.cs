@@ -50,7 +50,7 @@ public class NPCUnit : GridUnit
 
     protected override void Die()
     {
-        Tile tile = _currentTile;
+        ITile tile = _currentTile;
         base.Die();
         //drop item
         tile.Occupy(ItemGenerator.Instance.WrapItem(ItemGenerator.Instance.GenerateItem()));

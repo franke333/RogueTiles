@@ -30,7 +30,7 @@ public class PlayerUnit : GridUnit
         return cards;
     }
 
-    private Tile GetKeyDownTile()
+    private ITile GetKeyDownTile()
     {
         var adjTiles = GridManager.Instance.GetAdjecentTiles(CurrentTile);
         Vector2 pos = new Vector2(CurrentTile.x, CurrentTile.y);
@@ -48,7 +48,7 @@ public class PlayerUnit : GridUnit
 
     public void SelectCard(Card card)
     {
-        Tile.CleanDisplayInRange();
+        GridManager.Instance.CleanDisplayInRange();
         Log.Debug($"selcted Card: {card}", gameObject);
         HandDisplayer.Instance.ToggleVisibility();
         _selectedCard = card;
@@ -59,7 +59,7 @@ public class PlayerUnit : GridUnit
     public void DeselectCard()
     {
         _selectedCard = null;
-        Tile.CleanDisplayInRange();
+        GridManager.Instance.CleanDisplayInRange();
     }
 
     protected override void RaiseEvent(EventInfo ei)
@@ -76,7 +76,7 @@ public class PlayerUnit : GridUnit
         // player has no card selected, clicking a tile means movement
         if (_selectedCard == null)
         {
-            Tile selectedTile;
+            ITile selectedTile;
             if ((selectedTile = GridManager.Instance.GetSelectedTile()) == null)
                 if ((selectedTile = GetKeyDownTile()) == null)
                     return false;
@@ -93,7 +93,7 @@ public class PlayerUnit : GridUnit
         {
             if (_selectedCard.needsTarget)
             {
-                Tile selectedTile;
+                ITile selectedTile;
                 if ((selectedTile = GridManager.Instance.SelectedTileInRange) == null)
                     return false;
                 if(selectedTile.GetObject == null)

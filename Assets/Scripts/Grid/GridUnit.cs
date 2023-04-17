@@ -117,7 +117,7 @@ public abstract class GridUnit : GridObject
     protected virtual void Die()
     {
         GameManager.Instance.UnregisterUnit(this);
-        _currentTile.Deoccupy();
+        _currentTile.Occupy(null);
         gameObject.SetActive(false);
     }
 

@@ -188,4 +188,6 @@ public class GameManager : SingletonClass<GameManager>
         EndGame,
         PlayerChooseTarget
     }
+
+    public List<GridUnit> GetUnits() => _units;
 }

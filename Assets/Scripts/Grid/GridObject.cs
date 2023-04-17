@@ -11,9 +11,9 @@ abstract public class GridObject : MonoBehaviour
     [SerializeField]
     protected bool _targetable;
 
-    protected Tile _currentTile; 
+    protected ITile _currentTile; 
 
-    public Tile CurrentTile { get => _currentTile; set => _currentTile = value; }
+    public ITile CurrentTile { get => _currentTile; set => _currentTile = value; }
 
     public abstract bool TakeDamage(int dmg);
 

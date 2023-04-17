@@ -59,10 +59,15 @@ public class LevelDesignManager : PersistentSingletonClass<LevelDesignManager>
     [SerializeField]
     private WorldType worldType;
     [Space]
-    public Tile DirtTilePrefab;
-    public Tile WallTilePrefab;
-    public Tile CobblestoneTilePrefab;
-    public Tile WaterTilePrefab;
+    public TileStandalone DirtTilePrefab;
+    public TileStandalone WallTilePrefab;
+    public TileStandalone CobblestoneTilePrefab;
+    public TileStandalone WaterTilePrefab;
+    [Space]
+    public Tile2DTM DirtTile2DTMPrefab;
+    public Tile2DTM WallTile2DTMPrefab;
+    public Tile2DTM CobblestoneTile2DTMPrefab;
+    public Tile2DTM WaterTile2DTMPrefab;
 
 
     public PlayerUnit Hero { get => hero; set => hero = value; }
@@ -82,7 +87,7 @@ public class LevelDesignManager : PersistentSingletonClass<LevelDesignManager>
 
     public int WorldTypeInt { get => (int)worldType; set => worldType = (WorldType)value; }
 
-    public Tile GetTilePrefab(TileType type)
+    public TileStandalone GetTileStandalonePrefab(TileType type)
     {
         return type switch
         {
@@ -93,7 +98,18 @@ public class LevelDesignManager : PersistentSingletonClass<LevelDesignManager>
         };
     }
 
-    public Tile GetTilePrefab(byte index) => GetTilePrefab((TileType)index);
+    public Tile2DTM GetTile2DTM(TileType type)
+    {
+        return type switch
+        {
+            TileType.Dirt => DirtTile2DTMPrefab,
+            TileType.Wall => WallTile2DTMPrefab,
+            TileType.Cobblestone => CobblestoneTile2DTMPrefab,
+            _ => WaterTile2DTMPrefab,
+        };
+    }
+
+    public ITile GetTilePrefab(byte index) => GetTileStandalonePrefab((TileType)index);
 
     /// <summary>
     /// Tries to place a dungeon onto the map that is reachable from certain position
@@ -298,12 +314,12 @@ public class LevelDesignManager : PersistentSingletonClass<LevelDesignManager>
     public void GenerateWorld()
     {
         CellMap map = null;
-        Vector2 heroStart = new Vector2(0,0);
+        Vector2Int heroStart = new Vector2Int(0,0);
         switch (WorldType)
         {
             case WorldType.Island:
                 map = DrunkardWalk.Generate(mapWidth, mapHeight, RoomType.Outside, TileType.Dirt, drunkards, drunkardsMaxPath);
-                heroStart = new Vector2(map.Width / 2, map.Height / 2);
+                heroStart = new Vector2Int(map.Width / 2, map.Height / 2);
                 // place dungeons
                 for (int i = 0; i < numberOfDungeons; i++)
                     PlaceWalledDungeon(map, dungeonSettings, heroStart);
@@ -324,7 +340,7 @@ public class LevelDesignManager : PersistentSingletonClass<LevelDesignManager>
                 var g = Graph.WalkToTarget(dg.endPosition, dg.randomMoveChance, dg.numberOfAgents, false);
                 map = g.GenerateCellMap(dg.roomWidth, dg.roomHeight, dg.corridorWidth, dg.corridorLength, dg.roomMergeChance);
                 //todo
-                heroStart = new Vector2(g.StartNodeDistanceXInGraph*(dg.roomWidth+dg.corridorWidth) + dg.roomWidth/2, dg.roomHeight/2);
+                heroStart = new Vector2Int(g.StartNodeDistanceXInGraph*(dg.roomWidth+dg.corridorWidth) + dg.roomWidth/2, dg.roomHeight/2);
                 break;
             default:
                 break;

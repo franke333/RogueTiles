@@ -22,8 +22,6 @@ public class CellMap
 
     int _maxRoomIndex;
     
-    
-    
 
     List<RoomType> _roomTypes;
 
@@ -240,13 +238,14 @@ public class CellMap
 
         for (int x = 0; x < Width; x++)
             for (int y = 0; y < Height; y++)
-                {
-                    Cell c = _map[x, y];
-                    Tile tilePrefab = LevelDesignManager.Instance.GetTilePrefab(c.type);
-                    var tile = GameObject.Instantiate(tilePrefab, new Vector3(x, y), Quaternion.identity, rooms[c.roomIndex].transform);
-                    tile.Init((x + y)% 2 == 0, x, y, rooms[c.roomIndex]);
-                    rooms[c.roomIndex].GetRoomTiles.Add(tile);
-                }
+            {
+                Cell c = _map[x, y];
+                ITile tile;
+                tile = GridManager.Instance.CreateTile((TileType)c.type,new Vector3(x, y), rooms[c.roomIndex].transform);
+                tile = tile.Init((x + y)% 2 == 0, x, y, rooms[c.roomIndex]);
+                rooms[c.roomIndex].GetRoomTiles.Add(tile);
+                
+            }
         rooms.RemoveAll(r => r.GetRoomTiles.Count == 0);
         return rooms;
     }

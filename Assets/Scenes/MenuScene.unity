@@ -619,8 +619,8 @@ MonoBehaviour:
   numberOfDungeons: 3
   mapWidth: 10
   mapHeight: 10
-  drunkards: 2
-  drunkardsMaxPath: 3000
+  drunkards: 3
+  drunkardsMaxPath: 5000
   outsideTribesSizes: 020000000200000002000000
   insideTribeSize: 3
   worldType: 0
@@ -628,6 +628,10 @@ MonoBehaviour:
   WallTilePrefab: {fileID: 255348424307460436, guid: dcc42b524cbb2674083ed581ce189a29, type: 3}
   CobblestoneTilePrefab: {fileID: 2665019034490785667, guid: db089b19649384546b8b0d5f101db00c, type: 3}
   WaterTilePrefab: {fileID: 8717461199902170475, guid: 2039e9cb34b410e45a55c7f5ca4baec6, type: 3}
+  DirtTile2DTMPrefab: {fileID: 11400000, guid: 407a95307ff4f124dbf0529bf53fa475, type: 2}
+  WallTile2DTMPrefab: {fileID: 11400000, guid: 032179cc34613fe43b81b5f1eefa29f4, type: 2}
+  CobblestoneTile2DTMPrefab: {fileID: 11400000, guid: d31fe171f16f22944a85e8685b99a0d2, type: 2}
+  WaterTile2DTMPrefab: {fileID: 11400000, guid: bbc639636e5636b4f85507994636ec4f, type: 2}
 --- !u!4 &168532983
 Transform:
   m_ObjectHideFlags: 0
@@ -4750,7 +4754,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 937989755}
   m_Direction: 0
   m_MinValue: 20
-  m_MaxValue: 250
+  m_MaxValue: 1000
   m_WholeNumbers: 1
   m_Value: 20
   m_OnValueChanged:
@@ -4858,7 +4862,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  m_IsOn: 0
+  m_IsOn: 1
 --- !u!224 &1746685576
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5193,7 +5197,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 212630224}
   m_Direction: 0
   m_MinValue: 20
-  m_MaxValue: 250
+  m_MaxValue: 1000
   m_WholeNumbers: 1
   m_Value: 20
   m_OnValueChanged:
@@ -6010,7 +6014,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  m_IsOn: 1
+  m_IsOn: 0
 --- !u!1 &2059228671
 GameObject:
   m_ObjectHideFlags: 0
