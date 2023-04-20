@@ -25,6 +25,8 @@ public class CellMap
 
     List<RoomType> _roomTypes;
 
+    public List<RoomType> RoomTypes { get => _roomTypes; }
+
     [HideInInspector]
     public List<(Vector2, Vector2)> protectedAreas = new List<(Vector2, Vector2)>();
 

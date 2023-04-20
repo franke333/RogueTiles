@@ -57,6 +57,7 @@ public class Card : ScriptableObject
     // ---------------------------
     public new string name;
     public Sprite sprite;
+    [TextArea(3, 10)]
     public string description;
 
     public AreaShape shape;
@@ -69,5 +70,5 @@ public class Card : ScriptableObject
     public bool needsTarget;
     public UnityEvent cardEffect;
 
-
+    public AudioManager.SFXType audioType;
 }

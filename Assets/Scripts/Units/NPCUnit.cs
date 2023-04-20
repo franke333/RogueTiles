@@ -14,7 +14,13 @@ public class NPCUnit : GridUnit
 
     [SerializeField]
     List<ActionEntry> _actions = new List<ActionEntry>();
+    public ITile homeTile;
 
+    public override void Init(int maxHp, bool enemy)
+    {
+        base.Init(maxHp, enemy);
+        homeTile = CurrentTile;
+    }
 
     public List<ActionEntry> ActionList { get => _actions; }
     protected override bool PlayTurn()

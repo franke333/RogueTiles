@@ -6,6 +6,11 @@ public class UIManager : SingletonClass<UIManager>
 {
     [SerializeField]
     GameObject _enemyTurnMessage;
+
+    public EndScreenScript EndScreen;
+
+    public CardInfoDisplayer CardInfoDisplayer;
+
     public void ToggleEnemyTurnMessage(bool value)
     {
         _enemyTurnMessage?.SetActive(value);

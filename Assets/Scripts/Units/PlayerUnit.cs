@@ -112,7 +112,7 @@ public class PlayerUnit : GridUnit
             Card.playedCard = _selectedCard;
 
             _selectedCard.cardEffect.Invoke();
-
+            AudioManager.Instance.PlaySFX(_selectedCard.audioType);
 
             //clean
             Card.ClearData();
@@ -121,5 +121,11 @@ public class PlayerUnit : GridUnit
 
             return true;
         }
+    }
+    
+    protected override void Die()
+    {
+        base.Die();
+        GameManager.Instance.EndGame(false);
     }
 }

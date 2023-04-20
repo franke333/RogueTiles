@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Temporary Shield
   sprite: {fileID: 0}
-  description: Gain 3 extra HP
+  description: Gain 3 temporary HP on top of your normal HP. These are used to reduce
+    incoming damage.
   shape: 3
   range: 0
   cost: 2
@@ -35,3 +36,4 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  audioType: 5

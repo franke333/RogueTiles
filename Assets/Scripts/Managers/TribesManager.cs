@@ -2,14 +2,44 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 public class TribesManager : SingletonClass<TribesManager>
 {
     public List<Sprite> bodies, heads, leftHandItems, rightHandItems,chests,legs;
+    
+    
 
-    public List<NPCActionBase> actions;
+    [Serializable]
+    class BaseActionWeightEntry
+    {
+        public NPCActionBase action;
+        public int weight;
+    }
+
+    [Serializable]
+    class ActionCostEntry
+    {
+        public NPCActionBase action;
+        public int cost;
+    }
+    [Space]
+    //action, weight
+    [SerializeField]
+    private List<BaseActionWeightEntry> _baseActions;
+
+    //actions that will be added to units at random
+    //weights will be randomized between 1 and 3
+    //an enemy will have around 5 coins to spend on actions
+    //action, cost
+    [SerializeField]
+    private List<ActionCostEntry> _actions;
 
     public int baseLayerOrder;
+
+    [SerializeField]
+    private int _NPCDetectionRange = 8;
+    public int NPCDetectionRange { get { return _NPCDetectionRange; } }
 
     List<Tribe> tribes;
 
@@ -23,7 +53,7 @@ public class TribesManager : SingletonClass<TribesManager>
         public RoomType assignedRoom { get; private set; }
 
 
-        List<GridUnit> units;
+        List<NPCUnit> units;
 
         private SpriteRenderer AddSpriteRendererAsChildObject(GameObject parent,string name)
         {
@@ -37,7 +67,7 @@ public class TribesManager : SingletonClass<TribesManager>
             hue = MyRandom.Color();
             name = MyRandom.String(4, 9);
             assignedRoom = roomType;
-            units = new List<GridUnit>();
+            units = new List<NPCUnit>();
             TribesManager tribeManager = TribesManager.Instance;
             for (int i = 0; i < size; i++)
             {
@@ -75,10 +105,24 @@ public class TribesManager : SingletonClass<TribesManager>
                 sr.sprite = MyRandom.Choice(tribeManager.rightHandItems);
                 sr.sortingOrder = tribeManager.baseLayerOrder + 5;
 
-                //TODO add movements and actions
-                unit.ActionList.Add(new NPCUnit.ActionEntry() { weight = 1, actionObj = TribesManager.Instance.actions[0] });
+                //base actions
+                foreach(var actionWeightEntry in tribeManager._baseActions)
+                    unit.ActionList.Add(new NPCUnit.ActionEntry() { weight = actionWeightEntry.weight, actionObj = actionWeightEntry.action });
 
-                unit.Init(5, true);
+                //buy phase
+                int coins = 4 + MyRandom.Int(0, 3); //4-6
+                int actionsToBuy = MyRandom.Int(1, 4); //1-3
+                for (int j = 0; j < actionsToBuy; j++)
+                {
+                    var actionCostEntry = MyRandom.Choice(tribeManager._actions);
+                    if (coins >= actionCostEntry.cost)
+                    {
+                        coins -= actionCostEntry.cost;
+                        unit.ActionList.Add(new NPCUnit.ActionEntry() { weight = MyRandom.Int(1,4), actionObj = actionCostEntry.action });
+                    }
+                }
+                //unused coins are converted to extra health
+                unit.Init(5+2*coins, true);
                 units.Add(unit);
 
                 //we need this as prefab. not a real gameobject
@@ -87,7 +131,7 @@ public class TribesManager : SingletonClass<TribesManager>
             }
         }
 
-        public GridUnit GetRandomEnemy() => MyRandom.Choice(units);
+        public NPCUnit GetRandomEnemy() => MyRandom.Choice(units);
     }
 
     // check that generation happened before trying to fetch enemies
@@ -105,11 +149,12 @@ public class TribesManager : SingletonClass<TribesManager>
         enemyParentObject.transform.SetParent(GameObject.Find("Enviroment").transform);
     }
 
-    private void SpawnEnemy(GridUnit enemy,ITile tile)
+    private void SpawnEnemy(NPCUnit enemy,ITile tile)
     {
         var unit = Instantiate(enemy,enemyParentObject.transform);
         tile.Occupy(unit);
         unit.gameObject.SetActive(true);
+        unit.Init(unit.maxHp, true);
     }
 
     public void ProcessRooms(List<Room> rooms)

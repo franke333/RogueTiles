@@ -607,6 +607,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hero: {fileID: 0}
+  boss: {fileID: 6373421008749478223, guid: ff29355db67b9164a9fbe141ea304232, type: 3}
   dungeonSettings:
     endPosition: {x: 3, y: 3}
     randomMoveChance: 0.2

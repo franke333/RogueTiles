@@ -49,6 +49,7 @@ public class InventoryDisplayer : SingletonClass<InventoryDisplayer>
 
         pickUpDialogGO.SetActive(true);
         inventory.gameObject.SetActive(true);
+        AudioManager.Instance.PlaySFX(AudioManager.SFXType.PickUp);
     }
 
     public void SwitchItemWith(int slotIndex)

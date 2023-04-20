@@ -13,6 +13,9 @@ public abstract class GridUnit : GridObject
 
     private bool takingTurn = false;
 
+    public int hp { get => _hp; }
+    public int maxHp { get => _maxHp; }
+
     [SerializeField]
     protected bool _isEnemy;
 
@@ -36,6 +39,11 @@ public abstract class GridUnit : GridObject
         Log.Info($"{alias} took {dmg} dmg", gameObject);
         if (_hp < 0)
             Die();
+        if (dmg != 0)
+        {
+            AudioManager.Instance.PlaySFX(AudioManager.SFXType.TakeDamage);
+            this.TakeDamageVFX();
+        }
         return dmg != 0;
     }
 
@@ -71,7 +79,7 @@ public abstract class GridUnit : GridObject
         return res;
     }
 
-    public void Init(int maxHp,bool enemy)
+    public virtual void Init(int maxHp,bool enemy)
     {
         _maxHp = maxHp;
         _isEnemy = enemy;
@@ -126,5 +134,9 @@ public abstract class GridUnit : GridObject
         childrenRenderer.SetActive(value);
     }
 
+    public void TakeDamageVFX()
+    {
+        childrenRenderer.AddComponent<TakeDamageVFX>();
+    }
 
 }

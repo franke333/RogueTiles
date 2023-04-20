@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: ATTACK
   sprite: {fileID: 0}
-  description: 
+  description: Deal 1 damage to 1 target right next to you
   shape: 0
   range: 1
   cost: 1
@@ -35,3 +35,4 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  audioType: 2

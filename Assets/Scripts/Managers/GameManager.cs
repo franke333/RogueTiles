@@ -128,7 +128,6 @@ public class GameManager : SingletonClass<GameManager>
                 StartEnemyTurn();
                 break;
             case GameState.EndGame:
-                HandleEnd();
                 break;
             case GameState.PlayerChooseTarget:
                 break;
@@ -174,9 +173,11 @@ public class GameManager : SingletonClass<GameManager>
         GridManager.Instance.UpdateFog();
     }
 
-    private void HandleEnd()
+    public void EndGame(bool isWin)
     {
-        //TODO
+        //TODO stats
+        UIManager.Instance.EndScreen.Show(isWin,new List<Tuple<string, int>>());
+        ChangeState(GameState.EndGame);
     }
 
     public enum GameState

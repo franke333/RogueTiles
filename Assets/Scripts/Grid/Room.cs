@@ -24,7 +24,7 @@ public enum RoomType
 
     Outside,
     OutsideEnemyCamp,
-    OutsideShopkeeper,
+    BossRoom,
 
     // Graph Rooms
     Start,

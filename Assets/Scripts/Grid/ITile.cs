@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public interface ITile
@@ -27,4 +28,12 @@ public interface ITile
 
     public void Refresh();
 
+}
+
+public static class ITileExtensions
+{
+    public static int ManhattanDistance(this ITile a, ITile b)
+    {
+        return math.abs(a.x - b.x) + math.abs(a.y - b.y);
+    }
 }

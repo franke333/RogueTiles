@@ -24,4 +24,9 @@ abstract public class GridObject : MonoBehaviour
     {
         gameObject.SetActive(value);
     }
+
+    public int ManhattanDistance(ITile other)
+    {
+        return CurrentTile.ManhattanDistance(other);
+    }
 }

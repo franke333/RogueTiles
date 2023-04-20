@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Linq;
+using Unity.Mathematics;
 
 public enum WorldType
 {
@@ -40,6 +41,8 @@ public class LevelDesignManager : PersistentSingletonClass<LevelDesignManager>
     // world settings
     [SerializeField]
     private PlayerUnit hero;
+    [SerializeField]
+    private NPCUnit boss;
     [SerializeField]
     private DungeonSettings dungeonSettings;
     [SerializeField]
@@ -310,6 +313,33 @@ public class LevelDesignManager : PersistentSingletonClass<LevelDesignManager>
         }
     }
 
+    private Vector2Int ChooseBossSpawnCell(Vector2Int heroStart,CellMap map) {
+        List<Vector2Int> possibleBossSpawns = new List<Vector2Int>();
+        for (int x = 0; x < map.Width; x++)
+            for (int y = 0; y < map.Height; y++)
+            {
+                Cell c = map[x, y];
+                if (map.RoomTypes.Count <= c.roomIndex)
+                    continue;
+                if (GetTilePrefab(c.type).IsWalkable && map.GetTypeOfRoom(c.roomIndex) == RoomType.End)
+                    possibleBossSpawns.Add(new Vector2Int(x, y));
+            }
+        if (possibleBossSpawns.Count == 0)
+        {
+            for (int x = 0; x < map.Width; x++)
+                for (int y = 0; y < map.Height; y++)
+                {
+                    Cell c = map[x, y];
+                    if (map.RoomTypes.Count <= c.roomIndex)
+                        continue;
+                    if (GetTilePrefab(c.type).IsWalkable && map.GetTypeOfRoom(c.roomIndex) == RoomType.OutsideEnemyCamp)
+                        possibleBossSpawns.Add(new Vector2Int(x, y));
+                }
+        }
+        int minDistanceFromHero = math.min(15, possibleBossSpawns.Max(c => c.ManhattanDistance(heroStart)));
+        Log.Debug($"Dist:{minDistanceFromHero}, possible:{possibleBossSpawns}");
+        return MyRandom.Choice(possibleBossSpawns.Where(c => c.ManhattanDistance(heroStart) >= minDistanceFromHero).ToList());
+    }
 
     public void GenerateWorld()
     {
@@ -362,6 +392,18 @@ public class LevelDesignManager : PersistentSingletonClass<LevelDesignManager>
             GameManager.Instance.UnregisterUnit(unit);
             Destroy(unit.gameObject);
             Log.Error("! FAILED TO SUMMON HERO", gameObject);
+            return;
+        }
+
+        //summon boss
+        var bossSpawnCell = ChooseBossSpawnCell(heroStart, map);
+        var boss = Instantiate(this.boss);
+        GridManager.Instance.GetTile(new Vector2Int(bossSpawnCell.x, bossSpawnCell.y))?.Occupy(boss);
+        if (boss.CurrentTile == null)
+        {
+            GameManager.Instance.UnregisterUnit(unit);
+            Destroy(unit.gameObject);
+            Log.Error("! FAILED TO SUMMON BOSS", gameObject);
             return;
         }
 
