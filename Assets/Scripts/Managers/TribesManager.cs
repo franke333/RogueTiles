@@ -28,6 +28,10 @@ public class TribesManager : SingletonClass<TribesManager>
     [SerializeField]
     private List<BaseActionWeightEntry> _baseActions;
 
+    [Space]
+    [SerializeField]
+    protected Canvas _healtBarCanvasPrefab;
+
     //actions that will be added to units at random
     //weights will be randomized between 1 and 3
     //an enemy will have around 5 coins to spend on actions
@@ -122,8 +126,13 @@ public class TribesManager : SingletonClass<TribesManager>
                     }
                 }
                 //unused coins are converted to extra health
-                unit.Init(5+2*coins, true);
+                unit.Init(3+coins, true);
                 units.Add(unit);
+
+                //add helath bar
+                var bar = Instantiate(TribesManager.Instance._healtBarCanvasPrefab, spritesHolder.transform);
+                bar.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -0.5f);
+
 
                 //we need this as prefab. not a real gameobject
                 unitObject.SetActive(false);

@@ -11,6 +11,8 @@ public class UIManager : SingletonClass<UIManager>
 
     public CardInfoDisplayer CardInfoDisplayer;
 
+    public HealthBarScript PlayerHealthBar;
+
     public void ToggleEnemyTurnMessage(bool value)
     {
         _enemyTurnMessage?.SetActive(value);

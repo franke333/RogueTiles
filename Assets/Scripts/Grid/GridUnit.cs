@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Events;
 
 public abstract class GridUnit : GridObject
 {
@@ -13,7 +13,17 @@ public abstract class GridUnit : GridObject
 
     private bool takingTurn = false;
 
-    public int hp { get => _hp; }
+    public UnityEvent ChangeHealthEvent = new UnityEvent();
+
+    public int hp { get => _hp; 
+        set {
+            if(value != _hp)
+            {
+                _hp = value;
+                ChangeHealthEvent.Invoke();
+            }
+        }
+    }
     public int maxHp { get => _maxHp; }
 
     [SerializeField]
@@ -30,21 +40,23 @@ public abstract class GridUnit : GridObject
         get => _isEnemy;
     }
 
+    // returns true if damage was taken
     public override bool TakeDamage(int dmg)
     {
         var ei = new EventInfo(EventType.TakeDamage, dmg);
         RaiseEvent(ei);
         dmg = Math.Max(ei.finalDamage, 0);
-        _hp -= dmg;
+        hp -= dmg;
         Log.Info($"{alias} took {dmg} dmg", gameObject);
-        if (_hp < 0)
+        if (hp <= 0)
             Die();
         if (dmg != 0)
         {
             AudioManager.Instance.PlaySFX(AudioManager.SFXType.TakeDamage);
             this.TakeDamageVFX();
+            return true;
         }
-        return dmg != 0;
+        return false;
     }
 
     public void ApplyEffect(LingeringEffect effect)
@@ -83,7 +95,7 @@ public abstract class GridUnit : GridObject
     {
         _maxHp = maxHp;
         _isEnemy = enemy;
-        _hp = maxHp;
+        hp = maxHp;
         childrenRenderer = transform.GetChild(0).gameObject;
         _targetable = true;
     }
