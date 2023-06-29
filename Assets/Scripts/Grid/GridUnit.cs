@@ -13,12 +13,15 @@ public abstract class GridUnit : GridObject
 
     private bool takingTurn = false;
 
+    public int HpChange { get; private set; }
+
     public UnityEvent ChangeHealthEvent = new UnityEvent();
 
     public int hp { get => _hp; 
         set {
             if(value != _hp)
             {
+                HpChange = value - _hp;
                 _hp = value;
                 ChangeHealthEvent.Invoke();
             }
@@ -104,6 +107,7 @@ public abstract class GridUnit : GridObject
     {
         _maxHp = maxHp;
         _isEnemy = enemy;
+        HpChange = 0;
         hp = maxHp;
         childrenRenderer = transform.GetChild(0).gameObject;
         _targetable = true;

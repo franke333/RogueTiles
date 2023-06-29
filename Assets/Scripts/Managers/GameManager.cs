@@ -17,6 +17,21 @@ public class GameManager : SingletonClass<GameManager>
     [SerializeField]
     public GameState State { get; private set; }
 
+    /// <summary>
+    /// Coroutine to wait for the game to start
+    /// </summary>
+    /// <param name="action"></param>
+    /// <returns></returns>
+    public static IEnumerator WaitForStart(Action action)
+    {
+        while (GameManager.Instance == null)
+            yield return null;
+        while (GameManager.Instance.State != GameManager.GameState.StartGame &&
+            GameManager.Instance.State != GameManager.GameState.PlayerTurn)
+            yield return null;
+        action.Invoke();
+    }
+
     protected override void Awake()
     {
         base.Awake();
@@ -191,7 +206,7 @@ public class GameManager : SingletonClass<GameManager>
     public void EndGame(bool isWin)
     {
         //TODO stats
-        UIManager.Instance.EndScreen.Show(isWin,new List<Tuple<string, int>>());
+        UIManager.Instance.EndScreen.Show(isWin,StatisticsManager.Instance.GetStats());
         ChangeState(GameState.EndGame);
     }
 

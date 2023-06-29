@@ -15,6 +15,12 @@ public class AudioManager : PersistentSingletonClass<AudioManager>
         PickUp
     }
 
+    public float SFXVolume
+    {
+        get => _audioSource.volume;
+        set => _audioSource.volume = value;
+    }
+
     private AudioSource _audioSource;
 
     private Dictionary<SFXType, List<AudioClip>> _sfxClips;
@@ -70,6 +76,7 @@ public class AudioManager : PersistentSingletonClass<AudioManager>
         {
             _audioSource = gameObject.AddComponent<AudioSource>();
         }
+        SFXVolume = 0.5f;
         LoadClips();
         CreateSources();
     }
@@ -86,6 +93,7 @@ public class AudioManager : PersistentSingletonClass<AudioManager>
             return;
         var clip = MyRandom.Choice(list);
         source.clip = clip;
+        source.volume = SFXVolume;
         source.Play();
     }
 }

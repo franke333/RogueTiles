@@ -16,7 +16,7 @@ public class BasicAttack : NPCActionBase
     int damage;
     public override bool CheckPlayability(NPCUnit caster)
     {
-        var player = GameManager.Instance.GetUnits().Where(unit => !unit.IsEnemy).First();
+        var player = GameManager.Instance.GetUnits().Where(unit => !unit.IsEnemy).FirstOrDefault();
         if (player == null)
             return false;
         if (caster.ManhattanDistance(player.CurrentTile) > range)

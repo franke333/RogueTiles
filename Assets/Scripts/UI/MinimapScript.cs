@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Unity.Mathematics;
 using System.Linq;
+using System;
 
 public class MinimapScript : MonoBehaviour
 {
@@ -18,16 +19,8 @@ public class MinimapScript : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(WaitForStart());
-    }
-
-    //coroutine to wait for start of game and then create minimap
-    IEnumerator WaitForStart()
-    {
-        while (GameManager.Instance.State != GameManager.GameState.StartGame &&
-            GameManager.Instance.State != GameManager.GameState.PlayerTurn)
-            yield return null;
-        CreateMap();
+        //coroutine to wait for start of game and then create minimap
+        StartCoroutine(GameManager.WaitForStart(CreateMap));
     }
 
     private void CreateMap()
