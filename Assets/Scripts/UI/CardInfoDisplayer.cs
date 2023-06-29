@@ -1,57 +1,49 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CardInfoDisplayer : MonoBehaviour
+public class CardInfoDisplayer : SingletonClass<CardInfoDisplayer>
 {
     [SerializeField]
-    GameObject _infoPopUpWindow;
-    [SerializeField]
-    Text _nameText;
+    RectTransform _infoPopUpWindow;
     [SerializeField]
     Text _descriptionText;
     [SerializeField]
-    Vector3 _offset;
+    Vector2 _extraBorderSize;
 
-    float _time= 0;
+    public float timeToWaitBeforeDisplayingInfo = 0.33f;
 
-    public void DisplayInfoFor(string cardName,string cardDescription,float time)
+    public void DisplayInfoFor(string cardDescription, Vector2 position)
     {
-        Log.Debug("bug");
-        _nameText.text = cardName;
         _descriptionText.text = cardDescription;
-        _infoPopUpWindow.SetActive(true);
-        time = Mathf.Max(time, 0.5f);
-        _time = Mathf.Max(_time, time);
+        _infoPopUpWindow.gameObject.SetActive(true);
+        _infoPopUpWindow.sizeDelta = new Vector2(math.max(200, _descriptionText.preferredWidth), _descriptionText.preferredHeight) + _extraBorderSize;
+        _infoPopUpWindow.transform.position = position + new Vector2(_infoPopUpWindow.sizeDelta.x/2,0);
+        //the display may run out of screen bounds. Push it back
+        //Bottom left corner of Screen is (0,0)
+        if (_infoPopUpWindow.transform.position.x + _infoPopUpWindow.sizeDelta.x > Screen.width)
+        {
+            _infoPopUpWindow.transform.position = new Vector2(Screen.width - _infoPopUpWindow.sizeDelta.x/2, _infoPopUpWindow.transform.position.y);
+        }
+        if(_infoPopUpWindow.transform.position.y - _infoPopUpWindow.sizeDelta.y < 0)
+        {
+            _infoPopUpWindow.transform.position = new Vector2(_infoPopUpWindow.transform.position.x, _infoPopUpWindow.sizeDelta.y/2);
+        }
     }
 
-
+    private void Start()
+    {
+        HideInfo();
+    }
 
     public void HideInfo()
     {
-        _infoPopUpWindow.SetActive(false);
+        _descriptionText.text = default;
+        _infoPopUpWindow.gameObject.SetActive(false);
     }
 
-    private void Update()
-    {
-        //follow mouse
-        if(!_infoPopUpWindow.activeSelf)
-            return;
-        if (_time > 0)
-        {
-            _time -= Time.deltaTime;
-            if (_time <= 0)
-            {
-                HideInfo();
-                return;
-            }
-        }
-        else
-            return;
-        Vector3 mousePos = Input.mousePosition;
-        mousePos.z = 0;
-        
-        _infoPopUpWindow.transform.position = mousePos+_offset;
-    }
+
+
 }

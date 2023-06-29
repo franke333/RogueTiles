@@ -6,6 +6,8 @@ using UnityEngine;
 
 public class BasicAttack : NPCActionBase
 {
+    [Space]
+    [Header("Basic Attack Stats")]
     [SerializeField]
     int range;
     [SerializeField]

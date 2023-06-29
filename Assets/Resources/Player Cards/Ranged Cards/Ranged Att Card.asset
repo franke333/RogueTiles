@@ -10,15 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c62fd6550a927184f85575293f96fcfc, type: 3}
-  m_Name: PunchCard
+  m_Name: Ranged Att Card
   m_EditorClassIdentifier: 
-  name: Punch
+  name: Ranged Attack
   sprite: {fileID: 0}
-  description: Deal 1 damage to 1 target right next to you
+  description: Deals 2 damage to single target that is 1 or 2 tiles away from you
+    in same column or row.
   shape: 0
-  range: 1
-  cost: 1000
-  itemType: 6
+  range: 2
+  cost: 2
+  itemType: 3
   needsTarget: 1
   cardEffect:
     m_PersistentCalls:
@@ -30,9 +31,9 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 1
+          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  audioType: 2
+  audioType: 3

@@ -28,6 +28,7 @@ public interface ITile
 
     public void Refresh();
 
+    public Color GetColor();
 }
 
 public static class ITileExtensions

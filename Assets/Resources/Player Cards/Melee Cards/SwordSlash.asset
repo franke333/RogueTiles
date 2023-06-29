@@ -10,30 +10,29 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c62fd6550a927184f85575293f96fcfc, type: 3}
-  m_Name: Temporary HP Card
+  m_Name: SwordSlash
   m_EditorClassIdentifier: 
-  name: Temporary Shield
+  name: Slash
   sprite: {fileID: 0}
-  description: Gain 3 temporary HP on top of your normal HP. These are used to reduce
-    incoming damage.
-  shape: 3
-  range: 0
-  cost: 2
-  itemType: 1
-  needsTarget: 0
+  description: Slash a single enemy in melee range for 2 damage.
+  shape: 0
+  range: 1
+  cost: 1
+  itemType: 2
+  needsTarget: 1
   cardEffect:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3585887776412756551, guid: 0b995670230f0a24796b9a77f7fcb07e, type: 3}
         m_TargetAssemblyTypeName: CardEffects, Assembly-CSharp
-        m_MethodName: GainTemporaryHealth
+        m_MethodName: DealDamage
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 3
+          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  audioType: 5
+  audioType: 2

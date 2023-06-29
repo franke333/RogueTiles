@@ -43,6 +43,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b3f32374af77f2489357daa85e609ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cost: 2
+  isBaseAction: 0
   range: 2
   onlySameColumnRow: 1
   damage: 1

@@ -59,6 +59,15 @@ public abstract class GridUnit : GridObject
         return false;
     }
 
+    public bool RestoreHealth(int amount)
+    {
+        if (hp == maxHp || amount == 0)
+            return false;
+        hp = Math.Min(hp + amount, maxHp);
+        AudioManager.Instance.PlaySFX(AudioManager.SFXType.Heal);
+        return true;
+    }
+
     public void ApplyEffect(LingeringEffect effect)
     {
         if (effect.tag != "")

@@ -151,4 +151,6 @@ public class TileStandalone : MonoBehaviour, ITile
     {
         RecalculateColor();
     }
+
+    public Color GetColor() => _baseColor;
 }

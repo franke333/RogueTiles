@@ -73,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -1000
-  m_Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
+  m_Sprite: {fileID: -6163371429683501033, guid: ed455ac02f60a744db85b94b304f3ee3, type: 3}
   m_Color: {r: 0.7264151, g: 0.35355446, b: 0.065103225, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -104,8 +104,6 @@ MonoBehaviour:
   _selectionColor: {r: 0.3479886, g: 0.39525545, b: 0.8679245, a: 0.6666667}
   _fogOfWarColor: {r: 0, g: 0, b: 0, a: 0.7372549}
   _occupiedObject: {fileID: 0}
-  x: 0
-  y: 0
 --- !u!61 &619400206858539364
 BoxCollider2D:
   m_ObjectHideFlags: 0

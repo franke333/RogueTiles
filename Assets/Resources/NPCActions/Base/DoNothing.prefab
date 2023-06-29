@@ -43,4 +43,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c691179175bb5f949a0789e4c559b6c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  value: 0
+  cost: 999
+  isBaseAction: 1

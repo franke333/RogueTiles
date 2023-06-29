@@ -4,19 +4,19 @@ TextureImporter:
   internalIDToNameTable:
   - first:
       213: 6425842788120615541
-    second: placehodlerItemIcons_0
+    second: melee
   - first:
       213: 5696447443879173405
-    second: placehodlerItemIcons_1
+    second: ranged
   - first:
       213: -4686737954740522470
-    second: placehodlerItemIcons_2
+    second: magic
   - first:
       213: -792760855957746086
-    second: placehodlerItemIcons_3
+    second: armor
   - first:
       213: 6758090590130644737
-    second: placehodlerItemIcons_4
+    second: trinket
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -118,7 +118,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: placehodlerItemIcons_0
+      name: melee
       rect:
         serializedVersion: 2
         x: 0
@@ -126,7 +126,7 @@ TextureImporter:
         width: 48
         height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -139,7 +139,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: placehodlerItemIcons_1
+      name: ranged
       rect:
         serializedVersion: 2
         x: 48
@@ -147,7 +147,7 @@ TextureImporter:
         width: 48
         height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -160,7 +160,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: placehodlerItemIcons_2
+      name: magic
       rect:
         serializedVersion: 2
         x: 0
@@ -168,7 +168,7 @@ TextureImporter:
         width: 48
         height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -181,7 +181,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: placehodlerItemIcons_3
+      name: armor
       rect:
         serializedVersion: 2
         x: 48
@@ -189,7 +189,7 @@ TextureImporter:
         width: 48
         height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -202,7 +202,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: placehodlerItemIcons_4
+      name: trinket
       rect:
         serializedVersion: 2
         x: 0
@@ -210,7 +210,7 @@ TextureImporter:
         width: 48
         height: 48
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

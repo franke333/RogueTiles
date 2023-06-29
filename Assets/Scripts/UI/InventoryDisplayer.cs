@@ -13,22 +13,26 @@ public class InventoryDisplayer : SingletonClass<InventoryDisplayer>
     [SerializeField]
     private GameObject pickUpDialogGO;
 
+    private ItemSlotDisplayer _lastHighlightedSlotDisplayer;
 
     private ItemSlot pickedUpItemSlot;
     [SerializeField]
     private ItemSlotDisplayer pickedUpItemSlotDisplayer;
+    [SerializeField]
+    private List<CardDisplayer> _inventoryItemCardDisplayers;
 
     private void Start()
     {
         inventory.gameObject.SetActive(false);
         pickedUpItemSlot = new ItemSlot();
         pickedUpItemSlotDisplayer.Link(pickedUpItemSlot);
+        HideAllInventoryItemCards();
         
     }
     // Update is called once per frame
     void Update()
     {
-        // if inventory dialog is up -> we need the player to choose what to di with item first
+        // if inventory dialog is up -> we need the player to choose what to do with item first
         if (pickUpDialogGO.activeInHierarchy)
             return;
         if (Input.GetKeyDown(KeyCode.I))
@@ -41,6 +45,11 @@ public class InventoryDisplayer : SingletonClass<InventoryDisplayer>
     {
         if (pickedUpItem == null)
             return;
+        if (pickedUpItem.itemType == ItemType.Consumable)
+        {
+            ((ConsumableItem)pickedUpItem).HealPlayer();
+            return;
+        }
         pickedUpItemSlot.SetItem(pickedUpItem);
         pickedUpItemSlotDisplayer.Display();
         for (int i = 0; i < slotDisplayers.Count; i++)
@@ -65,5 +74,33 @@ public class InventoryDisplayer : SingletonClass<InventoryDisplayer>
         pickedUpItemSlot.SetItem(null);
         pickUpDialogGO.SetActive(false);
         inventory.gameObject.SetActive(false);
+    }
+
+    public void HideAllInventoryItemCards()
+    {
+        foreach (var item in _inventoryItemCardDisplayers)
+            item.Hide();
+    }
+
+    public void DisplayCardsOfItemInItemSlot(ItemSlotDisplayer itemSlotDisplayer)
+    {
+        //highlight colors in inventory
+        if (_lastHighlightedSlotDisplayer != null)
+            _lastHighlightedSlotDisplayer.SetHighlight(false);
+        _lastHighlightedSlotDisplayer = itemSlotDisplayer;
+        itemSlotDisplayer.SetHighlight(true);
+
+        if (itemSlotDisplayer.Slot.IsEmpty)
+        {
+            HideAllInventoryItemCards();
+            return;
+        }
+
+        //display cards
+        Item item = itemSlotDisplayer.Slot.item;
+        for (int i = 0; i < item.cards.Count; i++)
+        {
+            _inventoryItemCardDisplayers[i].DisplayCard(item.cards[i]);
+        }
     }
 }

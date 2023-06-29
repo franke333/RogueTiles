@@ -36,7 +36,6 @@ public class TribesManager : SingletonClass<TribesManager>
     //weights will be randomized between 1 and 3
     //an enemy will have around 5 coins to spend on actions
     //action, cost
-    [SerializeField]
     private List<ActionCostEntry> _actions;
 
     public int baseLayerOrder;
@@ -66,9 +65,9 @@ public class TribesManager : SingletonClass<TribesManager>
             return obj.AddComponent<SpriteRenderer>();
         }
 
-        public Tribe(int size,RoomType roomType)
+        public Tribe(int size,RoomType roomType, Color tribeColor)
         {
-            hue = MyRandom.Color();
+            hue = tribeColor;
             name = MyRandom.String(4, 9);
             assignedRoom = roomType;
             units = new List<NPCUnit>();
@@ -82,39 +81,37 @@ public class TribesManager : SingletonClass<TribesManager>
                 spritesHolder.transform.parent = unitObject.transform;
                 var unit = unitObject.AddComponent<NPCUnit>();
                 unit.alias = name + " " + unitName;
-                SpriteRenderer sr;
+                SpriteRenderer AddSpriteBodyPart(string name,Sprite sprite,int sortingOrder)
+                {
+                    SpriteRenderer sr = AddSpriteRendererAsChildObject(spritesHolder, name);
+                    sr.sprite = sprite;
+                    sr.sortingOrder = tribeManager.baseLayerOrder + sortingOrder;
+                    return sr;
+                }
+
                 //body
-                sr = AddSpriteRendererAsChildObject(spritesHolder, "body");
+                var sr = AddSpriteBodyPart("body", MyRandom.Choice(tribeManager.bodies), 0);
                 sr.color = hue;
-                sr.sprite = MyRandom.Choice(tribeManager.bodies);
-                sr.sortingOrder = tribeManager.baseLayerOrder;
                 //chest
-                sr = AddSpriteRendererAsChildObject(spritesHolder, "chest piece");
-                sr.sprite = MyRandom.Choice(tribeManager.chests);
-                sr.sortingOrder = tribeManager.baseLayerOrder + 2;
+                AddSpriteBodyPart("chest piece", MyRandom.Choice(tribeManager.chests), 2);
                 //heads
-                sr = AddSpriteRendererAsChildObject(spritesHolder, "head piece");
-                sr.sprite = MyRandom.Choice(tribeManager.heads);
-                sr.sortingOrder = tribeManager.baseLayerOrder + 3;
+                AddSpriteBodyPart("head piece", MyRandom.Choice(tribeManager.heads), 3);
                 //legs
-                sr = AddSpriteRendererAsChildObject(spritesHolder, "leg piece");
-                sr.sprite = MyRandom.Choice(tribeManager.legs);
-                sr.sortingOrder = tribeManager.baseLayerOrder + 1;
+                AddSpriteBodyPart("leg piece", MyRandom.Choice(tribeManager.legs), 1);
                 //lefthand
-                sr = AddSpriteRendererAsChildObject(spritesHolder, "left hand");
-                sr.sprite = MyRandom.Choice(tribeManager.leftHandItems);
-                sr.sortingOrder = tribeManager.baseLayerOrder + 4;
+                AddSpriteBodyPart("left hand piece", MyRandom.Choice(tribeManager.leftHandItems), 4);
                 //righthand
-                sr = AddSpriteRendererAsChildObject(spritesHolder, "right hand");
-                sr.sprite = MyRandom.Choice(tribeManager.rightHandItems);
-                sr.sortingOrder = tribeManager.baseLayerOrder + 5;
+                AddSpriteBodyPart("right hand piece", MyRandom.Choice(tribeManager.rightHandItems), 5);
 
                 //base actions
                 foreach(var actionWeightEntry in tribeManager._baseActions)
                     unit.ActionList.Add(new NPCUnit.ActionEntry() { weight = actionWeightEntry.weight, actionObj = actionWeightEntry.action });
 
+
+
+
                 //buy phase
-                int coins = 4 + MyRandom.Int(0, 3); //4-6
+                int coins = 5;
                 int actionsToBuy = MyRandom.Int(1, 4); //1-3
                 for (int j = 0; j < actionsToBuy; j++)
                 {
@@ -122,7 +119,7 @@ public class TribesManager : SingletonClass<TribesManager>
                     if (coins >= actionCostEntry.cost)
                     {
                         coins -= actionCostEntry.cost;
-                        unit.ActionList.Add(new NPCUnit.ActionEntry() { weight = MyRandom.Int(1,4), actionObj = actionCostEntry.action });
+                        unit.ActionList.Add(new NPCUnit.ActionEntry() { weight = MyRandom.Int(3,6), actionObj = actionCostEntry.action });
                     }
                 }
                 //unused coins are converted to extra health
@@ -148,14 +145,34 @@ public class TribesManager : SingletonClass<TribesManager>
 
     public void GenerateTribes(List<int> outdoorTribeSizes,int indoorTribeSize)
     {
-        
+        List<Color> colors = MyMath.GetDistinctColors(outdoorTribeSizes.Count + 1);
         tribes = new List<Tribe>();
-        tribes.Add(new Tribe(indoorTribeSize, RoomType.Hall));
-        foreach(var size in outdoorTribeSizes)
-            tribes.Add(new Tribe(size, RoomType.OutsideEnemyCamp));
+        tribes.Add(new Tribe(indoorTribeSize, RoomType.Hall, colors[colors.Count-1]));
+        for(int i = 0; i < outdoorTribeSizes.Count; i++)
+            tribes.Add(new Tribe(outdoorTribeSizes[i], RoomType.OutsideEnemyCamp, colors[i]));
         _ready = true;
         enemyParentObject = new GameObject("Enemies");
         enemyParentObject.transform.SetParent(GameObject.Find("Enviroment").transform);
+    }
+
+    private void LoadActionsFromResources()
+    {
+        if(_actions != null && _actions.Count > 0)
+        {
+            return;
+        }
+        _actions = new List<ActionCostEntry>();
+        var actions = Resources.LoadAll<NPCActionBase>("NPCActions").Where( ab => !ab.isBaseAction).ToList();
+        foreach(var action in actions)
+        {
+            _actions.Add(new ActionCostEntry() { action = action, cost = action.cost });
+        }
+        Log.Info($"Loaded {_actions.Count} npc actions", this.gameObject);
+    }
+
+    private void Start()
+    {
+        LoadActionsFromResources();
     }
 
     private void SpawnEnemy(NPCUnit enemy,ITile tile)

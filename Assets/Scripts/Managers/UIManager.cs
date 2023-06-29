@@ -9,8 +9,6 @@ public class UIManager : SingletonClass<UIManager>
 
     public EndScreenScript EndScreen;
 
-    public CardInfoDisplayer CardInfoDisplayer;
-
     public HealthBarScript PlayerHealthBar;
 
     public void ToggleEnemyTurnMessage(bool value)

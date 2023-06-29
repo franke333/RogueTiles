@@ -9,17 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c62fd6550a927184f85575293f96fcfc, type: 3}
-  m_Name: DoNothingCard
+  m_Script: {fileID: 11500000, guid: 48676a70a8990df4ca27a075aef47b9b, type: 3}
+  m_Name: Bandage
   m_EditorClassIdentifier: 
-  name: do nothing
-  sprite: {fileID: 0}
-  description: '-'
-  shape: 0
-  range: 0
-  cost: -2
-  itemType: 6
-  needsTarget: 0
-  cardEffect:
-    m_PersistentCalls:
-      m_Calls: []
+  itemName: Bandage
+  sprite: {fileID: 267042343117847326, guid: 4afc29087116e164a8d3abffe3d10a5e, type: 3}
+  itemType: 0
+  cards: []
+  _healAmount: 6

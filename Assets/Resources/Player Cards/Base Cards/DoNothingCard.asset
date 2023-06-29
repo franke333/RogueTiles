@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c62fd6550a927184f85575293f96fcfc, type: 3}
+  m_Name: DoNothingCard
+  m_EditorClassIdentifier: 
+  name: Do Nothing
+  sprite: {fileID: 0}
+  description: 'Does nothing for a turn.
+
+    (Go and make some tea)'
+  shape: 0
+  range: 0
+  cost: -2
+  itemType: 6
+  needsTarget: 0
+  cardEffect:
+    m_PersistentCalls:
+      m_Calls: []
+  audioType: 0

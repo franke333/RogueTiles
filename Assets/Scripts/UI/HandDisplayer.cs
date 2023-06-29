@@ -43,12 +43,14 @@ public class HandDisplayer : SingletonClass<HandDisplayer>, IPointerEnterHandler
             gameObject.SetActive(!gameObject.activeSelf);
         if (!gameObject.activeSelf)
             MouseOver = false;
+        CardInfoDisplayer.Instance.HideInfo();
     }
 
     public void Hide()
     {
         _activeUnit = null;
         gameObject.SetActive(false);
+        CardInfoDisplayer.Instance.HideInfo();
     }
 
     public void OnPointerEnter(PointerEventData eventData)

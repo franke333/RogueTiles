@@ -398,6 +398,7 @@ public class LevelDesignManager : PersistentSingletonClass<LevelDesignManager>
         //summon boss
         var bossSpawnCell = ChooseBossSpawnCell(heroStart, map);
         var boss = Instantiate(this.boss);
+        GameManager.Instance.Boss = (BossUnit)boss;
         GridManager.Instance.GetTile(new Vector2Int(bossSpawnCell.x, bossSpawnCell.y))?.Occupy(boss);
         if (boss.CurrentTile == null)
         {

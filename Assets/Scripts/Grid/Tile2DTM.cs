@@ -141,4 +141,6 @@ public class Tile2DTM : TileBase, ITile
             return false;
         return true;
     }
+
+    public Color GetColor() => _baseColor;
 }

@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class GameManager : SingletonClass<GameManager>
 {
@@ -14,7 +16,6 @@ public class GameManager : SingletonClass<GameManager>
 
     [SerializeField]
     public GameState State { get; private set; }
-
 
     protected override void Awake()
     {
@@ -106,6 +107,20 @@ public class GameManager : SingletonClass<GameManager>
                 break;
             default:
                 break;
+        }
+    }
+
+    public BossUnit Boss { get; set; }
+
+    private PlayerUnit _player;
+
+    public PlayerUnit Player
+    {
+        get
+        {
+            if (_player == null)
+                _player = (PlayerUnit)_units.Where(unit => !unit.IsEnemy).FirstOrDefault();
+            return _player;
         }
     }
 

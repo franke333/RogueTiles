@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System;
 
-public class CardDisplayer : MonoBehaviour, IPointerDownHandler
+public class CardDisplayer : MonoBehaviour, IPointerDownHandler , IPointerEnterHandler, IPointerExitHandler
 {
 
     public Action displayerClicked;
@@ -14,8 +14,8 @@ public class CardDisplayer : MonoBehaviour, IPointerDownHandler
     Text _cardName;
 
     string _description;
-
-    RectTransform rectTransform;
+    [SerializeField]
+    private bool _clickable = true;
 
     public void DisplayCard(Card card)
     {
@@ -28,24 +28,31 @@ public class CardDisplayer : MonoBehaviour, IPointerDownHandler
     public void Hide()
     {
         gameObject.SetActive(false);
-    }
-
-    private void Start()
-    {
-        rectTransform = GetComponent<RectTransform>();
-    }
-
-    private void Update()
-    {
-        Vector2 mousePos = rectTransform.InverseTransformPoint(Input.mousePosition);
-        if (rectTransform.rect.Contains(mousePos))
-        {
-           UIManager.Instance.CardInfoDisplayer.DisplayInfoFor(_cardName.text, _description, Time.deltaTime*2);
-        }
+        CardInfoDisplayer.Instance.HideInfo();
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        displayerClicked.Invoke();
+        if(_clickable)
+            displayerClicked.Invoke();
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        StopAllCoroutines();
+        StartCoroutine(StartTimer());
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        StopAllCoroutines();
+        CardInfoDisplayer.Instance.HideInfo();
+    }
+
+    private IEnumerator StartTimer()
+    {
+        yield return new WaitForSeconds(CardInfoDisplayer.Instance.timeToWaitBeforeDisplayingInfo);
+        //show message
+        CardInfoDisplayer.Instance.DisplayInfoFor(_description, Input.mousePosition);
     }
 }

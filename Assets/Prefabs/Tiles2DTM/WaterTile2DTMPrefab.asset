@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _isWall: 0
   _isWalkable: 0
-  _sprite: {fileID: 21300000, guid: dd33aab0b948ef54fad04c136256f4d8, type: 3}
-  _baseColor: {r: 0.19215687, g: 0.23137255, b: 0.77254903, a: 0.7647059}
+  _sprite: {fileID: 5516397341420153987, guid: ed455ac02f60a744db85b94b304f3ee3, type: 3}
+  _baseColor: {r: 0.19215687, g: 0.23137255, b: 0.77254903, a: 1}
   _oddTileDarkening: {r: 0.8, g: 0.8, b: 0.8, a: 1}
   _rangeColor: {r: 0.7529412, g: 0.6, b: 0.16078432, a: 0.5882353}
   _selectionColor: {r: 0.34901962, g: 0.39607844, b: 0.8666667, a: 0.84313726}

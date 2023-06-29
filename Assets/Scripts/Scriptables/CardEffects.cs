@@ -24,22 +24,24 @@ public class CardEffects : MonoBehaviour
     class TemporaryHPEffect : LingeringEffect
     {
         int tempHP;
-        public TemporaryHPEffect(int tempHP)
+        public TemporaryHPEffect(int tempHP, int duration)
         {
             this.tempHP = tempHP;
-            _tag = "tempHP";
+            this._duration = duration;
+            _tag = "shield";
         }
 
         public override void DoEffect(EventInfo info)
         {
             if(info.eventType == EventType.TakeDamage)
             {
-                int tempHPDamage = Mathf.Max(tempHP, info.finalDamage);
+                int tempHPDamage = Mathf.Min(tempHP, info.finalDamage);
                 tempHP -= tempHPDamage;
                 info.finalDamage -= tempHPDamage;
                 if (tempHP == 0)
                     this._discard = true;
             }
+            base.DoEffect(info);
         }
     }
 
@@ -49,9 +51,21 @@ public class CardEffects : MonoBehaviour
         data.currentTarget.TakeDamage(damage);
     }
 
-    public void GainTemporaryHealth(int tmphp)
+    public void GainTemporaryHealthFor10Turns(int tmphp)
     {
         var data = CardData.ReadData();
-        data.currentUnit.ApplyEffect(new TemporaryHPEffect(tmphp));
+        data.currentUnit.ApplyEffect(new TemporaryHPEffect(tmphp,10));
+    }
+
+    public void GainTemporaryHealthFor5Turns(int tmphp)
+    {
+        var data = CardData.ReadData();
+        data.currentUnit.ApplyEffect(new TemporaryHPEffect(tmphp,5));
+    }
+
+    public void GainTemporaryHealthFor2Turns(int tmphp)
+    {
+        var data = CardData.ReadData();
+        data.currentUnit.ApplyEffect(new TemporaryHPEffect(tmphp,2));
     }
 }

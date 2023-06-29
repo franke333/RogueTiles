@@ -19,6 +19,16 @@ public static class MyMath
         }
         return true;
     }
+
+    public static List<Color> GetDistinctColors(int count)
+    {
+        List<Color> colors = new List<Color>();
+        for (int i = 0; i < count; i++)
+        {
+            colors.Add(Color.HSVToRGB(((float)i)/count,1,1));
+        }
+        return colors;
+    }
 }
 
 public static class Vector2Extension
