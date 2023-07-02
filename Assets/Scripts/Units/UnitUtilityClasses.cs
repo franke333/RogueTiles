@@ -15,13 +15,15 @@ public class EventInfo
 {
     public readonly EventType eventType;
 
+    public readonly GridUnit hostOfEffect;
     public readonly int baseDamage;
     public int finalDamage;
 
-    public EventInfo(EventType eventType,int damage=0)
+    public EventInfo(EventType eventType,GridUnit hostOfEffect,int damage=0)
     {
         this.eventType = eventType;
         baseDamage = damage;
         finalDamage = damage;
+        this.hostOfEffect = hostOfEffect;
     }
 }

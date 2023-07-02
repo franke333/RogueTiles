@@ -293,18 +293,15 @@ public class LevelDesignManager : PersistentSingletonClass<LevelDesignManager>
 
             }
         }
-        //check for too small Cells (lets say 30 for now)
+        //check for too small Cells (<=20)
         for (int i = 0; i < tilesOfVoronoiCellList.Count; i++)
         {
             var voronoiCell = tilesOfVoronoiCellList[i];
-            if (voronoiCell.Count < 30)
+            if (voronoiCell.Count <= 20)
             {
                 continue;
             }
-            if (MyRandom.Float() <= 0.5f)
-                map.AddNewRoom(RoomType.OutsideEnemyCamp);
-            else
-                map.AddNewRoom(RoomType.Outside);
+            map.AddNewRoom(RoomType.OutsideEnemyCamp);
 
             foreach (var (x, y) in voronoiCell)
             {

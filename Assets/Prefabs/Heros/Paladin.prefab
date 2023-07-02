@@ -161,8 +161,11 @@ MonoBehaviour:
   alias: Bob, the Paladin
   _walkable: 0
   _targetable: 1
-  _hp: 10
-  _maxHp: 10
+  _hp: 15
+  _maxHp: 15
+  ChangeHealthEvent:
+    m_PersistentCalls:
+      m_Calls: []
   _isEnemy: 0
   childrenRenderer: {fileID: 1186725927826772880}
   _visibleRange: 5

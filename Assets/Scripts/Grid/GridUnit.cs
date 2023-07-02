@@ -46,7 +46,7 @@ public abstract class GridUnit : GridObject
     // returns true if damage was taken
     public override bool TakeDamage(int dmg)
     {
-        var ei = new EventInfo(EventType.TakeDamage, dmg);
+        var ei = new EventInfo(EventType.TakeDamage,this, dmg);
         RaiseEvent(ei);
         dmg = Math.Max(ei.finalDamage, 0);
         hp -= dmg;
@@ -90,14 +90,14 @@ public abstract class GridUnit : GridObject
         if (!takingTurn)
         {
             //turn started
-            RaiseEvent(new EventInfo(EventType.StartTurn));
+            RaiseEvent(new EventInfo(EventType.StartTurn,this));
             takingTurn = true;
         }
         bool res = PlayTurn();
         if (res)
         {
             //turn ending
-            RaiseEvent(new EventInfo(EventType.EndTurn));
+            RaiseEvent(new EventInfo(EventType.EndTurn,this));
             takingTurn = false;
         }
         return res;

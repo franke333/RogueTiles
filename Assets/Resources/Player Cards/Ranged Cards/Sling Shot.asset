@@ -10,23 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c62fd6550a927184f85575293f96fcfc, type: 3}
-  m_Name: Temporary HP Card
+  m_Name: Sling Shot
   m_EditorClassIdentifier: 
-  name: Shield
+  name: Sling Shot
   sprite: {fileID: 0}
-  description: Gain 3 temporary HP on top of your normal HP for 10 turns. These are
-    used to reduce incoming damage.
-  shape: 3
-  range: 0
-  cost: 2
-  itemType: 1
-  needsTarget: 0
+  description: Deals 1 damage to single target that is 1 or 2 tiles away from you
+    in same column or row.
+  shape: 0
+  range: 2
+  cost: 1
+  itemType: 3
+  needsTarget: 1
   cardEffect:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3585887776412756551, guid: 0b995670230f0a24796b9a77f7fcb07e, type: 3}
         m_TargetAssemblyTypeName: CardEffects, Assembly-CSharp
-        m_MethodName: GainTemporaryHealthFor10Turns
+        m_MethodName: DealDamage
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -36,4 +36,4 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  audioType: 5
+  audioType: 3

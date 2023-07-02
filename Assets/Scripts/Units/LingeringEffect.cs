@@ -11,6 +11,10 @@ public abstract class LingeringEffect
     protected bool _discard;
     protected int _duration;
     protected bool _infinite = false;
+    public string Name {  get; protected set;}
+    public string Description { get; protected set; }
+    public Sprite Sprite { get; protected set; }
+    public bool IsToBeDisplayed { get; protected set; }
 
     public bool discard { get => _discard; }
 
@@ -25,11 +29,18 @@ public abstract class LingeringEffect
     /// <param name="info"> Holds information about the invoking effect </param>
     public virtual void DoEffect(EventInfo info)
     {
-        if(infinite)
+        UpdateDescription();
+        if (infinite || info.eventType != EventType.EndTurn)
             return;
+        //tick
         _duration--;
         if (_duration <= 0)
             _discard = true;
+    }
+
+    protected virtual void UpdateDescription()
+    {
+        Description = "Missing description";
     }
 
     /// <summary>
@@ -41,6 +52,147 @@ public abstract class LingeringEffect
     /// Tells if the effect is infinite
     /// </summary>
     public bool infinite { get => _infinite; }
-
-
 }
+
+public class TemporaryHPEffect : LingeringEffect
+{
+    int tempHP;
+    public TemporaryHPEffect(int tempHP, int duration,string name)
+    {
+        this.tempHP = tempHP;
+        this._duration = duration;
+        _tag = "shield";
+        Name = name;
+        IsToBeDisplayed = true;
+        //TODO add sprite
+        UpdateDescription();
+    }
+
+    protected override void UpdateDescription()
+    {
+        Description = $"Temporary {tempHP} HP for ";
+        if (_duration == 1)
+            Description += "1 turn";
+        else
+            Description += $"{_duration} turns";
+    }
+
+    public override void DoEffect(EventInfo info)
+    {
+        if (info.eventType == EventType.TakeDamage)
+        {
+            int tempHPDamage = Mathf.Min(tempHP, info.finalDamage);
+            tempHP -= tempHPDamage;
+            info.finalDamage -= tempHPDamage;
+            if (tempHP == 0)
+                this._discard = true;
+        }
+        base.DoEffect(info);
+        UpdateDescription();
+    }
+}
+
+//Damage over Time
+public class DOTEffect : LingeringEffect
+{
+    int damage;
+    public DOTEffect(int damage, int duration, string name, string tag)
+    {
+        //TODO sprite
+        this.damage = damage;
+        this._duration = duration;
+        _tag = tag;
+        Name = name;
+        IsToBeDisplayed = true;
+        UpdateDescription();
+    }
+
+    protected override void UpdateDescription()
+    {
+        Description = $"Deals {damage} damage each turn for ";
+        if (_duration == 1)
+            Description += "1 turn";
+        else
+            Description += $"{_duration} turns";
+    }
+
+    public override void DoEffect(EventInfo info)
+    {
+        if (info.eventType == EventType.EndTurn)
+        {
+            info.hostOfEffect.TakeDamage(damage);
+        }
+        //ticking down
+        base.DoEffect(info);
+    }
+}
+
+// unit takes extra const damage from all sources
+public class WeaknessEffect : LingeringEffect
+{
+    int damage;
+    public WeaknessEffect(int damage, int duration, string name)
+    {
+        //TODO sprite
+        this.damage = damage;
+        this._duration = duration;
+        _tag = "weakness";
+        Name = name;
+        IsToBeDisplayed = true;
+        UpdateDescription();
+    }
+
+    protected override void UpdateDescription()
+    {
+        Description = $"Takes {damage} extra damage from all sources for ";
+        if (_duration == 1)
+            Description += "1 turn";
+        else
+            Description += $"{_duration} turns";
+    }
+
+    public override void DoEffect(EventInfo info)
+    {
+        if (info.eventType == EventType.TakeDamage)
+        {
+            info.finalDamage += damage;
+        }
+        //ticking down
+        base.DoEffect(info);
+    }
+}
+
+//unit takes reduced damage from all sources
+public class ResistanceEffect : LingeringEffect
+{
+    int damageReduction;
+    public ResistanceEffect(int damageReduction, int duration, string name)
+    {
+        //TODO sprite
+        this.damageReduction = damageReduction;
+        this._duration = duration;
+        _tag = "damage reduction";
+        Name = name;
+        IsToBeDisplayed = true;
+        UpdateDescription();
+    }
+
+    protected override void UpdateDescription()
+    {
+        Description = $"Takes {damageReduction} less damage from all sources for ";
+        if (_duration == 1)
+            Description += "1 turn";
+        else
+            Description += $"{_duration} turns";
+    }
+
+    public override void DoEffect(EventInfo info)
+    {
+        if (info.eventType == EventType.TakeDamage)
+        {
+            info.finalDamage -= damageReduction;
+        }
+        //ticking down
+        base.DoEffect(info);
+    }
+}   

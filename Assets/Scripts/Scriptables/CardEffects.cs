@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class CardEffects : MonoBehaviour
@@ -21,29 +23,7 @@ public class CardEffects : MonoBehaviour
             => new CardData(Card.playedCard, Card.currentUnit, Card.currentTarget);
     }
 
-    class TemporaryHPEffect : LingeringEffect
-    {
-        int tempHP;
-        public TemporaryHPEffect(int tempHP, int duration)
-        {
-            this.tempHP = tempHP;
-            this._duration = duration;
-            _tag = "shield";
-        }
-
-        public override void DoEffect(EventInfo info)
-        {
-            if(info.eventType == EventType.TakeDamage)
-            {
-                int tempHPDamage = Mathf.Min(tempHP, info.finalDamage);
-                tempHP -= tempHPDamage;
-                info.finalDamage -= tempHPDamage;
-                if (tempHP == 0)
-                    this._discard = true;
-            }
-            base.DoEffect(info);
-        }
-    }
+    // ---- MELEE ----
 
     public void DealDamage(int damage)
     {
@@ -51,21 +31,132 @@ public class CardEffects : MonoBehaviour
         data.currentTarget.TakeDamage(damage);
     }
 
+    public void Rend()
+    {
+        var data = CardData.ReadData();
+        //apply if target is GridUnit
+        if (data.currentTarget is GridUnit)
+        {
+            GridUnit unit = data.currentTarget as GridUnit;
+            unit.ApplyEffect(new DOTEffect(1,5,data.playedCard.name,""));
+        }
+    }
+
+    public void Cleave()
+    {
+        var data = CardData.ReadData();
+        //apply if target is GridUnit
+        if (data.currentTarget is GridUnit)
+        {
+            GridUnit unit = data.currentTarget as GridUnit;
+            unit.ApplyEffect(new DOTEffect(1, 3, data.playedCard.name, ""));
+        }
+        data.currentTarget.TakeDamage(2);
+    }
+
+    public void DeepWound()
+    {
+        var data = CardData.ReadData();
+        //apply if target is GridUnit
+        if (data.currentTarget is GridUnit)
+        {
+            GridUnit unit = data.currentTarget as GridUnit;
+            unit.ApplyEffect(new DOTEffect(2, 3, data.playedCard.name, ""));
+        }
+        data.currentTarget.TakeDamage(1);
+    }
+
+    // ---- RANGED ----
+
+    readonly static Tuple<int, int>[] _RANGE_OF_DAMAGES =
+    {
+        new Tuple<int, int>(1, 3), //arrow shot
+        new Tuple<int, int>(2, 4), //powered arrow shot
+        new Tuple<int, int>(0, 3), //snipe
+
+    };
+
+    public void DealDamageInRange(int rangeOfDamageIndex)
+    {
+        if(rangeOfDamageIndex < 0 || rangeOfDamageIndex >= _RANGE_OF_DAMAGES.Length)
+            throw new ArgumentOutOfRangeException(nameof(rangeOfDamageIndex));
+
+        var data = CardData.ReadData();
+        var (min, max) = _RANGE_OF_DAMAGES[rangeOfDamageIndex];
+        data.currentTarget.TakeDamage(MyRandom.Int(min,max+1));
+    }
+
+    // ---- MAGIC ----
+
+    public void RingOfFire()
+    {
+        var data = CardData.ReadData();
+        foreach (var enemy in GameManager.Instance.GetUnits().Where(u => u.IsEnemy)
+            .Where(u => 2 >= u.ManhattanDistance(data.currentUnit.CurrentTile)))
+        {
+            enemy.TakeDamage(1);
+        }
+    }
+
+    public void SyphonLife()
+    {
+        var data = CardData.ReadData();
+        data.currentTarget.TakeDamage(2);
+        data.currentUnit.RestoreHealth(1);
+    }
+
+    public void CurseOfWeakness()
+    {
+        var data = CardData.ReadData();
+        if (data.currentTarget is GridUnit)
+        {
+            GridUnit unit = data.currentTarget as GridUnit;
+            unit.ApplyEffect(new WeaknessEffect(1,5, data.playedCard.name));
+            AudioManager.Instance.PlaySFX(AudioManager.SFXType.Debuff);
+        }
+    }
+
+    public void ConsumingFlame()
+    {
+        var data = CardData.ReadData();
+        data.currentTarget.TakeDamage(5);
+        data.currentUnit.TakeDamage(MyRandom.Int(0, 3));
+    }
+
+    // ---- ARMOR ----
+
+    public void ArmorUp()
+    {
+        var data = CardData.ReadData();
+        data.currentUnit.ApplyEffect(new ResistanceEffect(1,5, data.playedCard.name));
+    }
+
+    public void BraceYourselves()
+    {
+        var data = CardData.ReadData();
+        data.currentUnit.ApplyEffect(new ResistanceEffect(2, 3, data.playedCard.name));
+    }
+
     public void GainTemporaryHealthFor10Turns(int tmphp)
     {
         var data = CardData.ReadData();
-        data.currentUnit.ApplyEffect(new TemporaryHPEffect(tmphp,10));
+        data.currentUnit.ApplyEffect(new TemporaryHPEffect(tmphp,10,data.playedCard.name));
     }
 
     public void GainTemporaryHealthFor5Turns(int tmphp)
     {
         var data = CardData.ReadData();
-        data.currentUnit.ApplyEffect(new TemporaryHPEffect(tmphp,5));
+        data.currentUnit.ApplyEffect(new TemporaryHPEffect(tmphp,5, data.playedCard.name));
     }
 
     public void GainTemporaryHealthFor2Turns(int tmphp)
     {
         var data = CardData.ReadData();
-        data.currentUnit.ApplyEffect(new TemporaryHPEffect(tmphp,2));
+        data.currentUnit.ApplyEffect(new TemporaryHPEffect(tmphp,2, data.playedCard.name));
     }
+
+    // ---- TRINKET ----
+
+    //TODO
+
 }

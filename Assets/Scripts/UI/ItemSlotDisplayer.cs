@@ -50,6 +50,11 @@ public class ItemSlotDisplayer : MonoBehaviour, IPointerDownHandler
 
     public void SetHighlight(bool value)
     {
+        if (_background == null)
+        {
+            _background = GetComponent<Image>();
+            _baseBackgroundColor = _background.color;
+        }
         if (!value)
             _background.color = _baseBackgroundColor;
         else

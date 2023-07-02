@@ -12,7 +12,8 @@ public class AudioManager : PersistentSingletonClass<AudioManager>
         Range,
         Magic,
         Heal,
-        PickUp
+        PickUp,
+        Debuff
     }
 
     public float SFXVolume

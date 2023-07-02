@@ -161,8 +161,11 @@ MonoBehaviour:
   alias: Alex, the Fighter
   _walkable: 0
   _targetable: 1
-  _hp: 10
-  _maxHp: 10
+  _hp: 12
+  _maxHp: 12
+  ChangeHealthEvent:
+    m_PersistentCalls:
+      m_Calls: []
   _isEnemy: 0
   childrenRenderer: {fileID: 2004931383030262069}
   _visibleRange: 5

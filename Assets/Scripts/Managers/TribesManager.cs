@@ -33,8 +33,9 @@ public class TribesManager : SingletonClass<TribesManager>
     protected Canvas _healtBarCanvasPrefab;
 
     //actions that will be added to units at random
-    //weights will be randomized between 1 and 3
-    //an enemy will have around 5 coins to spend on actions
+    //weights will be randomized between 4 and 6
+    //an enemy will have 5 coins to spend on actions
+
     //action, cost
     private List<ActionCostEntry> _actions;
 
@@ -202,6 +203,14 @@ public class TribesManager : SingletonClass<TribesManager>
         var assignedTribe = MyRandom.Choice(appropriateTribes);
         foreach (var tile in room.GetRoomTiles)
             tile.TintBaseColor(assignedTribe.hue,0.2f);
-        SpawnEnemy(assignedTribe.GetRandomEnemy(), MyRandom.Choice(room.GetRoomTiles));
+        var emptyTiles = room.GetRoomTiles.Where(t => t.GetObject == null).ToList();
+        int number_of_enemies = MyRandom.Int(1, 3); //1 or 2
+        if(emptyTiles.Count > 50)
+            number_of_enemies += MyRandom.Int(1, 3); //extra 1 or 2
+        for (int i = 0; i < number_of_enemies; i++) {
+            var tile = MyRandom.Choice(emptyTiles);
+            SpawnEnemy(assignedTribe.GetRandomEnemy(), tile);
+            emptyTiles.Remove(tile);
+        }
     }
 }

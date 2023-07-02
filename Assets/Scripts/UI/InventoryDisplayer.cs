@@ -58,6 +58,7 @@ public class InventoryDisplayer : SingletonClass<InventoryDisplayer>
 
         pickUpDialogGO.SetActive(true);
         inventory.gameObject.SetActive(true);
+        DisplayCardsOfItemInItemSlot(pickedUpItemSlotDisplayer);
         AudioManager.Instance.PlaySFX(AudioManager.SFXType.PickUp);
     }
 
@@ -89,10 +90,9 @@ public class InventoryDisplayer : SingletonClass<InventoryDisplayer>
             _lastHighlightedSlotDisplayer.SetHighlight(false);
         _lastHighlightedSlotDisplayer = itemSlotDisplayer;
         itemSlotDisplayer.SetHighlight(true);
-
+        HideAllInventoryItemCards();
         if (itemSlotDisplayer.Slot.IsEmpty)
         {
-            HideAllInventoryItemCards();
             return;
         }
 

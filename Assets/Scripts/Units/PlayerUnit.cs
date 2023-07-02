@@ -86,6 +86,7 @@ public class PlayerUnit : GridUnit
             if (!GridManager.Instance.GetAdjecentTiles(CurrentTile).Contains(selectedTile))
                 return false;
             selectedTile.Occupy(this);
+            RaiseEvent(new EventInfo(EventType.Move,this));
             return true;
         }
         // else player selected card
