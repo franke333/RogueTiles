@@ -114,6 +114,8 @@ public class BSP
             }
         }
 
+        // missing corridors
+
         return cm;
     }
 }

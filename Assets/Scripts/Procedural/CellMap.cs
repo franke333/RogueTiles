@@ -14,8 +14,6 @@ public struct Cell
 
 public class CellMap
 {
-    // byte map. bool could be enough, but in the matter of mem size there is no difference
-    // and we can more easily expand byte map
 
     //[x,y]
     Cell[,] _map;
@@ -41,6 +39,13 @@ public class CellMap
     {
         get => _map[x, y];
         set => _map[x, y] = value;
+    }
+
+    public IEnumerable<Tuple<int,int,Cell>> GetCells()
+    {
+        for (int i = 0; i < Width; i++)
+            for (int j = 0; j < Height; j++)
+                yield return new Tuple<int, int, Cell>(i, j, _map[i, j]);
     }
 
     public Cell this[(int,int) pos] => this[pos.Item1,pos.Item2];

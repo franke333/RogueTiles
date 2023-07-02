@@ -8,7 +8,8 @@ using Unity.Mathematics;
 public enum WorldType
 {
     Island=0,
-    Dungeon=1
+    DungeonRandomWalk=1,
+    DungeonBSP=2,
 }
 
 [Serializable]
@@ -362,12 +363,19 @@ public class LevelDesignManager : PersistentSingletonClass<LevelDesignManager>
                 // split outside into regions
                 SplitRoomVoronoi(map, (Cell c) => c.roomIndex == outsideRoomIndex, map.Width * map.Height / 200);
                 break;
-            case WorldType.Dungeon:
+            case WorldType.DungeonRandomWalk:
                 var dg = dungeonSettings;
                 var g = Graph.WalkToTarget(dg.endPosition, dg.randomMoveChance, dg.numberOfAgents, false);
                 map = g.GenerateCellMap(dg.roomWidth, dg.roomHeight, dg.corridorWidth, dg.corridorLength, dg.roomMergeChance);
                 //todo
                 heroStart = new Vector2Int(g.StartNodeDistanceXInGraph*(dg.roomWidth+dg.corridorWidth) + dg.roomWidth/2, dg.roomHeight/2);
+                break;
+            case WorldType.DungeonBSP:
+                var settings = dungeonSettings;
+                map = BSP.Generate(MapWidth, mapHeight,5, settings.corridorWidth,4);
+                var walkableTiles = map.GetCells().Where(c => ((TileType)c.Item3.type).IsWalkable()).Select(c => (c.Item1,c.Item2));
+                var heroStartentry = MyRandom.Choice(walkableTiles.ToList());
+                heroStart = new Vector2Int(heroStartentry.Item1, heroStartentry.Item2);
                 break;
             default:
                 break;
