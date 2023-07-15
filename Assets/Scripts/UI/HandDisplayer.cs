@@ -13,17 +13,17 @@ public class HandDisplayer : SingletonClass<HandDisplayer>, IPointerEnterHandler
     private List<CardDisplayer> cardDisplayers;
 
 
-    public void DisplayUnitCards(PlayerUnit unit)
+    public void DisplayUnitCards(PlayerUnit playerUnit)
     {
-        _activeUnit = unit;
+        _activeUnit = playerUnit;
         // display cards here
         // TODO: make pick logic inside player.. not here :/
-        var hand = unit.GetCards().PickN(cardDisplayers.Count);
+        var hand = playerUnit.GetCards().PickN(cardDisplayers.Count);
         for (int i = 0; i < hand.Count; i++)
         {
             Card card = hand[i];
             cardDisplayers[i].DisplayCard(card);
-            cardDisplayers[i].displayerClicked = () => unit.SelectCard(card);
+            cardDisplayers[i].displayerClicked = () => playerUnit.SelectCard(card);
         }
         for (int i = hand.Count; i < cardDisplayers.Count; i++)
         {

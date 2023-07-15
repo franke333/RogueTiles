@@ -43,9 +43,9 @@ public class MenuManager : SingletonClass<MenuManager>
         return null;
     }
 
-    public void OpenMenu(int menuInt)
+    public void OpenMenu(int menuIndex)
     {
-        Menu menu = (Menu)menuInt;
+        Menu menu = (Menu)menuIndex;
         if (menu == currentMenu)
             return;
         GetMenuGO(currentMenu).SetActive(false);

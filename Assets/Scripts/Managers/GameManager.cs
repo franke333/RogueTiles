@@ -53,8 +53,9 @@ public class GameManager : SingletonClass<GameManager>
 
     public void UnregisterUnit(GridUnit gu)
     {
-        // active untis managed by index.. needs to check for this
+        
         Log.Info($"UNregistered {gu}", gameObject);
+        // active untis managed by index. update it if needed
         if (_units.IndexOf(gu) <= _currentUnitIndex)
             _currentUnitIndex--;
         _units.Remove(gu);
@@ -79,6 +80,7 @@ public class GameManager : SingletonClass<GameManager>
         _waitUntil = Time.time +
             (_units[_currentUnitIndex].CurrentTile.Visible ? _waitTime : 0);
 
+        // next unit
         var lastTurnUnit = _units[_currentUnitIndex];
         _currentUnitIndex = (_currentUnitIndex + 1) % _units.Count;
 
@@ -88,6 +90,7 @@ public class GameManager : SingletonClass<GameManager>
         if (!lastTurnUnit.IsEnemy)
             GridManager.Instance.UpdateFog();
 
+        // change gamestate if necessary
         if (lastTurnUnit.IsEnemy != newTurnUnit.IsEnemy)
         {
             if (newTurnUnit.IsEnemy)
@@ -115,7 +118,6 @@ public class GameManager : SingletonClass<GameManager>
                 }
                 break;
             case GameState.PlayerTurn:
-            case GameState.PlayerChooseTarget:
                 ProcessUnitTurn();
                 break;
             case GameState.EndGame:
@@ -158,8 +160,6 @@ public class GameManager : SingletonClass<GameManager>
                 StartEnemyTurn();
                 break;
             case GameState.EndGame:
-                break;
-            case GameState.PlayerChooseTarget:
                 break;
             default:
                 break;
@@ -213,8 +213,7 @@ public class GameManager : SingletonClass<GameManager>
         StartGame,
         PlayerTurn,
         EnemyTurn,
-        EndGame,
-        PlayerChooseTarget
+        EndGame
     }
 
     public List<GridUnit> GetUnits() => _units;

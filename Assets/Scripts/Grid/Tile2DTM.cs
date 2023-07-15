@@ -132,8 +132,7 @@ public class Tile2DTM : TileBase, ITile
 
     public bool CheckSelectability()
     {
-        if (GameManager.Instance.State != GameManager.GameState.PlayerTurn &&
-            GameManager.Instance.State != GameManager.GameState.PlayerChooseTarget)
+        if (GameManager.Instance.State != GameManager.GameState.PlayerTurn)
             return false;
         if (HandDisplayer.Instance.MouseOver)
             return false;
