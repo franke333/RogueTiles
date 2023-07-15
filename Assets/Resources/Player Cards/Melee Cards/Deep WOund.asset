@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Deep Wound
   sprite: {fileID: 0}
-  description: Create a bleeding wound on your target. The target takes 1 damage
-    now and 2 damage each turn for 3 turns.
+  description: "Create a bleeding wound on your target.\n The target takes 1 damage
+    now and 2 damage each turn for 3 turns."
   shape: 0
   range: 1
   cost: 4

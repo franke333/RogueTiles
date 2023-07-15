@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Snipe
   sprite: {fileID: 0}
-  description: Shoot an arrow to deal something between 0 and 3 damage to a target
-    that is up to 3 tiles away.
+  description: "Shoot an arrow to deal something between 0 and 3 damage\n to a target
+    that is up to 3 tiles away."
   shape: 0
   range: 3
   cost: 3

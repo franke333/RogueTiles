@@ -42,7 +42,7 @@ public class Card : ScriptableObject
 {
     public enum AreaShape
     {
-        Line, Circle, Square, None
+        Line, Circle, None
     }
     // ---------------------------
     // static values and methods for cardEffects

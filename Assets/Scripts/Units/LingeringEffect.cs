@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -196,3 +198,165 @@ public class ResistanceEffect : LingeringEffect
         base.DoEffect(info);
     }
 }   
+
+public class FireArmorEffect : LingeringEffect
+{
+    int damageReturn;
+    int damageReduction;
+    public FireArmorEffect(int damageReturn,int damageReduction, int duration, string name)
+    {
+        //TODO sprite
+        this.damageReturn = damageReturn;
+        this.damageReduction = damageReduction;
+        this._duration = duration;
+        _tag = "damage reduction";
+        Name = name;
+        IsToBeDisplayed = true;
+        UpdateDescription();
+    }
+
+    protected override void UpdateDescription()
+    {
+        Description = $"Deals {damageReturn} damage to attacker while taking reduced damage by {damageReduction} for ";
+        if (_duration == 1)
+            Description += "1 turn";
+        else
+            Description += $"{_duration} turns";
+    }
+
+    public override void DoEffect(EventInfo info)
+    {
+        if (info.eventType == EventType.TakeDamage)
+        {
+            info.finalDamage -= damageReduction;
+            if (GameManager.Instance.currentUnit != info.hostOfEffect)
+                GameManager.Instance.currentUnit.TakeDamage(damageReturn);
+        }
+        //ticking down
+        base.DoEffect(info);
+    }
+}
+
+public class DodgeEffect : LingeringEffect
+{
+    int remainingDodges;
+    float dodgeChance;
+    public DodgeEffect(float dodgeChance, int duration, int maxDodges, string name)
+    {
+        //TODO sprite
+        this.dodgeChance = dodgeChance;
+        this.remainingDodges = maxDodges;
+        this._duration = duration;
+        _tag = "parry";
+        Name = name;
+        IsToBeDisplayed = true;
+        UpdateDescription();
+    }
+
+    protected override void UpdateDescription()
+    {
+        Description = $"Has {dodgeChance}% chance to dodge up to ";
+        if(remainingDodges == 1)
+            Description += "1 attack ";
+        else
+            Description += $"{remainingDodges} attacks ";
+        if (_duration == 1)
+            Description += "for 1 turn";
+        else
+            Description += $"for {_duration} turns";
+    }
+
+    public override void DoEffect(EventInfo info)
+    {
+        if (info.eventType == EventType.TakeDamage)
+        {
+            if(MyRandom.Float(0,1) < dodgeChance)
+            {
+                remainingDodges--;
+                if (remainingDodges == 0)
+                    _discard = true;
+                info.finalDamage = 0;
+            }
+        }
+        //ticking down
+        base.DoEffect(info);
+    }
+}
+
+public class DeflectEffect : LingeringEffect
+{
+    float chanceToDeflect;
+
+    public DeflectEffect(float chanceToDeflect, int duration, string name)
+    {
+        //TODO sprite
+        this.chanceToDeflect = chanceToDeflect;
+        this._duration = duration;
+        _tag = "parry";
+        Name = name;
+        IsToBeDisplayed = true;
+        UpdateDescription();
+    }
+
+    protected override void UpdateDescription()
+    {
+        Description = $"Has {chanceToDeflect}% chance to deflect a damage and deal it to a random close enemy target ";
+        if (_duration == 1)
+            Description += "for 1 turn";
+        else
+            Description += $"for {_duration} turns";
+    }
+
+    public override void DoEffect(EventInfo info)
+    {
+        if (info.eventType == EventType.TakeDamage)
+        {
+            if (MyRandom.Float(0, 1) < chanceToDeflect)
+            {
+                info.finalDamage = 0;
+                List<GridUnit> targets = GameManager.Instance.GetUnits().Where(
+                    gu => gu.ManhattanDistance(info.hostOfEffect.CurrentTile) <= 2 && gu != info.hostOfEffect).ToList();
+                if (targets.Count > 0)
+                {
+                    GridUnit target = MyRandom.Choice(targets);
+                    target.TakeDamage(info.baseDamage);
+                    this._discard = true;
+                }
+            }
+        }
+        //ticking down
+        base.DoEffect(info);
+    }
+}
+
+public class ReverseDamageTakenToHealing : LingeringEffect
+{
+    public ReverseDamageTakenToHealing(int duration, string name)
+    {
+        //TODO sprite
+        this._duration = duration;
+        Name = name;
+        IsToBeDisplayed = true;
+        UpdateDescription();
+    }
+
+    protected override void UpdateDescription()
+    {
+        Description = $"Damage taken is turned into healing instead ";
+        if (_duration == 1)
+            Description += "for 1 turn";
+        else
+            Description += $"for {_duration} turns";
+    }
+
+    public override void DoEffect(EventInfo info)
+    {
+        if (info.eventType == EventType.TakeDamage)
+        {
+            info.hostOfEffect.RestoreHealth(info.finalDamage);
+            info.finalDamage = 0;
+        }
+        //ticking down
+        base.DoEffect(info);
+    }
+}

@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Shield+
   sprite: {fileID: 0}
-  description: Gain 4 temporary HP on top of your normal HP for 5 turns. These are
-    used to tank incoming damage.
+  description: "Gain 4 temporary HP on top of your normal HP for 5 turns.\n These
+    are used to tank incoming damage."
   shape: 3
   range: 0
   cost: 3

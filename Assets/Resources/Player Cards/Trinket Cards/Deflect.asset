@@ -10,23 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c62fd6550a927184f85575293f96fcfc, type: 3}
-  m_Name: Rend
+  m_Name: Deflect
   m_EditorClassIdentifier: 
-  name: Rend
+  name: Deflect
   sprite: {fileID: 0}
-  description: "Create a bleeding wound on your target.\n The target takes 1 damage
-    each turn for 5 turns."
-  shape: 0
-  range: 1
-  cost: 2
-  itemType: 2
-  needsTarget: 1
+  description: "Gives the player character 35% chance\n to deflect one insatnce of
+    incoming damage\n to a random nearby (2 tiles) enemy. Lasts for 3 turns."
+  shape: 2
+  range: 0
+  cost: 4
+  itemType: 5
+  needsTarget: 0
   cardEffect:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 3585887776412756551, guid: 0b995670230f0a24796b9a77f7fcb07e, type: 3}
         m_TargetAssemblyTypeName: CardEffects, Assembly-CSharp
-        m_MethodName: Rend
+        m_MethodName: Deflect
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -36,4 +36,4 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  audioType: 2
+  audioType: 6

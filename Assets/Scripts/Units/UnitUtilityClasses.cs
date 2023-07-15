@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum EventType
 {
-    TakeDamage, DealDamage, StartTurn, EndTurn, Move //TODO:(eventcalls) , Heal, PlayCard
+    TakeDamage, DealDamage, StartTurn, EndTurn, Move
 }
 
 
@@ -19,7 +19,7 @@ public class EventInfo
     public readonly int baseDamage;
     public int finalDamage;
 
-    public EventInfo(EventType eventType,GridUnit hostOfEffect,int damage=0)
+    public EventInfo(EventType eventType,GridUnit hostOfEffect, int damage = 0)
     {
         this.eventType = eventType;
         baseDamage = damage;

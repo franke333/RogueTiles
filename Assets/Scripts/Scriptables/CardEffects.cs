@@ -92,7 +92,7 @@ public class CardEffects : MonoBehaviour
     {
         var data = CardData.ReadData();
         foreach (var enemy in GameManager.Instance.GetUnits().Where(u => u.IsEnemy)
-            .Where(u => 2 >= u.ManhattanDistance(data.currentUnit.CurrentTile)))
+            .Where(u => 2 >= u.ManhattanDistance(data.currentUnit.CurrentTile)).ToList())
         {
             enemy.TakeDamage(1);
         }
@@ -157,6 +157,39 @@ public class CardEffects : MonoBehaviour
 
     // ---- TRINKET ----
 
-    //TODO
+    public void FireArmor()
+    {
+        var data = CardData.ReadData();
+        data.currentUnit.ApplyEffect(new FireArmorEffect(1,1,3, data.playedCard.name));
+    }
 
+    public void SyphonSoul()
+    {
+        var data = CardData.ReadData();
+        data.currentTarget.TakeDamage(1);
+        if(data.currentTarget is GridUnit)
+        {
+            GridUnit unit = data.currentTarget as GridUnit;
+            if(unit.hp <= 0)
+                data.currentUnit.RestoreHealth(3);
+        }
+    }
+
+    public void Dodge()
+    {
+        var data = CardData.ReadData();
+        data.currentUnit.ApplyEffect(new DodgeEffect(0.50f,3,3, data.playedCard.name));
+    }
+
+    public void Deflect()
+    {
+        var data = CardData.ReadData();
+        data.currentUnit.ApplyEffect(new DeflectEffect(0.35f,3, data.playedCard.name));
+    }
+
+    public void MindGames()
+    {
+        var data = CardData.ReadData();
+        data.currentUnit.ApplyEffect(new ReverseDamageTakenToHealing(1, data.playedCard.name));
+    }
 }

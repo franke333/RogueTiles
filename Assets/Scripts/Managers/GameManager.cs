@@ -193,19 +193,16 @@ public class GameManager : SingletonClass<GameManager>
 
     private void HandleStart()
     {
-        //foreach (DebugSummonUnit o in GameObject.FindObjectsOfType(typeof(DebugSummonUnit))) o.Summon();
-
+        //start with player unit
         _currentUnitIndex = 0;
-        if (_units[_currentUnitIndex].IsEnemy)
-            ChangeState(GameState.EnemyTurn);
-        else
-            ChangeState(GameState.PlayerTurn);
+        while (_units[_currentUnitIndex].IsEnemy)
+            _currentUnitIndex++;
+        ChangeState(GameState.PlayerTurn);
         GridManager.Instance.UpdateFog();
     }
 
     public void EndGame(bool isWin)
     {
-        //TODO stats
         UIManager.Instance.EndScreen.Show(isWin,StatisticsManager.Instance.GetStats());
         ChangeState(GameState.EndGame);
     }
@@ -221,4 +218,6 @@ public class GameManager : SingletonClass<GameManager>
     }
 
     public List<GridUnit> GetUnits() => _units;
+
+    public GridUnit currentUnit { get => _units[_currentUnitIndex];}
 }

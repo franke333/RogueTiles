@@ -120,7 +120,7 @@ public class TribesManager : SingletonClass<TribesManager>
                     if (coins >= actionCostEntry.cost)
                     {
                         coins -= actionCostEntry.cost;
-                        unit.ActionList.Add(new NPCUnit.ActionEntry() { weight = MyRandom.Int(3,6), actionObj = actionCostEntry.action });
+                        unit.ActionList.Add(new NPCUnit.ActionEntry() { weight = MyRandom.Int(7,10), actionObj = actionCostEntry.action });
                     }
                 }
                 //unused coins are converted to extra health

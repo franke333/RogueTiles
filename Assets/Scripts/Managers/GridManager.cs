@@ -76,10 +76,24 @@ public class GridManager : SingletonClass<GridManager>
                 }
                 break;
             case Card.AreaShape.Circle:
-                Log.Error("NOT IMPLEMENTED");
-                break;
-            case Card.AreaShape.Square:
-                Log.Error("NOT IMPLEMENTED");
+                //BFS
+                void BFS(ITile start, int range)
+                {
+                    Queue<ITile> q = new Queue<ITile>();
+                    q.Enqueue(start);
+                    while (q.Count > 0)
+                    {
+                        var t = q.Dequeue();
+                        if (t == null || t.IsWall || _tilesDisplayedInRange.Contains(t) || t.ManhattanDistance(start) > range)
+                            continue;
+                        _tilesDisplayedInRange.Add(t);
+                        if(t.ManhattanDistance(start) == range)
+                            continue;
+                        foreach(ITile adjTile in GetAdjecentTiles(t))
+                            q.Enqueue(adjTile);
+                    }
+                }
+                BFS(startTile, card.range);
                 break;
             case Card.AreaShape.None:
             default:

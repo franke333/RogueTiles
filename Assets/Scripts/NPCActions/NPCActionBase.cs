@@ -7,6 +7,7 @@ public abstract class NPCActionBase : MonoBehaviour
     [Header("Action Economy")]
     public int cost;
     public bool isBaseAction;
+
     /// <summary>
     /// Returns true if the action makes sense and can be done.
     /// </summary>

@@ -507,11 +507,11 @@ MonoBehaviour:
   - action: {fileID: 3818537164410658068, guid: 1ef16c48af8572740b058317283a9526, type: 3}
     weight: 1
   - action: {fileID: 2451333657578105167, guid: fa7bbf941b7fd67499d01a4b06c6a2f6, type: 3}
-    weight: 3
+    weight: 7
   - action: {fileID: 4842315545916309268, guid: fa72753c302d42e4c9cd2280f5ddd8da, type: 3}
-    weight: 2
+    weight: 5
   - action: {fileID: -5517312651026695242, guid: bdbe93b42b228244988edf1ee5918bcb, type: 3}
-    weight: 1
+    weight: 3
   _healtBarCanvasPrefab: {fileID: 7023990876863762937, guid: dad9f3bcdc6f4024e8cdcbf82977f5f0, type: 3}
   baseLayerOrder: 5
   _NPCDetectionRange: 8
@@ -1070,7 +1070,7 @@ GameObject:
   - component: {fileID: 94795429}
   - component: {fileID: 94795430}
   m_Layer: 2
-  m_Name: CardDescriptionParent
+  m_Name: PopupDescriptionParent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4520,8 +4520,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 442.5, y: -249}
-  m_SizeDelta: {x: 541, y: 140}
+  m_AnchoredPosition: {x: 437.6, y: -241}
+  m_SizeDelta: {x: 541, y: 142.8401}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &990737071
 MonoBehaviour:

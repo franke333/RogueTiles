@@ -100,7 +100,7 @@ MonoBehaviour:
   _wall: 1
   _walkable: 0
   _sr: {fileID: 8067806215758127188}
-  _rangeColor: {r: 0.8018868, g: 0.62127876, b: 0.12482201, a: 0.6156863}
+  _rangeColor: {r: 1, g: 1, b: 1, a: 0.57254905}
   _selectionColor: {r: 0.3479886, g: 0.39525545, b: 0.8679245, a: 0.84313726}
   _fogOfWarColor: {r: 0, g: 0, b: 0, a: 0.68235296}
   _occupiedObject: {fileID: 0}
@@ -121,7 +121,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.16, y: 0.16}
+    oldSize: {x: 1, y: 1}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0

@@ -66,9 +66,8 @@ public static class PerlinNoise
     public static Texture2D GenerateTexture(Data data)
         => GenerateTextureBase(data, (float a) => Mathf.Clamp01(a));
 
-    // TODO: better name for divider lol
-    public static Texture2D GenerateTexture01(Data data,float divider)
-        => GenerateTextureBase(data, (float a) => a > divider ? 1 : 0);
+    public static Texture2D GenerateTexture01(Data data,float boundary)
+        => GenerateTextureBase(data, (float a) => a > boundary ? 1 : 0);
 
     public static Texture2D GenerateTextureWorms(Data data, float range)
         => GenerateTextureBase(data, (float a) => Mathf.Abs(a-0.5f) > range/2 ? 1 : 0);

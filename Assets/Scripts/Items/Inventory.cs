@@ -8,7 +8,6 @@ public class Inventory : MonoBehaviour
     public int scraps;
     private void Start()
     {
-        // TODO copy slot types and base items
         // init slots
         for (int i = 0; i < slots.Count; i++)
         {

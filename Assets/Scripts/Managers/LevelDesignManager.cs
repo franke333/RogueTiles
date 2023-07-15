@@ -367,7 +367,6 @@ public class LevelDesignManager : PersistentSingletonClass<LevelDesignManager>
                 var dg = dungeonSettings;
                 var g = Graph.WalkToTarget(dg.endPosition, dg.randomMoveChance, dg.numberOfAgents, false);
                 map = g.GenerateCellMap(dg.roomWidth, dg.roomHeight, dg.corridorWidth, dg.corridorLength, dg.roomMergeChance);
-                //todo
                 heroStart = new Vector2Int(g.StartNodeDistanceXInGraph*(dg.roomWidth+dg.corridorWidth) + dg.roomWidth/2, dg.roomHeight/2);
                 break;
             case WorldType.DungeonBSP:

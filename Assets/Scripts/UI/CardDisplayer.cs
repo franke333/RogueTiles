@@ -28,7 +28,7 @@ public class CardDisplayer : MonoBehaviour, IPointerDownHandler , IPointerEnterH
     public void Hide()
     {
         gameObject.SetActive(false);
-        CardInfoDisplayer.Instance.HideInfo();
+        PopupInfoDisplayer.Instance.HideInfo();
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -46,13 +46,13 @@ public class CardDisplayer : MonoBehaviour, IPointerDownHandler , IPointerEnterH
     public void OnPointerExit(PointerEventData eventData)
     {
         StopAllCoroutines();
-        CardInfoDisplayer.Instance.HideInfo();
+        PopupInfoDisplayer.Instance.HideInfo();
     }
 
     private IEnumerator StartTimer()
     {
-        yield return new WaitForSeconds(CardInfoDisplayer.Instance.timeToWaitBeforeDisplayingInfo);
+        yield return new WaitForSeconds(PopupInfoDisplayer.Instance.timeToWaitBeforeDisplayingInfo);
         //show message
-        CardInfoDisplayer.Instance.DisplayInfoFor(_description, Input.mousePosition);
+        PopupInfoDisplayer.Instance.DisplayInfoFor(_description, Input.mousePosition);
     }
 }

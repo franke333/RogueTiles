@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Powered Arrow Shot
   sprite: {fileID: 0}
-  description: Shoot an arrow to deal something between 2 and 4 damage to a target
-    that is up to 2 tiles away.
+  description: "Shoot an arrow to deal something between 2 and 4 damage\n to a target
+    that is up to 2 tiles away."
   shape: 0
   range: 2
   cost: 3

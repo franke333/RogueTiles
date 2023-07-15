@@ -67,6 +67,7 @@ public abstract class GridUnit : GridObject
         if (hp == maxHp || amount == 0)
             return false;
         hp = Math.Min(hp + amount, maxHp);
+        this.HealVFX();
         AudioManager.Instance.PlaySFX(AudioManager.SFXType.Heal);
         return true;
     }
@@ -161,7 +162,14 @@ public abstract class GridUnit : GridObject
 
     public void TakeDamageVFX()
     {
-        childrenRenderer.AddComponent<TakeDamageVFX>();
+        var vfx = childrenRenderer.AddComponent<FadeColorVFX>();
+        vfx.SetColor(Color.red);
+    }
+
+    public void HealVFX()
+    {
+        var vfx = childrenRenderer.AddComponent<FadeColorVFX>();
+        vfx.SetColor(Color.green);
     }
 
 }

@@ -37,7 +37,6 @@ public class ItemGenerator : SingletonClass<ItemGenerator>
         int random = MyRandom.Int(0, 100);
         if(random < 50)
         {
-            //TODO: get value from paper
             return Item.GenerateEquip(5); //50%
         }
         else if(random < 75)

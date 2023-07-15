@@ -4,7 +4,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CardInfoDisplayer : SingletonClass<CardInfoDisplayer>
+public class PopupInfoDisplayer : SingletonClass<PopupInfoDisplayer>
 {
     [SerializeField]
     RectTransform _infoPopUpWindow;
@@ -15,9 +15,9 @@ public class CardInfoDisplayer : SingletonClass<CardInfoDisplayer>
 
     public float timeToWaitBeforeDisplayingInfo = 0.33f;
 
-    public void DisplayInfoFor(string cardDescription, Vector2 position)
+    public void DisplayInfoFor(string description, Vector2 position)
     {
-        _descriptionText.text = cardDescription;
+        _descriptionText.text = description;
         _infoPopUpWindow.gameObject.SetActive(true);
         _infoPopUpWindow.sizeDelta = new Vector2(math.max(200, _descriptionText.preferredWidth), _descriptionText.preferredHeight) + _extraBorderSize;
         _infoPopUpWindow.transform.position = position + new Vector2(_infoPopUpWindow.sizeDelta.x/2,0);
