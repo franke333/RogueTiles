@@ -59,7 +59,7 @@ public class ItemGenerator : SingletonClass<ItemGenerator>
     {
         var gi = Instantiate(gridItemGO);
         gi.GetComponent<SpriteRenderer>().sprite = item.sprite;
-        gi.item = item;
+        gi.AssignedItem = item;
         return gi;
     }
 }

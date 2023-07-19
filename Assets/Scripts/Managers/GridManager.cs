@@ -15,6 +15,12 @@ public class GridManager : SingletonClass<GridManager>
     [SerializeField]
     Tilemap _tilemap;
 
+    private int _minXCoord = 0, _maxXCoord = 0,
+        _minYCoord = 0, _maxYCoord = 0;
+
+    public int Width { get => _maxXCoord - _minXCoord; }
+    public int Height { get => _maxYCoord - _minYCoord; }
+
     public Tilemap Tilemap
     {
         get
@@ -36,6 +42,14 @@ public class GridManager : SingletonClass<GridManager>
         foreach (var t in tiles)
         {
             _map.Add(new Vector2Int(t.x, t.y), t);
+            if (t.x < _minXCoord)
+                _minXCoord = t.x;
+            if (t.x > _maxXCoord)
+                _maxXCoord = t.x;
+            if (t.y < _minYCoord)
+                _minYCoord = t.y;
+            if (t.y > _maxYCoord)
+                _maxYCoord = t.y;
         }
     }
 
@@ -56,13 +70,15 @@ public class GridManager : SingletonClass<GridManager>
     {
         var (x, y) = (startTile.x, startTile.y);
         CleanDisplayInRange();
-        _tilesDisplayedInRange.Add(startTile);
+        
         switch (card.shape) 
         {
             case Card.AreaShape.Line:
+                _tilesDisplayedInRange.Add(startTile);
                 foreach (var dir in new int[] { 1, -1 })
                 {
                     ITile t;
+
                     for (int i = 1; i <= card.range; i++)
                         if (_map.TryGetValue(new Vector2Int(x + dir * i, y), out t) && !t.IsWall)
                             _tilesDisplayedInRange.Add(t);
@@ -77,23 +93,20 @@ public class GridManager : SingletonClass<GridManager>
                 break;
             case Card.AreaShape.Circle:
                 //BFS
-                void BFS(ITile start, int range)
+                Queue<ITile> q = new Queue<ITile>();
+                q.Enqueue(startTile);
+                int range = card.range;
+                while (q.Count > 0)
                 {
-                    Queue<ITile> q = new Queue<ITile>();
-                    q.Enqueue(start);
-                    while (q.Count > 0)
-                    {
-                        var t = q.Dequeue();
-                        if (t == null || t.IsWall || _tilesDisplayedInRange.Contains(t) || t.ManhattanDistance(start) > range)
-                            continue;
-                        _tilesDisplayedInRange.Add(t);
-                        if(t.ManhattanDistance(start) == range)
-                            continue;
-                        foreach(ITile adjTile in GetAdjecentTiles(t))
-                            q.Enqueue(adjTile);
-                    }
+                    var tile = q.Dequeue();
+                    if (tile == null || tile.IsWall || _tilesDisplayedInRange.Contains(tile) || tile.ManhattanDistance(startTile) > range)
+                        continue;
+                    _tilesDisplayedInRange.Add(tile);
+                    if(tile.ManhattanDistance(startTile) == range)
+                        continue;
+                    foreach(ITile adjTile in GetAdjecentTiles(tile))
+                        q.Enqueue(adjTile);
                 }
-                BFS(startTile, card.range);
                 break;
             case Card.AreaShape.None:
             default:

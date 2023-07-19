@@ -13,7 +13,7 @@ public class WorldSettingsHolder : MonoBehaviour
     [SerializeField]
     private int mapHeight;
     [SerializeField]
-    private int drunkards;
+    private float minimalWalkableTileRatio;
     [SerializeField]
     private int drunkardsMaxPath;
     [SerializeField]
@@ -30,7 +30,7 @@ public class WorldSettingsHolder : MonoBehaviour
         levelDesignManager.NumberOfDungeons = numberOfDungeons;
         levelDesignManager.MapWidth = mapWidth;
         levelDesignManager.MapHeight = mapHeight;
-        levelDesignManager.Drunkards = drunkards;
+        levelDesignManager.MinimalWalkableTileRatio = minimalWalkableTileRatio;
         levelDesignManager.DrunkardsMaxPath = drunkardsMaxPath;
         levelDesignManager.OutsideTribesSizes = outsideTribesSizes;
         levelDesignManager.InsideTribeSize = insideTribeSize;

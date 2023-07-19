@@ -53,7 +53,7 @@ public class LevelDesignManager : PersistentSingletonClass<LevelDesignManager>
     [SerializeField]
     private int mapHeight;
     [SerializeField]
-    private int drunkards;
+    private float minimalWalkableTileRatio;
     [SerializeField]
     private int drunkardsMaxPath;
     [SerializeField]
@@ -83,7 +83,7 @@ public class LevelDesignManager : PersistentSingletonClass<LevelDesignManager>
     public int MapHeight { get => mapHeight; set => mapHeight = value; }
 
     public float MapHeightF { get => mapHeight; set => mapHeight = (int)value; }
-    public int Drunkards { get => drunkards; set => drunkards = value; }
+    public float MinimalWalkableTileRatio { get => minimalWalkableTileRatio; set => minimalWalkableTileRatio = value; }
     public int DrunkardsMaxPath { get => drunkardsMaxPath; set => drunkardsMaxPath = value; }
     public List<int> OutsideTribesSizes { get => outsideTribesSizes; set => outsideTribesSizes = value; }
     public int InsideTribeSize { get => insideTribeSize; set => insideTribeSize = value; }
@@ -121,7 +121,7 @@ public class LevelDesignManager : PersistentSingletonClass<LevelDesignManager>
     /// <param name="map"> Cell Map onto the dungeon is placed</param>
     /// <param name="dungeonSettings">Settings that will generate dungeon to be placed</param>
     /// <param name="spawnPoint"> a position from which must exist a path tu dungeon entrance </param>
-    /// <returns>true if plaxed succesfully</returns>
+    /// <returns>true if dungeon was placed succesfully</returns>
     public static bool PlaceWalledDungeon(CellMap map, DungeonSettings dungeonSettings,Vector2 spawnPoint, int spawnSafeArea = 10)
     {
         DungeonSettings dg = dungeonSettings;
@@ -214,9 +214,12 @@ public class LevelDesignManager : PersistentSingletonClass<LevelDesignManager>
                 }
             }
         }
+        if (possibleDungEntrance.Count == 0)
+            return false;
 
-        for (int entrancyTry = 0; entrancyTry < 100; entrancyTry++)
+        for (int entrancePlacementTry = 0; entrancePlacementTry < 100; entrancePlacementTry++)
         {
+            
             var ((dungeonXEntrance, dungeonYEntrance), orientaion) = MyRandom.Choice(possibleDungEntrance);
             int dungeonX = 0, dungeonY = 0;
             switch (orientaion)
@@ -339,14 +342,14 @@ public class LevelDesignManager : PersistentSingletonClass<LevelDesignManager>
         return MyRandom.Choice(possibleBossSpawns.Where(c => c.ManhattanDistance(heroStart) >= minDistanceFromHero).ToList());
     }
 
-    public void GenerateWorld()
+    public bool GenerateWorld()
     {
         CellMap map = null;
         Vector2Int heroStart = new Vector2Int(0,0);
         switch (WorldType)
         {
             case WorldType.Island:
-                map = DrunkardWalk.Generate(mapWidth, mapHeight, RoomType.Outside, TileType.Dirt, drunkards, drunkardsMaxPath);
+                map = DrunkardWalk.Generate(mapWidth, mapHeight, RoomType.Outside, TileType.Dirt, minimalWalkableTileRatio, drunkardsMaxPath);
                 heroStart = new Vector2Int(map.Width / 2, map.Height / 2);
                 // place dungeons
                 for (int i = 0; i < numberOfDungeons; i++)
@@ -356,6 +359,7 @@ public class LevelDesignManager : PersistentSingletonClass<LevelDesignManager>
                 if (map.GetTypeOfRoom(outsideRoomIndex) != RoomType.Outside)
                 {
                     Log.Error("Failed assert on outside room of generate");
+                    return false;
                 }
 
                 map.ClearUnreachableTilesFrom((int)heroStart.x, (int)heroStart.y);
@@ -396,7 +400,7 @@ public class LevelDesignManager : PersistentSingletonClass<LevelDesignManager>
             GameManager.Instance.UnregisterUnit(unit);
             Destroy(unit.gameObject);
             Log.Error("! FAILED TO SUMMON HERO", gameObject);
-            return;
+            return false;
         }
 
         //summon boss
@@ -409,10 +413,22 @@ public class LevelDesignManager : PersistentSingletonClass<LevelDesignManager>
             GameManager.Instance.UnregisterUnit(unit);
             Destroy(unit.gameObject);
             Log.Error("! FAILED TO SUMMON BOSS", gameObject);
-            return;
+            return false;
         }
 
 
         GameManager.Instance.ChangeState(GameManager.GameState.StartGame);
+        return true;
+    }
+
+    /// <summary>
+    /// This is a hack.
+    /// We need to remove this manager when its not needed anymore
+    /// so it does not mess up settings in main menu. (new one is created when return back to main menu)
+    /// </summary>
+    public void RemoveManagerInstance()
+    {
+        //sets instance to null and destroys gameObject
+        OnApplicationQuit();
     }
 }

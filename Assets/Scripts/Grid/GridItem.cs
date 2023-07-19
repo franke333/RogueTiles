@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Class to represent an item on the grid.
+/// </summary>
 public class GridItem : GridObject
 {
-    public Item item;
+    public Item AssignedItem;
     public override bool TakeDamage(int dmg)
     {
         return false;
@@ -12,12 +15,12 @@ public class GridItem : GridObject
 
     public override void SetVisible(bool value)
     {
-        if(item == null)
+        if(AssignedItem == null)
         {
             Log.Error("GridItem is missing an item", gameObject);
             return;
         }
-        GetComponent<SpriteRenderer>().sprite = item.sprite;
+        GetComponent<SpriteRenderer>().sprite = AssignedItem.sprite;
         base.SetVisible(value);
     }
 }

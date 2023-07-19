@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class DrunkardWalk
 {
-    private static int maxStartingPositionTries = 3;
+    private static int maxStartingPositionTries = 6;
 
-    public static CellMap Generate(int width,int height, RoomType roomType,TileType tileType, int numOfAgents, int maxStepsOfAgent)
+    public static CellMap Generate(int width,int height, RoomType roomType,TileType tileType, float ratioWalkableTiles, int maxStepsOfAgent)
     {
         CellMap cm = new CellMap(width, height);
         var center = (width / 2, height / 2);
+
+        int tilesInTotal = width * height;
+        int walkableTiles = 0;
 
         cm.AddNewRoom(roomType);
 
@@ -17,10 +20,11 @@ public class DrunkardWalk
 
         List<(int,int)> possibleMoves = new List<(int, int)>(){ (0,1),(0,-1),(1,0),(-1,0) };
 
-        for (int i = 0; i < numOfAgents; i++)
+        while (walkableTiles < ratioWalkableTiles*tilesInTotal)
         {
             var (x,y) = center;
 
+            //try new placement for agent
             for (int j = 0; j < maxStartingPositionTries; j++)
             {
                 var (newx, newy) = (MyRandom.Int(0, width), MyRandom.Int(0, height));
@@ -35,7 +39,12 @@ public class DrunkardWalk
                 //check if agent left the map, if yes -> summon new agent instead
                 if (x < 0 || y < 0 || x == width || y == height)
                     break;
-                cm.SetCell(x, y, tileType);
+                //check if tile wasn't already visited
+                if (cm[x, y].roomIndex != 1)
+                {
+                    cm.SetCell(x, y, tileType);
+                    walkableTiles++;
+                }
             }
 
         }

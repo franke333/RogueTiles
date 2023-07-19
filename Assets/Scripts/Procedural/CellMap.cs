@@ -67,7 +67,7 @@ public class CellMap
 
     public void SetCellOfRoom(int x, int y, TileType tileType,int roomIndex)
     {
-        if(roomIndex > _maxRoomIndex || roomIndex < 0)
+        if(roomIndex >= _maxRoomIndex || roomIndex < 0)
         {
             Log.Error("Index must be in range of rooms in CellMap", null);
             return;
@@ -85,7 +85,7 @@ public class CellMap
         return ++_maxRoomIndex;
     }
 
-    public RoomType GetTypeOfRoom(int index) => _roomTypes[index];
+    public RoomType GetTypeOfRoom(int index) => _roomTypes[index-1];
 
     public CellMap(int width,int height)
     {

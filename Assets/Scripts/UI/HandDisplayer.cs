@@ -23,7 +23,7 @@ public class HandDisplayer : SingletonClass<HandDisplayer>, IPointerEnterHandler
         {
             Card card = hand[i];
             cardDisplayers[i].DisplayCard(card);
-            cardDisplayers[i].displayerClicked = () => playerUnit.SelectCard(card);
+            cardDisplayers[i].DisplayerClicked = () => playerUnit.SelectCard(card);
         }
         for (int i = hand.Count; i < cardDisplayers.Count; i++)
         {

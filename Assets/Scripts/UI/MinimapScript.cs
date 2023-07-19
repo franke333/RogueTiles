@@ -25,7 +25,7 @@ public class MinimapScript : MonoBehaviour
 
     private void CreateMap()
     {
-        var (width,height) = (LevelDesignManager.Instance.MapWidth, LevelDesignManager.Instance.MapHeight);
+        var (width,height) = (GridManager.Instance.Width, GridManager.Instance.Height);
         int spriteSize = math.max(width,height);
         _map = new Texture2D(width,height);
         _map.filterMode = FilterMode.Point;

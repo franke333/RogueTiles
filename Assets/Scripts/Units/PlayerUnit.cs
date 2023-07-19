@@ -120,6 +120,7 @@ public class PlayerUnit : GridUnit
             DeselectCard();
             GridManager.Instance.SetSelectedTile(null);
 
+            gameObject.AddComponent<ShakeVFX>();
             return true;
         }
     }

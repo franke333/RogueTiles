@@ -8,7 +8,7 @@ using System;
 public class CardDisplayer : MonoBehaviour, IPointerDownHandler , IPointerEnterHandler, IPointerExitHandler
 {
 
-    public Action displayerClicked;
+    public Action DisplayerClicked;
 
     [SerializeField]
     Text _cardName;
@@ -34,7 +34,7 @@ public class CardDisplayer : MonoBehaviour, IPointerDownHandler , IPointerEnterH
     public void OnPointerDown(PointerEventData eventData)
     {
         if(_clickable)
-            displayerClicked.Invoke();
+            DisplayerClicked.Invoke();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -52,7 +52,7 @@ public class CardDisplayer : MonoBehaviour, IPointerDownHandler , IPointerEnterH
     private IEnumerator StartTimer()
     {
         yield return new WaitForSeconds(PopupInfoDisplayer.Instance.timeToWaitBeforeDisplayingInfo);
-        //show message
+        //show hoverbox
         PopupInfoDisplayer.Instance.DisplayInfoFor(_description, Input.mousePosition);
     }
 }

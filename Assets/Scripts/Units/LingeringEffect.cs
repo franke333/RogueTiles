@@ -32,7 +32,7 @@ public abstract class LingeringEffect
     public virtual void DoEffect(EventInfo info)
     {
         UpdateDescription();
-        if (infinite || info.eventType != EventType.EndTurn)
+        if (infinite || info.eventType != EventType.StartTurn)
             return;
         //tick
         _duration--;

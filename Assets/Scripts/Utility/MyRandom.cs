@@ -5,23 +5,11 @@ using UnityEngine;
 
 public static class MyRandom
 {
-    //use unity Random to preserve randomness states across program runs thorugh saves
 
 
-    //to get consistent results across runs
-    static int _seed = 1234;
-    
-
-    static MyRandom()
+    public static void SetState(int seed)
     {
-        Log.Warning($"MyRandom is not consistent");
-        //Random.InitState(_seed);
-    }
-
-    public static Random.State State
-    {
-        get => Random.state;
-        set => Random.state = value;
+        Random.InitState(seed);
     }
 
     public static int Int(int minValueInc = int.MinValue,int maxValueExc = int.MaxValue)

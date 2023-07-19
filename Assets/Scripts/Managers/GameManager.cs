@@ -86,7 +86,7 @@ public class GameManager : SingletonClass<GameManager>
 
         var newTurnUnit = _units[_currentUnitIndex];
 
-        //a friendly unit has moved -> update fog
+        //a friendly unit might moved -> update fog
         if (!lastTurnUnit.IsEnemy)
             GridManager.Instance.UpdateFog();
 
@@ -168,7 +168,20 @@ public class GameManager : SingletonClass<GameManager>
 
     private void GenerateLayout()
     {
-        LevelDesignManager.Instance.GenerateWorld();
+        // while generation fails, try again
+        // fail is quite rare -> it is faster to generate new world
+        int fails = 0;
+        while (!LevelDesignManager.Instance.GenerateWorld())
+        {
+            //clean units
+            foreach (var unit in _units)
+                UnregisterUnit(unit);
+            if(++fails >= 5)
+            {
+                Log.Error("Failed to generate world", gameObject);
+                return;
+            }
+        }
     }
 
     private void StartEnemyTurn()
@@ -199,6 +212,8 @@ public class GameManager : SingletonClass<GameManager>
             _currentUnitIndex++;
         ChangeState(GameState.PlayerTurn);
         GridManager.Instance.UpdateFog();
+        // we need new intance when returning back to main menu
+        LevelDesignManager.Instance.RemoveManagerInstance();
     }
 
     public void EndGame(bool isWin)

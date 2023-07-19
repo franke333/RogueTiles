@@ -60,12 +60,6 @@ public class Graph
 
     private static readonly Vector2[] edgeVectors = new Vector2[]
     {
-        /*
-        new Vector2(0,1),
-        new Vector2(1,0),
-        new Vector2(0,-1),
-        new Vector2(-1,0)
-        */
         Vector2.up,
         Vector2.right,
         Vector2.down,
@@ -127,7 +121,8 @@ public class Graph
         for (int agent = 0; agent < numOfAgents; agent++)
         {
             Vector2 agentPosition = new Vector2(0, 0);
-            while (true) 
+            Node currentNode = null;
+            while (agentPosition != target) 
             {
                 Vector2 move;
                 if (randomMoveChance > MyRandom.Float(0,1))
@@ -145,7 +140,6 @@ public class Graph
                 }
                 Node prevNode = map[agentPosition];
                 agentPosition += move;
-                Node currentNode;
                 if (!map.TryGetValue(agentPosition, out currentNode))
                 {
                     currentNode = new Node(RoomType.Hall);
@@ -168,13 +162,8 @@ public class Graph
                 {
                     g.edges.Add(new Edge(prevNode, currentNode, false));
                 }
-
-                if (agentPosition == target)
-                {
-                    currentNode.type = RoomType.End;
-                    break;
-                }
             }
+            currentNode.type = RoomType.End;
         }
 
         return g;

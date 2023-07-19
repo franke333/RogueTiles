@@ -80,7 +80,7 @@ public class TileStandalone : MonoBehaviour, ITile
             if (_occupiedObject is GridItem)
             {
                 if (obj is PlayerUnit)
-                    InventoryDisplayer.Instance.DisplayPickUpDialog(((GridItem)_occupiedObject).item);
+                    InventoryDisplayer.Instance.DisplayPickUpDialog(((GridItem)_occupiedObject).AssignedItem);
                 _occupiedObject.gameObject.SetActive(false);
             }
             else

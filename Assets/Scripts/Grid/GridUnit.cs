@@ -94,14 +94,14 @@ public abstract class GridUnit : GridObject
             RaiseEvent(new EventInfo(EventType.StartTurn,this));
             takingTurn = true;
         }
-        bool res = PlayTurn();
-        if (res)
+        bool turnEnded = PlayTurn();
+        if (turnEnded)
         {
             //turn ending
             RaiseEvent(new EventInfo(EventType.EndTurn,this));
             takingTurn = false;
         }
-        return res;
+        return turnEnded;
     }
 
     public virtual void Init(int maxHp,bool enemy)

@@ -32,5 +32,6 @@ public class BasicAttack : NPCActionBase
         if (player == null)
             return;
         player.TakeDamage(damage);
+        caster.gameObject.AddComponent<ShakeVFX>();
     }
 }

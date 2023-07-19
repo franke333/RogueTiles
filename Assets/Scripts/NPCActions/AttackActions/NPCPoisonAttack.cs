@@ -35,6 +35,6 @@ public class NPCPoisonAttack : NPCActionBase
             player.TakeDamage(initialDamage);
         player.ApplyEffect(new DOTEffect(overTimeDamage,overTimeDuration,"Poison","poison"));
         AudioManager.Instance.PlaySFX(AudioManager.SFXType.Debuff);
-
+        caster.gameObject.AddComponent<ShakeVFX>();
     }
 }

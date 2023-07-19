@@ -74,7 +74,7 @@ public class Tile2DTM : TileBase, ITile
             if (_gridObject is GridItem)
             {
                 if (obj is PlayerUnit)
-                    InventoryDisplayer.Instance.DisplayPickUpDialog(((GridItem)_gridObject).item);
+                    InventoryDisplayer.Instance.DisplayPickUpDialog(((GridItem)_gridObject).AssignedItem);
                 _gridObject.gameObject.SetActive(false);
             }
             else
