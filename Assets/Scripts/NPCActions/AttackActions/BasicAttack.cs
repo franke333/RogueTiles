@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-
+/// <summary>
+/// Deal damage to unit in range
+/// </summary>
 public class BasicAttack : NPCActionBase
 {
     [Space]

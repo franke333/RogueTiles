@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
+/// <summary>
+/// Implementation of a player unit
+/// </summary>
 public class PlayerUnit : GridUnit
 {
 
@@ -30,6 +33,7 @@ public class PlayerUnit : GridUnit
         return cards;
     }
 
+    // Get tile to move to based on key pressed
     private ITile GetKeyDownTile()
     {
         var adjTiles = GridManager.Instance.GetAdjecentTiles(CurrentTile);
@@ -46,6 +50,10 @@ public class PlayerUnit : GridUnit
         return tile.Any() ? tile.First() : null;
     }
 
+    /// <summary>
+    /// Select a card to play
+    /// </summary>
+    /// <param name="card">The card to be played</param>
     public void SelectCard(Card card)
     {
         GridManager.Instance.CleanDisplayInRange();

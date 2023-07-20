@@ -5,6 +5,9 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System;
 
+/// <summary>
+/// Class that displays a card on the user interface
+/// </summary>
 public class CardDisplayer : MonoBehaviour, IPointerDownHandler , IPointerEnterHandler, IPointerExitHandler
 {
 
@@ -17,6 +20,9 @@ public class CardDisplayer : MonoBehaviour, IPointerDownHandler , IPointerEnterH
     [SerializeField]
     private bool _clickable = true;
 
+    /// <summary>
+    /// Display information about a card
+    /// </summary>
     public void DisplayCard(Card card)
     {
         gameObject.SetActive(true);
@@ -25,11 +31,16 @@ public class CardDisplayer : MonoBehaviour, IPointerDownHandler , IPointerEnterH
 
     }
 
+    /// <summary>
+    /// Hide card
+    /// </summary>
     public void Hide()
     {
         gameObject.SetActive(false);
         PopupInfoDisplayer.Instance.HideInfo();
     }
+
+    // ------------------- UI EVENTS -------------------
 
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -49,6 +60,8 @@ public class CardDisplayer : MonoBehaviour, IPointerDownHandler , IPointerEnterH
         PopupInfoDisplayer.Instance.HideInfo();
     }
 
+    
+    // method for displaying hoverbox
     private IEnumerator StartTimer()
     {
         yield return new WaitForSeconds(PopupInfoDisplayer.Instance.timeToWaitBeforeDisplayingInfo);

@@ -4,13 +4,16 @@ using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 
+/// <summary>
+/// Move towards home tile if far away
+/// </summary>
 public class ActionMoveToHome : NPCActionBase
 {
     public override bool CheckPlayability(NPCUnit caster)
     {
         if(caster.homeTile == null)
             return false;
-        if(math.abs(caster.homeTile.x - caster.CurrentTile.x) < 10 && math.abs(caster.homeTile.y - caster.CurrentTile.y) < 10)
+        if(caster.CurrentTile.ManhattanDistance(caster.homeTile) < 10)
             return false;
         return GridManager.Instance.GetAdjecentTiles(caster.CurrentTile).Where(t => t.GetObject == null || t.GetObject.IsWalkable).
             Where(t => t.IsWalkable).Count() > 0;

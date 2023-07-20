@@ -21,6 +21,10 @@ public static class MyRandom
     public static float Float(float minValue, float maxValue)
         => Random.Range(minValue, maxValue);
 
+    /// <summary>
+    /// Returns a random element from the list
+    /// </summary>
+    /// <exception cref="System.Exception"></exception>
     public static T Choice<T>(IList<T> list)
     {
         if (list.Count == 0)
@@ -28,11 +32,17 @@ public static class MyRandom
         return list[Int(0, list.Count)];
     }
 
+    /// <summary>
+    /// Returns a random element from the array
+    /// </summary>
     public static T Choice<T>(T[] array)
     {
         return array[Int(0, array.Length)];
     }
 
+    /// <summary>
+    /// Create a random color using HSV (full saturation and value)
+    /// </summary>
     public static Color Color()
     {
         return Random.ColorHSV(0,1,1,1,1,1,1,1);
@@ -44,6 +54,13 @@ public static class MyRandom
 
     public static string String(int length) => String(length, length);
 
+    /// <summary>
+    /// Create a random string of characters
+    /// </summary>
+    /// <param name="minSize">minimal length of string</param>
+    /// <param name="maxSize">maximum length of string</param>
+    /// <param name="pool">custom pool of characters to be used</param>
+    /// <returns>random string of characters</returns>
     public static string String(int minSize,int maxSize, char[] pool = null)
     {
         if (maxSize < minSize || minSize < 0 || maxSize < 0)

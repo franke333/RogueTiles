@@ -4,6 +4,14 @@ using UnityEngine;
 
 public static class MyMath 
 {
+    /// <summary>
+    /// Returns true if the two rectangles overlap
+    /// </summary>
+    /// <param name="a_tl">Rectangle A TopLeft</param>
+    /// <param name="a_dr">Recatngle A DownRight</param>
+    /// <param name="b_tl">Rectangle B TopLeft</param>
+    /// <param name="b_dr">Recatngle B DownRight</param>
+    /// <returns>True if the two recatngles overlap</returns>
     public static bool RectanglesOverlap(Vector2 a_tl,Vector2 a_dr, Vector2 b_tl, Vector2 b_dr)
     {
         // If one rectangle is on left side of other
@@ -20,6 +28,11 @@ public static class MyMath
         return true;
     }
 
+    /// <summary>
+    /// Get "count" number of distinct colors using HSV color space
+    /// </summary>
+    /// <param name="count">number of colors</param>
+    /// <returns>List of distinct colors</returns>
     public static List<Color> GetDistinctColors(int count)
     {
         List<Color> colors = new List<Color>();

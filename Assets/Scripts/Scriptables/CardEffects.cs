@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+/// <summary>
+/// Class containg all the effects of the cards
+/// </summary>
 public class CardEffects : MonoBehaviour
 {
     private struct CardData

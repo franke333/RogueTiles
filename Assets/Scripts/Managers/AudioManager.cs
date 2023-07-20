@@ -2,8 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Manager to play audio clips
+/// </summary>
 public class AudioManager : PersistentSingletonClass<AudioManager>
 {
+    /// <summary>
+    /// types of SFX
+    /// </summary>
     public enum SFXType
     {
         None,
@@ -28,6 +34,9 @@ public class AudioManager : PersistentSingletonClass<AudioManager>
 
     private Dictionary<SFXType, AudioSource> _sfxSources;
 
+    /// <summary>
+    /// Load clips from /Resources/ by folder they are contained in
+    /// </summary>
     private void LoadClips()
     {
         _sfxClips = new Dictionary<SFXType, List<AudioClip>>();
@@ -36,6 +45,10 @@ public class AudioManager : PersistentSingletonClass<AudioManager>
         {
             if(sfxType == SFXType.None)
                 continue;
+
+            // audio files are stored in Resources/Audio/SFX/<SFXType> by their type
+            // multiple audio files per type are allowed and will be randomly selected
+            // when played
             var objects = Resources.LoadAll<AudioClip>("Audio/SFX/" + sfxType.ToString());
             var list = new List<AudioClip>();
             foreach (var obj in objects)
@@ -48,6 +61,9 @@ public class AudioManager : PersistentSingletonClass<AudioManager>
         Log.Debug($"Loaded {count} clips");
     }
 
+    /// <summary>
+    /// create audio component for each type of SFX
+    /// </summary>
     private void CreateSources()
     {
 
@@ -82,6 +98,10 @@ public class AudioManager : PersistentSingletonClass<AudioManager>
         CreateSources();
     }
 
+    /// <summary>
+    /// Play a SFX clip of the given type
+    /// </summary>
+    /// <param name="sfxType">type of the SFX to be played</param>
     public void PlaySFX(SFXType sfxType)
     {
         if(sfxType == SFXType.None)

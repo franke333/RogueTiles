@@ -4,6 +4,9 @@ using UnityEngine;
 using System.Linq;
 using System;
 
+/// <summary>
+/// 2D grid graph
+/// </summary>
 public class Graph
 {
     private class Node
@@ -71,6 +74,9 @@ public class Graph
 
     public int StartNodeDistanceXInGraph { get; private set; }
 
+    /// <summary>
+    /// Create a graph containing 2 nodes and 1 edge between them
+    /// </summary>
     public static Graph Simple()
     {
         Graph g = new Graph();
@@ -103,6 +109,14 @@ public class Graph
         return g;
     }
 
+    /// <summary>
+    /// Drunkard walk on graph
+    /// </summary>
+    /// <param name="target">the target position of drunkard</param>
+    /// <param name="randomMoveChance">a value between 0 and 1. Chance of drunkard moving at random instead towards its target</param>
+    /// <param name="numOfAgents">How many drunkard agents we send</param>
+    /// <param name="banNegativeY">Block drunkard from the bottom half of the grid</param>
+    /// <returns></returns>
     public static Graph WalkToTarget(Vector2 target,float randomMoveChance,int numOfAgents,bool banNegativeY = true)
     {
         if(banNegativeY && target.y<0)
@@ -176,6 +190,13 @@ public class Graph
     }
 
 
+    /// <summary>
+    /// Generate a cell map for a node
+    /// </summary>
+    /// <param name="roomWidth">width of room represented by node</param>
+    /// <param name="roomHeight">height of room represented by node</param>
+    /// <param name="roomType">type  of room</param>
+    /// <returns></returns>
     private CellMap NodeToCellMap(int roomWidth, int roomHeight, RoomType roomType)
     {
         CellMap cm = new CellMap(roomWidth, roomHeight);
@@ -189,7 +210,15 @@ public class Graph
 
     private static RoomType ChooseRandomRoomType(RoomType a, RoomType b)
         => MyRandom.Float() > 0.5f ? a : b;
-
+    /// <summary>
+    /// Generate a cell map from a graph
+    /// </summary>
+    /// <param name="roomWidth">width of room represented by node</param>
+    /// <param name="roomHeight">height of room represented by node</param>
+    /// <param name="corridorWidth">width of corridor represented by edge</param>
+    /// <param name="corridorLength">length of corridor represented by edge</param>
+    /// <param name="roomMergeProbability">(0-1) chance of corridor collapsing into a room merge</param>
+    /// <returns></returns>
     public CellMap GenerateCellMap(int roomWidth, int roomHeight, int corridorWidth, int corridorLength, float roomMergeProbability)
         => GenerateCellMap(roomWidth, roomHeight, corridorWidth, corridorLength, roomMergeProbability, ChooseRandomRoomType);
 
@@ -209,12 +238,15 @@ public class Graph
         map.Add(new Vector2(0, 0), start);
         queue.Enqueue(new Vector2(0, 0));
 
+        //traverse graph and create rooms from nodes
         while (queue.Count > 0)
         {
             
             Vector2 pos = queue.Dequeue();
             Node node = map[pos];
             int i = 0;
+
+            //create corridors
             foreach(Edge edge in node.Edges())
             {
                 if (edge != null)
@@ -274,6 +306,8 @@ public class Graph
                 }
                 i++;
             }
+
+            //create room
             rooms.Add(NodeToCellMap(roomWidth, roomHeight,node.type));
             roomsPos.Add(new Vector2(
                 pos.x * (roomWidth + corridorLength),
@@ -299,11 +333,6 @@ public class Graph
                 (int)roomsPos[i].x - minWidth * (roomWidth + corridorLength),
                 (int)roomsPos[i].y - minHeight * (roomHeight + corridorLength),
                 rooms[i]);
-        }
-
-        foreach (var mergeGroup in mergeGroups)
-        {
-            
         }
 
         // help to find start room in cellmap

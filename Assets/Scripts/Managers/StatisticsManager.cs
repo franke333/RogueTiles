@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+/// <summary>
+/// Counts the statistics of the game to be displayed at the end
+/// </summary>
 public class StatisticsManager : SingletonClass<StatisticsManager>
 {
     public int TilesMove { get; private set; }
@@ -22,6 +25,9 @@ public class StatisticsManager : SingletonClass<StatisticsManager>
         StartCoroutine(GameManager.WaitForStart(SetUpUnitListeners));
     }
 
+    /// <summary>
+    /// lingering effect sitting on the player unit to count the moves and turns taken by the player unit
+    /// </summary>
     class StatisticalCaptureLingEff : LingeringEffect
     {
         public StatisticalCaptureLingEff()
@@ -42,6 +48,7 @@ public class StatisticsManager : SingletonClass<StatisticsManager>
         }
     }
 
+    // Sets the listeners to count damage dealt (and other) to all units
     private void SetUpUnitListeners()
     {
         foreach (var unit in GameManager.Instance.GetUnits())
@@ -74,6 +81,10 @@ public class StatisticsManager : SingletonClass<StatisticsManager>
         }
     }
 
+    /// <summary>
+    /// Returns the statistics of the game
+    /// </summary>
+    /// <returns>List of Tuples (name,value) of the recorded statistics</returns>
     public List<Tuple<string, int>> GetStats()
     {
         var stats = new List<Tuple<string, int>>();

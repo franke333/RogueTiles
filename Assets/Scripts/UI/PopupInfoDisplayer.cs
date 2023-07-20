@@ -4,6 +4,9 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Hoverbox that displays info about cards
+/// </summary>
 public class PopupInfoDisplayer : SingletonClass<PopupInfoDisplayer>
 {
     [SerializeField]
@@ -15,6 +18,11 @@ public class PopupInfoDisplayer : SingletonClass<PopupInfoDisplayer>
 
     public float timeToWaitBeforeDisplayingInfo = 0.33f;
 
+    /// <summary>
+    /// Display info about a card
+    /// </summary>
+    /// <param name="description">description to be displayed</param>
+    /// <param name="position">position of hoverbox to be displayed</param>
     public void DisplayInfoFor(string description, Vector2 position)
     {
         _descriptionText.text = description;

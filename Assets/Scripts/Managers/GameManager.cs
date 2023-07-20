@@ -5,6 +5,9 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
+/// <summary>
+///  Manages the game state and the units
+/// </summary>
 public class GameManager : SingletonClass<GameManager>
 {
     List<GridUnit> _units;
@@ -45,12 +48,20 @@ public class GameManager : SingletonClass<GameManager>
         ChangeState(GameState.PrepareLevel);
     }
 
+    /// <summary>
+    /// Register a unit to the game manager
+    /// </summary>
+    /// <param name="gu">Unit to be registered</param>
     public void RegisterUnit(GridUnit gu)
     {
         Log.Info($"Registered {gu}", gameObject);
         _units.Add(gu);
     }
 
+    /// <summary>
+    /// Unregister a unit from the game manager
+    /// </summary>
+    /// <param name="gu">Unit to be unregistered</param>
     public void UnregisterUnit(GridUnit gu)
     {
         
@@ -61,14 +72,18 @@ public class GameManager : SingletonClass<GameManager>
         _units.Remove(gu);
     }
 
+
     private void ProcessUnitTurn()
     {
+        // wait until animation is finished
         if (Time.time < _waitUntil)
             return;
 
+        // start game if necessary
         if (State == GameState.StartGame)
             ChangeState(GameState.StartGame);
 
+        // set camera focus to current unit
         if (State == GameState.PlayerTurn)
             CameraManager.Instance.SetFocusAt(_units[_currentUnitIndex].gameObject);
 
@@ -102,13 +117,12 @@ public class GameManager : SingletonClass<GameManager>
 
     private void Update()
     {
+        // Process an unit turn each frame
+        // NOTE: we could play turns of multiple (hidden) units at single frame,
+        //      but there is no need due to size of our game
 
         switch (State)
         {
-            case GameState.PrepareLevel:
-                break;
-            case GameState.StartGame:
-                break;
             case GameState.EnemyTurn:
                 while (State == GameState.EnemyTurn)
                 {
@@ -119,8 +133,6 @@ public class GameManager : SingletonClass<GameManager>
                 break;
             case GameState.PlayerTurn:
                 ProcessUnitTurn();
-                break;
-            case GameState.EndGame:
                 break;
             default:
                 break;
@@ -141,6 +153,10 @@ public class GameManager : SingletonClass<GameManager>
         }
     }
 
+    /// <summary>
+    /// Change game state and handle it
+    /// </summary>
+    /// <param name="newState">New State</param>
     public void ChangeState(GameState newState)
     {
         State = newState;
@@ -196,6 +212,9 @@ public class GameManager : SingletonClass<GameManager>
         HandDisplayer.Instance.DisplayUnitCards((PlayerUnit)_units[_currentUnitIndex]);
     }
 
+    /// <summary>
+    /// Clear the list of units
+    /// </summary>
     public void ClearUnits()
     {
         //clean
@@ -213,9 +232,14 @@ public class GameManager : SingletonClass<GameManager>
         ChangeState(GameState.PlayerTurn);
         GridManager.Instance.UpdateFog();
         // we need new intance when returning back to main menu
+        // otherwise we lose component connections and settings in main menu would not work
         LevelDesignManager.Instance.RemoveManagerInstance();
     }
 
+    /// <summary>
+    /// Announce the end of the game
+    /// </summary>
+    /// <param name="isWin">Wheter the game ended with Victory for the player</param>
     public void EndGame(bool isWin)
     {
         UIManager.Instance.EndScreen.Show(isWin,StatisticsManager.Instance.GetStats());
@@ -231,7 +255,14 @@ public class GameManager : SingletonClass<GameManager>
         EndGame
     }
 
+    /// <summary>
+    /// Get list of all units
+    /// </summary>
+    /// <returns>List of all units</returns>
     public List<GridUnit> GetUnits() => _units;
 
+    /// <summary>
+    /// Get the current unit that is taking a turn
+    /// </summary>
     public GridUnit currentUnit { get => _units[_currentUnitIndex];}
 }

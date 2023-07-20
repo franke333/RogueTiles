@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+/// <summary>
+/// Move towards player unit
+/// </summary>
 public class ActionFollowPlayer : NPCActionBase
 {
     public override bool CheckPlayability(NPCUnit caster)

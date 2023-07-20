@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+/// <summary>
+/// Item slot displayer that displays an item slot in inventory
+/// </summary>
 public class ItemSlotDisplayer : MonoBehaviour, IPointerDownHandler
 {
     private ItemSlot slot;
@@ -13,12 +16,14 @@ public class ItemSlotDisplayer : MonoBehaviour, IPointerDownHandler
     public Text itemName;
     public Text itemType;
 
-    [SerializeField]
     private Image _background;
 
     private Color _baseBackgroundColor;
     private Color _highlightColor = Color.yellow;
 
+    /// <summary>
+    /// Link this displayer to a slot
+    /// </summary>
     public void Link(ItemSlot slot)
     {
         this.slot = slot;
@@ -43,11 +48,17 @@ public class ItemSlotDisplayer : MonoBehaviour, IPointerDownHandler
 
     private void Start()
     {
-        if(_background == null)
+        if (_background == null)
+        {
             _background = GetComponent<Image>();
-        _baseBackgroundColor = _background.color;
+            _baseBackgroundColor = _background.color;
+        }
     }
 
+    /// <summary>
+    /// Set the highlight of this item slot
+    /// (used to display cards of the item in the item slot)
+    /// </summary>
     public void SetHighlight(bool value)
     {
         if (_background == null)

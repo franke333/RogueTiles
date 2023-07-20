@@ -4,6 +4,10 @@ using UnityEngine;
 
 
 // more like inventory manager
+
+/// <summary>
+/// Class that manages the inventory UI
+/// </summary>
 public class InventoryDisplayer : SingletonClass<InventoryDisplayer>
 {
     public GameObject inventory;
@@ -41,6 +45,11 @@ public class InventoryDisplayer : SingletonClass<InventoryDisplayer>
 
     public bool InventoryWindowActive => inventory.gameObject.activeSelf;
 
+
+    /// <summary>
+    /// Displays the pick up dialog for the given item
+    /// </summary>
+    /// <param name="pickedUpItem">Picked up Item</param>
     public void DisplayPickUpDialog(Item pickedUpItem)
     {
         if (pickedUpItem == null)
@@ -51,6 +60,7 @@ public class InventoryDisplayer : SingletonClass<InventoryDisplayer>
             return;
         }
         pickedUpItemSlot.SetItem(pickedUpItem);
+        
         pickedUpItemSlotDisplayer.Display();
         for (int i = 0; i < slotDisplayers.Count; i++)
             slotSwitchButtons[i].gameObject.SetActive((slotDisplayers[i].Slot.slotType == pickedUpItemSlot.item.itemType) ||
@@ -59,6 +69,7 @@ public class InventoryDisplayer : SingletonClass<InventoryDisplayer>
         pickUpDialogGO.SetActive(true);
         inventory.gameObject.SetActive(true);
         DisplayCardsOfItemInItemSlot(pickedUpItemSlotDisplayer);
+        pickedUpItemSlotDisplayer.itemType.text = pickedUpItem.itemType.ToString();
         AudioManager.Instance.PlaySFX(AudioManager.SFXType.PickUp);
     }
 

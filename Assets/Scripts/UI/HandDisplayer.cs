@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+/// <summary>
+/// Hand displayer that displays cards in hand
+/// </summary>
 public class HandDisplayer : SingletonClass<HandDisplayer>, IPointerEnterHandler, IPointerExitHandler
 {
     private PlayerUnit _activeUnit;
@@ -12,12 +15,15 @@ public class HandDisplayer : SingletonClass<HandDisplayer>, IPointerEnterHandler
     [SerializeField]
     private List<CardDisplayer> cardDisplayers;
 
-
+    /// <summary>
+    /// Draw cards from playerUnit and display them
+    /// </summary>
+    /// <param name="playerUnit">Player Unit containg the cards</param>
     public void DisplayUnitCards(PlayerUnit playerUnit)
     {
         _activeUnit = playerUnit;
         // display cards here
-        // TODO: make pick logic inside player.. not here :/
+        // NOTE: would be more logical to have a list of cards in playerUnit
         var hand = playerUnit.GetCards().PickN(cardDisplayers.Count);
         for (int i = 0; i < hand.Count; i++)
         {
@@ -32,11 +38,17 @@ public class HandDisplayer : SingletonClass<HandDisplayer>, IPointerEnterHandler
         gameObject.SetActive(true);
     }
 
+    /// <summary>
+    /// Cancels the card selection
+    /// </summary>
     public void DeseceltCard()
     {
         _activeUnit.DeselectCard();
     }
 
+    /// <summary>
+    /// Toggles the visibility of the hand
+    /// </summary>
     public void ToggleVisibility()
     {
         if (_activeUnit != null)
@@ -46,12 +58,17 @@ public class HandDisplayer : SingletonClass<HandDisplayer>, IPointerEnterHandler
         PopupInfoDisplayer.Instance.HideInfo();
     }
 
+    /// <summary>
+    /// Hides the hand
+    /// </summary>
     public void Hide()
     {
         _activeUnit = null;
         gameObject.SetActive(false);
         PopupInfoDisplayer.Instance.HideInfo();
     }
+
+    // ------------------- UI Events -------------------
 
     public void OnPointerEnter(PointerEventData eventData)
     {

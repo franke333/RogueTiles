@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Custom class for logging messages to the console
+/// </summary>
 public static class Log
 {
     private enum MessageType
@@ -50,6 +53,7 @@ public static class Log
             UnityEngine.Debug.Log($"{_messageStrings[index]} {name}: {message}");
     }
 
+    // -------- public methods to display messages --------
 
     public static void Debug(string message, GameObject obj = null)
     {

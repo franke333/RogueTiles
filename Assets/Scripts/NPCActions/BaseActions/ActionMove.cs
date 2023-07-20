@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
+/// <summary>
+/// move at random
+/// </summary>
 public class ActionMove : NPCActionBase
 {
     public override bool CheckPlayability(NPCUnit caster)

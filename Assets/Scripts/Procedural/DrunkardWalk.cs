@@ -2,10 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Random Walk algorithm that generates a CellMap
+/// </summary>
 public class DrunkardWalk
 {
     private static int maxStartingPositionTries = 6;
 
+    /// <summary>
+    /// Generate a CellMap using the Drunkard Walk algorithm
+    /// </summary>
+    /// <param name="width">Width of the map</param>
+    /// <param name="height">Height of the map</param>
+    /// <param name="roomType">roomType of the created room</param>
+    /// <param name="tileType">tileType the drunkard applies when walking</param>
+    /// <param name="ratioWalkableTiles">How many tiles should the drunkard visit until the algorithm finishes</param>
+    /// <param name="maxStepsOfAgent">How many steps before creating new drunkard</param>
+    /// <returns></returns>
     public static CellMap Generate(int width,int height, RoomType roomType,TileType tileType, float ratioWalkableTiles, int maxStepsOfAgent)
     {
         CellMap cm = new CellMap(width, height);

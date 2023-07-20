@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+/// <summary>
+/// Apply poision to unit range
+/// </summary>
 public class NPCPoisonAttack : NPCActionBase
 {
     [Space]

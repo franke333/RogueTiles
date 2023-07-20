@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+/// <summary>
+/// VFX that shakes the body of the unit
+/// </summary>
 public class ShakeVFX : MonoBehaviour
 {
     Vector3 _originalBodyPos;

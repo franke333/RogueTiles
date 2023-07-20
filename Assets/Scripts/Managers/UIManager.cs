@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Manages User input to display/hide UI elements
+/// </summary>
 public class UIManager : SingletonClass<UIManager>
 {
     [SerializeField]
@@ -14,6 +17,10 @@ public class UIManager : SingletonClass<UIManager>
 
     public HealthBarScript PlayerHealthBar;
 
+    /// <summary>
+    /// toggles the right bottom icon that indicates enemy turn
+    /// </summary>
+    /// <param name="value"> is enemy taking a turn</param>
     public void ToggleEnemyTurnMessage(bool value)
     {
         _enemyTurnMessage?.SetActive(value);

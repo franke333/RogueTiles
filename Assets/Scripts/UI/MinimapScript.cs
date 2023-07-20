@@ -6,6 +6,10 @@ using Unity.Mathematics;
 using System.Linq;
 using System;
 
+
+/// <summary>
+/// Minimap script
+/// </summary>
 public class MinimapScript : MonoBehaviour
 {
     Texture2D _map;
@@ -23,6 +27,7 @@ public class MinimapScript : MonoBehaviour
         StartCoroutine(GameManager.WaitForStart(CreateMap));
     }
 
+    // method to create Sprite for minimap
     private void CreateMap()
     {
         var (width,height) = (GridManager.Instance.Width, GridManager.Instance.Height);
@@ -48,6 +53,11 @@ public class MinimapScript : MonoBehaviour
         _bossUnit = GameManager.Instance.Boss;
     }
 
+    /// <summary>
+    /// Update the position of the unit on the minimap
+    /// </summary>
+    /// <param name="newPos">new position of the unit</param>
+    /// <param name="icon">icon that represent the unit</param>
     private void UpdateMinimapUnitPos(Vector2Int newPos, Image icon)
     {
         float ratioX = (float)newPos.x / _map.width;

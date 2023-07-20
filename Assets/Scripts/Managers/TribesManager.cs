@@ -4,6 +4,9 @@ using UnityEngine;
 using System.Linq;
 using System;
 
+/// <summary>
+/// Manager that creates and manages tribes and enemy units
+/// </summary>
 public class TribesManager : SingletonClass<TribesManager>
 {
     public List<Sprite> bodies, heads, leftHandItems, rightHandItems,chests,legs;
@@ -42,13 +45,16 @@ public class TribesManager : SingletonClass<TribesManager>
     public int baseLayerOrder;
 
     [SerializeField]
-    private int _NPCDetectionRange = 8;
+    private int _NPCDetectionRange = 6;
     public int NPCDetectionRange { get { return _NPCDetectionRange; } }
 
     List<Tribe> tribes;
 
     private GameObject enemyParentObject;
 
+    /// <summary>
+    /// Tribe class. Each enemy except boss is a part of a tribe
+    /// </summary>
     private class Tribe
     {
         public string name { get; private set; }
@@ -57,7 +63,7 @@ public class TribesManager : SingletonClass<TribesManager>
         public RoomType assignedRoom { get; private set; }
 
 
-        List<NPCUnit> units;
+        List<NPCUnit> _units;
 
         private SpriteRenderer AddSpriteRendererAsChildObject(GameObject parent,string name)
         {
@@ -66,12 +72,18 @@ public class TribesManager : SingletonClass<TribesManager>
             return obj.AddComponent<SpriteRenderer>();
         }
 
+        /// <summary>
+        /// Constructor creates enemy units of the trbe
+        /// </summary>
+        /// <param name="size">number of unique units in this tribe</param>
+        /// <param name="roomType">in what type of room the tribe resides</param>
+        /// <param name="tribeColor"> hue of body</param>
         public Tribe(int size,RoomType roomType, Color tribeColor)
         {
             hue = tribeColor;
             name = MyRandom.String(4, 9);
             assignedRoom = roomType;
-            units = new List<NPCUnit>();
+            _units = new List<NPCUnit>();
             TribesManager tribeManager = TribesManager.Instance;
             for (int i = 0; i < size; i++)
             {
@@ -125,7 +137,7 @@ public class TribesManager : SingletonClass<TribesManager>
                 }
                 //unused coins are converted to extra health
                 unit.Init(3+coins, true);
-                units.Add(unit);
+                _units.Add(unit);
 
                 //add helath bar
                 var bar = Instantiate(TribesManager.Instance._healtBarCanvasPrefab, spritesHolder.transform);
@@ -138,12 +150,17 @@ public class TribesManager : SingletonClass<TribesManager>
             }
         }
 
-        public NPCUnit GetRandomEnemy() => MyRandom.Choice(units);
+        public NPCUnit GetRandomEnemy() => MyRandom.Choice(_units);
     }
 
     // check that generation happened before trying to fetch enemies
     private bool _ready;
 
+    /// <summary>
+    /// Generates tribes
+    /// </summary>
+    /// <param name="outdoorTribeSizes">List of sizes of each outdoor tribe</param>
+    /// <param name="indoorTribeSize">size of indoor tribe</param>
     public void GenerateTribes(List<int> outdoorTribeSizes,int indoorTribeSize)
     {
         List<Color> colors = MyMath.GetDistinctColors(outdoorTribeSizes.Count + 1);
@@ -184,12 +201,17 @@ public class TribesManager : SingletonClass<TribesManager>
         unit.Init(unit.MaxHp, true);
     }
 
+    /// <summary>
+    /// assign tribes to rooms, spawns enemies in rooms and tints tiles
+    /// </summary>
+    /// <param name="rooms">rooms to be processed</param>
     public void ProcessRooms(List<Room> rooms)
     {
         foreach (var room in rooms)
             ProcessRoom(room);
     }
 
+    // assign tribes to rooms, spawns enemies in rooms and tints tiles
     private void ProcessRoom(Room room)
     {
         if (!_ready)
@@ -197,17 +219,23 @@ public class TribesManager : SingletonClass<TribesManager>
             Log.Error("Tribes were not generated", gameObject);
             return;
         }
+        // assign tribe
         var appropriateTribes = tribes.Where(t => t.assignedRoom == room.Type).ToList();
         if (appropriateTribes.Count == 0)
             return;
         var assignedTribe = MyRandom.Choice(appropriateTribes);
+
+        // tint tiles
         foreach (var tile in room.GetRoomTiles)
             tile.TintBaseColor(assignedTribe.hue,0.2f);
+
         var emptyTiles = room.GetRoomTiles.Where(t => t.GetObject == null).ToList();
-        int number_of_enemies = MyRandom.Int(1, 3); //1 or 2
+
+        // spawn enemies depending on room size
+        int numberOfEenemies = MyRandom.Int(1, 3); //1 or 2
         if(emptyTiles.Count > 50)
-            number_of_enemies += MyRandom.Int(1, 3); //extra 1 or 2
-        for (int i = 0; i < number_of_enemies; i++) {
+            numberOfEenemies += MyRandom.Int(1, 3); //extra 1 or 2
+        for (int i = 0; i < numberOfEenemies; i++) {
             var tile = MyRandom.Choice(emptyTiles);
             SpawnEnemy(assignedTribe.GetRandomEnemy(), tile);
             emptyTiles.Remove(tile);

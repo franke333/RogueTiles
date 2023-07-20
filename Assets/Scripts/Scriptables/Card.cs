@@ -6,6 +6,10 @@ using UnityEngine.Events;
 
 public static class ListExtensions
 {
+    /// <summary>
+    /// Shuffles elements in a list
+    /// </summary>
+    /// <param name="list">List to be shuffled</param>
     public static void Shuffle<T>(this IList<T> list)
     {
         int n = list.Count;
@@ -19,6 +23,12 @@ public static class ListExtensions
         }
     }
 
+    /// <summary>
+    /// Pick n distinct elements from a list.
+    /// Warning. the list is going to be shuffled.
+    /// Pass a copy of the list if you want to keep the original order.
+    /// </summary>
+    /// <returns>picked elements</returns>
     public static List<T> PickN<T>(this IList<T> list,int n)
     {
 
@@ -37,6 +47,9 @@ public static class ListExtensions
     } 
 }
 
+/// <summary>
+/// Class that represents a card
+/// </summary>
 [CreateAssetMenu(fileName = "New Card",menuName = "Scriptables/Card")]
 public class Card : ScriptableObject
 {

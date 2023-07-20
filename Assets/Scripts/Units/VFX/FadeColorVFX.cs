@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-
+/// <summary>
+/// VFX that fades the color of the body renderer to a given color
+/// </summary>
 public class FadeColorVFX : MonoBehaviour
 {
     SpriteRenderer _bodyRenderer;
@@ -14,6 +16,9 @@ public class FadeColorVFX : MonoBehaviour
     float _duration;
     bool _colorSet,_running;
 
+    /// <summary>
+    /// Set color of fade
+    /// </summary>
     public void SetColor(Color fadeColor)
     {
         _fadeColor = fadeColor;

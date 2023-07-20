@@ -9,6 +9,7 @@ using UnityEngine.Tilemaps;
 [CreateAssetMenu(fileName = "New Tile 2DTM", menuName = "Scriptables/Tile2DTM")]
 public class Tile2DTM : TileBase, ITile
 {
+    // container for all tile class instances
     static private Dictionary<Vector2Int, Tile2DTM> _map = new Dictionary<Vector2Int, Tile2DTM>();
 
     [SerializeField]
@@ -39,6 +40,9 @@ public class Tile2DTM : TileBase, ITile
     public bool InRange { get => _inRange; set { if (value != _inRange) { _inRange = value; Refresh(); }  } }
     public bool Selected { get => _selected; set { if (value != _selected) { _selected = value; Refresh(); } } }
 
+    /// <summary>
+    /// Get the insatnce of this class for the given coordinates
+    /// </summary>
     public static Tile2DTM GetTile(int x, int y)
     {
         if (_map.TryGetValue(new Vector2Int(x, y), out Tile2DTM tile))

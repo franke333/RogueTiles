@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+/// <summary>
+/// Manages tiles and rooms
+/// </summary>
 public class GridManager : SingletonClass<GridManager>
 {
 
@@ -21,6 +24,9 @@ public class GridManager : SingletonClass<GridManager>
     public int Width { get => _maxXCoord - _minXCoord; }
     public int Height { get => _maxYCoord - _minYCoord; }
 
+    /// <summary>
+    /// Get tilemap in case we are using its implementation of ITile
+    /// </summary>
     public Tilemap Tilemap
     {
         get
@@ -37,6 +43,10 @@ public class GridManager : SingletonClass<GridManager>
     HashSet<ITile> _tilesDisplayedInRange = new HashSet<ITile>();
     HashSet<ITile> _tilesLightUp = new HashSet<ITile>();
 
+    /// <summary>
+    /// Add tiles to the map
+    /// </summary>
+    /// <param name="tiles">List of tiles to be added</param>
     public void RegisterTiles(List<ITile> tiles)
     {
         foreach (var t in tiles)
@@ -66,6 +76,11 @@ public class GridManager : SingletonClass<GridManager>
         
     }
 
+    /// <summary>
+    /// Highlight tiles that can be reached by the played card
+    /// </summary>
+    /// <param name="card">Card with info about its range</param>
+    /// <param name="startTile">Tile the player is standing on</param>
     public void DisplayRange(Card card,ITile startTile)
     {
         var (x, y) = (startTile.x, startTile.y);
@@ -73,6 +88,7 @@ public class GridManager : SingletonClass<GridManager>
         
         switch (card.shape) 
         {
+            // the target of the card must be on the same row or column as the player
             case Card.AreaShape.Line:
                 _tilesDisplayedInRange.Add(startTile);
                 foreach (var dir in new int[] { 1, -1 })
@@ -91,6 +107,7 @@ public class GridManager : SingletonClass<GridManager>
                             break;
                 }
                 break;
+            // the target of the card must be in range of the card
             case Card.AreaShape.Circle:
                 //BFS
                 Queue<ITile> q = new Queue<ITile>();
@@ -116,6 +133,9 @@ public class GridManager : SingletonClass<GridManager>
             t.InRange = true;
     }
 
+    /// <summary>
+    /// Remove highlights from tiles
+    /// </summary>
     public void CleanDisplayInRange()
     {
         foreach (var t in _tilesDisplayedInRange)
@@ -123,6 +143,13 @@ public class GridManager : SingletonClass<GridManager>
         _tilesDisplayedInRange.Clear();
     }
 
+    /// <summary>
+    /// Create an tile using the tilemap or the standalone version
+    /// </summary>
+    /// <param name="tileType">type of tile</param>
+    /// <param name="pos">position of the tile in world</param>
+    /// <param name="parent"> assign parent to clean scene hierarchy </param>
+    /// <returns></returns>
     public ITile CreateTile(TileType tileType,Vector3 pos,Transform parent= null)
     {
         if (_useStandalone)
@@ -143,6 +170,11 @@ public class GridManager : SingletonClass<GridManager>
         }
     }
 
+    /// <summary>
+    /// Generate a level using the given layout generator and room functions
+    /// </summary>
+    /// <param name="layoutGenerator">Function to Generate layout which return list of rooms</param>
+    /// <param name="roomFuncs">Action that processes list of rooms</param>
     public void GenerateLevel(Func<List<Room>> layoutGenerator, Action<List<Room>> roomFuncs)
     {
         // dispose of old level
@@ -179,7 +211,11 @@ public class GridManager : SingletonClass<GridManager>
         
     }
 
-
+    /// <summary>
+    /// Get tile at position
+    /// </summary>
+    /// <param name="pos">position</param>
+    /// <returns>The tile at position pos</returns>
     public ITile GetTile(Vector2Int pos)
     {
         if (_map.TryGetValue(pos, out ITile tile))
@@ -187,6 +223,11 @@ public class GridManager : SingletonClass<GridManager>
         return null;
     }
 
+    /// <summary>
+    /// Get all tiles adjacent to the given tile
+    /// </summary>
+    /// <param name="tile">tile to get neighbours of</param>
+    /// <returns>List of adjacent tiles</returns>
     public List<ITile> GetAdjecentTiles(ITile tile)
     {
         List<ITile> list = new List<ITile>();
@@ -200,28 +241,48 @@ public class GridManager : SingletonClass<GridManager>
         return list;
     }
 
+    /// <summary>
+    /// Get tile that is currently selected by user
+    /// </summary>
+    /// <returns> selected tile </returns>
     public ITile GetSelectedTile() => _selectedTile;
+
+    /// <summary>
+    /// Tile that is currently selected by user and is also highlighted
+    /// </summary>
     public ITile SelectedTileInRange
     {
         set => _selectedTileInRange=value;
         get => _selectedTileInRange;
     }
 
+    /// <summary>
+    /// Set the tile that is currently selected by user
+    /// </summary>
+    /// <param name="tile">tile that is currently selected by user</param>
     public void SetSelectedTile(ITile tile)
     {
         _selectedTile = tile;
     }
 
+    /// <summary>
+    /// Update the fog of war
+    /// </summary>
     public void UpdateFog()
     {
+        // find all units that give light
         List<GridUnit> lightGivingUnits = new List<GridUnit>();
         foreach(GridUnit unit in GameManager.Instance.GetUnits())
         {
             if (unit.VisibleRange > 0)
                 lightGivingUnits.Add(unit);
         }
+
+        // apply fog to all previously lit tiles
         foreach (ITile tile in _tilesLightUp)
             tile.Visible = false;
+
+        // light up all tiles that are in range of a light giving unit
         Dictionary<Vector2, int> lightLevel = new Dictionary<Vector2, int>();
         void LightUp(ITile t,int intensity)
         {

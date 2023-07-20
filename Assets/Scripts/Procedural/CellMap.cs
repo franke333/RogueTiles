@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Represents tile while making map
+/// </summary>
 public struct Cell
 {
     public byte type;
@@ -12,6 +15,10 @@ public struct Cell
     public bool IsWalkable { get => ((TileType)type).IsWalkable(); }
 }
 
+/// <summary>
+/// Represent the map.
+/// 2D array of cells, each cell is a tile.
+/// </summary>
 public class CellMap
 {
 
@@ -41,6 +48,10 @@ public class CellMap
         set => _map[x, y] = value;
     }
 
+    /// <summary>
+    /// Get enumerator of all cells in map
+    /// </summary>
+    /// <returns>Each cell (x,y,Cell)</returns>
     public IEnumerable<Tuple<int,int,Cell>> GetCells()
     {
         for (int i = 0; i < Width; i++)
@@ -64,6 +75,7 @@ public class CellMap
         }
         _map[x, y] = new Cell() { type = (byte)tileType, roomIndex = _maxRoomIndex };
     }
+
 
     public void SetCellOfRoom(int x, int y, TileType tileType,int roomIndex)
     {
@@ -98,7 +110,12 @@ public class CellMap
     }
 
 
-    // BFS
+    /// <summary>
+    /// BFS algorithm to calculate distance from given point to all other walkable tiles.
+    /// Result is stored in "distance" field of each cell.
+    /// </summary>
+    /// <param name="x">X of start point</param>
+    /// <param name="y">Y of start point</param>
     public void CalculateDistancesFrom(int x,int y)
     {
         if(!((TileType)_map[x,y].type).IsWalkable())
@@ -140,6 +157,11 @@ public class CellMap
         Log.Info($"Recalculated distances from {x} {y}, coverage is {(float)WalkableReachableTilesCount / (Width * Height)}", null);
     }
 
+    /// <summary>
+    /// Clear all tiles that are not reachable from given point.
+    /// </summary>
+    /// <param name="x">X of start point</param>
+    /// <param name="y">Y of start point</param>
     public void ClearUnreachableTilesFrom(int x,int y)
     {
         CalculateDistancesFrom(x, y);
@@ -150,10 +172,11 @@ public class CellMap
     }
 
     /// <summary>
-    /// 
+    /// Inserts one CellMap onto another CellMap
     /// </summary>
+    /// <param name="insertedMap"> map to be inserted </param>
     /// <param name="rotate"> rotate clockwise 90° n times (4=0)</param>
-    /// <returns> return the index that would correspond to the 0 index of insertedMap </returns>
+    /// <returns> return the room index that would correspond to the 0 room index of insertedMap </returns>
     public int InsertMap(int x,int y,CellMap insertedMap,int rotate = 0)
     {
         Func<int, int, (int, int)> rotCoords;
@@ -208,18 +231,24 @@ public class CellMap
         return returnValue;
     }
 
-    public int MergeRooms(List<int> indexes,RoomType newRoomType)
+    /// <summary>
+    /// Merges rooms with given indices into one room with newRoomType
+    /// </summary>
+    /// <param name="indices">indices of rooms to be merged</param>
+    /// <param name="newRoomType">new roomtype of the new room</param>
+    /// <returns></returns>
+    public int MergeRooms(List<int> indices,RoomType newRoomType)
     {
         int count = 0;
         for (int x = 0; x < Width; x++)
             for (int y = 0; y < Height; y++)
-                if (indexes.Contains(_map[x,y].roomIndex))
+                if (indices.Contains(_map[x,y].roomIndex))
                 {
-                    _map[x, y].roomIndex = indexes[0];
+                    _map[x, y].roomIndex = indices[0];
                     count++;
                 }
 
-        _roomTypes[indexes[0]] = newRoomType;
+        _roomTypes[indices[0]] = newRoomType;
         return count;
     }
 

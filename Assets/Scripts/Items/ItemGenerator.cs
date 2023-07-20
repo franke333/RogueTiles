@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Wrapper class for Item generation
+/// </summary>
 public class ItemGenerator : SingletonClass<ItemGenerator>
 {
     [SerializeField]
@@ -13,6 +16,11 @@ public class ItemGenerator : SingletonClass<ItemGenerator>
     [SerializeField]
     private ConsumableItem _foodItem, _bandageItem, _potionItem;
 
+    /// <summary>
+    /// Get item sprite by its type
+    /// </summary>
+    /// <param name="type">Type of the item</param>
+    /// <returns>Sprite that corrsponds to the type of the item</returns>
     public Sprite GetSrpite(ItemType type)
     {
         switch(type)
@@ -32,6 +40,9 @@ public class ItemGenerator : SingletonClass<ItemGenerator>
         }
     }
 
+    /// <summary>
+    /// Choose which item should be created
+    /// </summary>
     public Item GenerateItem()
     {
         int random = MyRandom.Int(0, 100);
@@ -55,6 +66,11 @@ public class ItemGenerator : SingletonClass<ItemGenerator>
         
     }
 
+    /// <summary>
+    /// Wrap an item in a GridItem Object
+    /// </summary>
+    /// <param name="item">Item to be wrapped</param>
+    /// <returns>GridItem Object that cna be placed on tile</returns>
     public GridItem WrapItem(Item item)
     {
         var gi = Instantiate(gridItemGO);

@@ -12,6 +12,9 @@ public enum WorldType
     DungeonBSP=2,
 }
 
+/// <summary>
+/// Information about dungeon for generation algorithms
+/// </summary>
 [Serializable]
 public struct DungeonSettings
 {
@@ -37,6 +40,10 @@ public static class TileTypeExtensions
     public static bool IsWalkable(this TileType tileType) => _isWalkable.Contains(tileType);
 }
 
+/// <summary>
+/// Class that creates the world at the start of the game
+/// and also contains settings about the generation
+/// </summary>
 public class LevelDesignManager : PersistentSingletonClass<LevelDesignManager>
 {
     // world settings
@@ -91,6 +98,11 @@ public class LevelDesignManager : PersistentSingletonClass<LevelDesignManager>
 
     public int WorldTypeInt { get => (int)worldType; set => worldType = (WorldType)value; }
 
+    /// <summary>
+    /// Get tile prefab for given type using standalone implementation
+    /// </summary>
+    /// <param name="type">type of tile</param>
+    /// <returns>prefab of tile</returns>
     public TileStandalone GetTileStandalonePrefab(TileType type)
     {
         return type switch
@@ -102,6 +114,11 @@ public class LevelDesignManager : PersistentSingletonClass<LevelDesignManager>
         };
     }
 
+    /// <summary>
+    /// Get tile prefab for given type using tilemap implementation
+    /// </summary>
+    /// <param name="type">type of tile</param>
+    /// <returns>prefab of tile</returns>
     public Tile2DTM GetTile2DTM(TileType type)
     {
         return type switch
@@ -113,6 +130,11 @@ public class LevelDesignManager : PersistentSingletonClass<LevelDesignManager>
         };
     }
 
+    /// <summary>
+    /// Get tile prefab for given type using standalone implementation
+    /// </summary>
+    /// <param name="index">index of the wanted tile type in enum</param>
+    /// <returns>prefab of tile</returns>
     public ITile GetTilePrefab(byte index) => GetTileStandalonePrefab((TileType)index);
 
     /// <summary>
@@ -262,6 +284,12 @@ public class LevelDesignManager : PersistentSingletonClass<LevelDesignManager>
         return false;
     }
 
+    /// <summary>
+    /// Apply Voronoi algorithm to map to split it into rooms
+    /// </summary>
+    /// <param name="map">map to be split</param>
+    /// <param name="predicate">predicate that need to be true for a tile to be split</param>
+    /// <param name="numberOfVoronoiCells">Number of voronoi cells</param>
     public static void SplitRoomVoronoi(CellMap map,Predicate<Cell> predicate,int numberOfVoronoiCells)
     {
         // divide outside into rooms using voronoi graph, then fill them up
@@ -314,6 +342,12 @@ public class LevelDesignManager : PersistentSingletonClass<LevelDesignManager>
         }
     }
 
+    /// <summary>
+    /// Find a position for a boss on map to spawn
+    /// </summary>
+    /// <param name="heroStart">Starting position of hero</param>
+    /// <param name="map">Map</param>
+    /// <returns></returns>
     private Vector2Int ChooseBossSpawnCell(Vector2Int heroStart,CellMap map) {
         List<Vector2Int> possibleBossSpawns = new List<Vector2Int>();
         for (int x = 0; x < map.Width; x++)
@@ -342,16 +376,21 @@ public class LevelDesignManager : PersistentSingletonClass<LevelDesignManager>
         return MyRandom.Choice(possibleBossSpawns.Where(c => c.ManhattanDistance(heroStart) >= minDistanceFromHero).ToList());
     }
 
+    /// <summary>
+    /// Generatea world. Both design and gameObjects to scene
+    /// </summary>
+    /// <returns>True if the world was generated without error</returns>
     public bool GenerateWorld()
     {
         CellMap map = null;
         Vector2Int heroStart = new Vector2Int(0,0);
         switch (WorldType)
         {
+            // used world generation of One large Island filles with smaller dungeons
             case WorldType.Island:
                 map = DrunkardWalk.Generate(mapWidth, mapHeight, RoomType.Outside, TileType.Dirt, minimalWalkableTileRatio, drunkardsMaxPath);
                 heroStart = new Vector2Int(map.Width / 2, map.Height / 2);
-                // place dungeons
+                // create and place dungeons
                 for (int i = 0; i < numberOfDungeons; i++)
                     PlaceWalledDungeon(map, dungeonSettings, heroStart);
 
@@ -362,11 +401,14 @@ public class LevelDesignManager : PersistentSingletonClass<LevelDesignManager>
                     return false;
                 }
 
+                // remove unreachable tiles
                 map.ClearUnreachableTilesFrom((int)heroStart.x, (int)heroStart.y);
 
                 // split outside into regions
                 SplitRoomVoronoi(map, (Cell c) => c.roomIndex == outsideRoomIndex, map.Width * map.Height / 200);
                 break;
+
+            // other unused world types
             case WorldType.DungeonRandomWalk:
                 var dg = dungeonSettings;
                 var g = Graph.WalkToTarget(dg.endPosition, dg.randomMoveChance, dg.numberOfAgents, false);
@@ -384,11 +426,13 @@ public class LevelDesignManager : PersistentSingletonClass<LevelDesignManager>
                 break;
         }
 
-        
+        // method to generate gameObjects from list of rooms
         Func<List<Room>> func = map.GenerateTileMap;
 
+        // prepare enemies
         TribesManager.Instance.GenerateTribes(outsideTribesSizes, insideTribeSize);
 
+        // generate level and fill it with enemies using the ribesManager.Instance.ProcessRooms method
         GridManager.Instance.GenerateLevel(func, TribesManager.Instance.ProcessRooms);
 
         //summon hero
@@ -416,7 +460,7 @@ public class LevelDesignManager : PersistentSingletonClass<LevelDesignManager>
             return false;
         }
 
-
+        // inform GameManager that the world was generated is ready
         GameManager.Instance.ChangeState(GameManager.GameState.StartGame);
         return true;
     }
@@ -424,7 +468,8 @@ public class LevelDesignManager : PersistentSingletonClass<LevelDesignManager>
     /// <summary>
     /// This is a hack.
     /// We need to remove this manager when its not needed anymore
-    /// so it does not mess up settings in main menu. (new one is created when return back to main menu)
+    /// so it does not mess up settings in main menu.
+    /// (new one is created when the game returns back to main menu)
     /// </summary>
     public void RemoveManagerInstance()
     {

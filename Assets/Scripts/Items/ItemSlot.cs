@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+
+/// <summary>
+/// Item slot that holds an item in inventory (or pickup dialog)
+/// </summary>
 [Serializable]
 public class ItemSlot
 {

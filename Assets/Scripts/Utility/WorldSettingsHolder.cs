@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Wrapper class to hold world settings and load them into the level design manager
+/// </summary>
 public class WorldSettingsHolder : MonoBehaviour
 {
     [SerializeField]

@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
+
+/// <summary>
+/// Main Menu manager. Controls the different menus
+/// </summary>
 public class MenuManager : SingletonClass<MenuManager>
 {
     [Serializable]
@@ -43,6 +47,10 @@ public class MenuManager : SingletonClass<MenuManager>
         return null;
     }
 
+    /// <summary>
+    /// Open a menu by its index of Menu enum
+    /// </summary>
+    /// <param name="menuIndex">index corresponding to Menu enum</param>
     public void OpenMenu(int menuIndex)
     {
         Menu menu = (Menu)menuIndex;
@@ -53,6 +61,9 @@ public class MenuManager : SingletonClass<MenuManager>
         currentMenu = menu;
     }
 
+    /// <summary>
+    /// Loads the GameScene
+    /// </summary>
     public void Play()
     {
         SceneManager.LoadScene("GameScene", LoadSceneMode.Single);

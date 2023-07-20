@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Inventory class that holds a list of ItemSlots
+/// </summary>
 public class Inventory : MonoBehaviour
 {
     public List<ItemSlot> slots;

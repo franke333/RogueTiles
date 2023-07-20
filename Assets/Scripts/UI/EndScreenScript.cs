@@ -9,6 +9,11 @@ public class EndScreenScript : MonoBehaviour
     [SerializeField]
     Text _result, _stats;
 
+    /// <summary>
+    /// Display the end screen with the given stats
+    /// </summary>
+    /// <param name="victory">If game ended as victory for player</param>
+    /// <param name="stats">statistics to be displayed (name,value)</param>
     public void Show(bool victory, List<Tuple<string,int>> stats)
     {
         gameObject.SetActive(true);

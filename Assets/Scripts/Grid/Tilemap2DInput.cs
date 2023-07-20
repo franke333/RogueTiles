@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+/// <summary>
+/// A compliment class to Tile2DTM that handles input for the tilemap
+/// </summary>
 public class Tilemap2DInput : MonoBehaviour
 {
     Tilemap tilemap;
@@ -15,9 +18,12 @@ public class Tilemap2DInput : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // get the tile that the mouse is hovering over
         var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         var tilePos = tilemap.WorldToCell(mousePos);
         var tile = Tile2DTM.GetTile(tilePos.x, tilePos.y);
+
+        // process input
         if (Input.GetMouseButtonDown(0) && hoveringOver != null)
             ButtonPress();
         if (tile == hoveringOver)

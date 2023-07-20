@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Implementation of ITile, where each tile is a standalone gameobject
+/// </summary>
 public class TileStandalone : MonoBehaviour, ITile
 {
     [SerializeField]
