@@ -53,7 +53,7 @@ public class StatisticsManager : SingletonClass<StatisticsManager>
                 {
                     if (copyOfUnit.HpChange < 0)
                         DamageDealt -= copyOfUnit.HpChange;
-                    if(copyOfUnit.hp <= 0)
+                    if(copyOfUnit.HP <= 0)
                         EnemiesKilled++;
                 }
                 else

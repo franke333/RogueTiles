@@ -42,9 +42,9 @@ public class HealthBarScript : MonoBehaviour
 
     void UpdateHealthBar()
     {
-        _slider.maxValue= _assignedUnit.maxHp;
-        _slider.value = _assignedUnit.hp;
+        _slider.maxValue= _assignedUnit.MaxHp;
+        _slider.value = _assignedUnit.HP;
         _fill.color = _gradient.Evaluate(_slider.normalizedValue);
-        _text.text = $"{_assignedUnit.hp}/{_assignedUnit.maxHp}";
+        _text.text = $"{_assignedUnit.HP}/{_assignedUnit.MaxHp}";
     }
 }

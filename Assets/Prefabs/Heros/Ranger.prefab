@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8bf1e3daec1e4584ba1b9b706bd93d8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  alias: Ranger
+  Alias: Ranger
   _walkable: 0
   _targetable: 1
   _hp: 14
@@ -54,7 +54,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   _isEnemy: 0
-  childrenRenderer: {fileID: 7028899817096234487}
+  _childrenRenderer: {fileID: 7028899817096234487}
   _visibleRange: 5
   cards:
   - {fileID: 11400000, guid: 6a8a9e38a330be348a309533387216a9, type: 2}
@@ -85,7 +85,6 @@ MonoBehaviour:
     _item: {fileID: 0}
   - slotType: 6
     _item: {fileID: 0}
-  scraps: 0
 --- !u!1 &7028899817096234487
 GameObject:
   m_ObjectHideFlags: 0

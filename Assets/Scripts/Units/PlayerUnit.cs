@@ -16,7 +16,7 @@ public class PlayerUnit : GridUnit
     // if card is selected, then we are looking at possible placements,
     // otherwise player is looking to where to walk
     private Card _selectedCard;
-    public override int visibleRange { get => _visibleRange; }
+    public override int VisibleRange { get => _visibleRange; }
 
     public List<Card> GetCards()
     {

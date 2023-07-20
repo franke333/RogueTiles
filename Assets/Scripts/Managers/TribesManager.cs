@@ -81,7 +81,7 @@ public class TribesManager : SingletonClass<TribesManager>
                 GameObject spritesHolder = new GameObject("Sprites Holder");
                 spritesHolder.transform.parent = unitObject.transform;
                 var unit = unitObject.AddComponent<NPCUnit>();
-                unit.alias = name + " " + unitName;
+                unit.Alias = name + " " + unitName;
                 SpriteRenderer AddSpriteBodyPart(string name,Sprite sprite,int sortingOrder)
                 {
                     SpriteRenderer sr = AddSpriteRendererAsChildObject(spritesHolder, name);
@@ -181,7 +181,7 @@ public class TribesManager : SingletonClass<TribesManager>
         var unit = Instantiate(enemy,enemyParentObject.transform);
         tile.Occupy(unit);
         unit.gameObject.SetActive(true);
-        unit.Init(unit.maxHp, true);
+        unit.Init(unit.MaxHp, true);
     }
 
     public void ProcessRooms(List<Room> rooms)

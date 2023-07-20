@@ -13,6 +13,10 @@ public class GridItem : GridObject
         return false;
     }
 
+    /// <summary>
+    /// Toggle rendering of the item icon atop of tile
+    /// </summary>
+    /// <param name="value">Visibility of the item</param>
     public override void SetVisible(bool value)
     {
         if(AssignedItem == null)

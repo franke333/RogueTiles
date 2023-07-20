@@ -170,7 +170,7 @@ public class CardEffects : MonoBehaviour
         if(data.currentTarget is GridUnit)
         {
             GridUnit unit = data.currentTarget as GridUnit;
-            if(unit.hp <= 0)
+            if(unit.HP <= 0)
                 data.currentUnit.RestoreHealth(3);
         }
     }

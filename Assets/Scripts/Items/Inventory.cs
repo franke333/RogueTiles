@@ -5,7 +5,6 @@ using UnityEngine;
 public class Inventory : MonoBehaviour
 {
     public List<ItemSlot> slots;
-    public int scraps;
     private void Start()
     {
         // init slots

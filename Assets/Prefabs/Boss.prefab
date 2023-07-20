@@ -245,7 +245,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f22c92d78d204834e80e2f74b609f2bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  alias: Boss
+  Alias: Boss
   _walkable: 0
   _targetable: 1
   _hp: 25
@@ -254,7 +254,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   _isEnemy: 1
-  childrenRenderer: {fileID: 498713669008062867}
+  _childrenRenderer: {fileID: 498713669008062867}
   _actions:
   - weight: 1
     actionObj: {fileID: 4842315545916309268, guid: fa72753c302d42e4c9cd2280f5ddd8da, type: 3}

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+/// <summary>
+/// Tile2DTM is a implemntation of ITile that uses Unity Tilemap system
+/// </summary>
 [CreateAssetMenu(fileName = "New Tile 2DTM", menuName = "Scriptables/Tile2DTM")]
 public class Tile2DTM : TileBase, ITile
 {
@@ -130,6 +133,10 @@ public class Tile2DTM : TileBase, ITile
         }
     }
 
+    /// <summary>
+    /// Check if the tile is selectable
+    /// </summary>
+    /// <returns>True if the tile is electable</returns>
     public bool CheckSelectability()
     {
         if (GameManager.Instance.State != GameManager.GameState.PlayerTurn)

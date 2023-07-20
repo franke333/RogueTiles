@@ -130,6 +130,8 @@ public class GridManager : SingletonClass<GridManager>
             TileStandalone tile = Instantiate(LevelDesignManager.Instance.GetTileStandalonePrefab(tileType) , pos, Quaternion.identity);
             if (parent != null)
                 tile.transform.SetParent(parent);
+            //reduce memory usage of the standalone version
+            tile.gameObject.name = "";
             return tile;
         }
         else
@@ -215,7 +217,7 @@ public class GridManager : SingletonClass<GridManager>
         List<GridUnit> lightGivingUnits = new List<GridUnit>();
         foreach(GridUnit unit in GameManager.Instance.GetUnits())
         {
-            if (unit.visibleRange > 0)
+            if (unit.VisibleRange > 0)
                 lightGivingUnits.Add(unit);
         }
         foreach (ITile tile in _tilesLightUp)
@@ -236,6 +238,6 @@ public class GridManager : SingletonClass<GridManager>
         }
 
         foreach (var unit in lightGivingUnits)
-            LightUp(unit.CurrentTile, unit.visibleRange);
+            LightUp(unit.CurrentTile, unit.VisibleRange);
     }
 }

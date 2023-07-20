@@ -4,10 +4,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
+/// <summary>
+/// Room represents a collection of tiles.
+/// Map is divided into rooms.
+/// </summary>
 public class Room : MonoBehaviour
 {
+    /// <summary>
+    /// Room type
+    /// </summary>
     public RoomType Type { get; set; }
-    public string roomName;
+    public string RoomName;
+
+    /// <summary>
+    /// Index of the tribe that occupies this room
+    /// </summary>
     public int TribeOccupation { get; set; }
 
     public List<ITile> GetRoomTiles { get => _roomTiles; }
@@ -20,19 +31,20 @@ public class Room : MonoBehaviour
 
 public enum RoomType
 {
+    //overworld rooms
     Water,
-
     Outside,
     OutsideEnemyCamp,
-    BossRoom,
+
 
     // Graph Rooms
+    BossRoom,
     Start,
     End,
     Hall,
     Treasure,
     Corridor,
-    Wall
+    Wall,
 }
 
 

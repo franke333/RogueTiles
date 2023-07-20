@@ -36,7 +36,8 @@ public class Item : ScriptableObject
 
     public static Item GenerateEquip(int value)
     {
-        //TODO better names from .txt
+        //TODO create better names in .txt file
+
         Item item = (Item)ScriptableObject.CreateInstance(typeof(Item));
         item.itemType = (ItemType)MyRandom.Int(1, 6);
         item.itemName = MyRandom.String(3, 6) + " " + item.itemType.ToString();
